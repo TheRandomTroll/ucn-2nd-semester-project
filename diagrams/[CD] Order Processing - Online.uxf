@@ -1,0 +1,68 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>Space for diagram notend</help_text><element><id>UMLGeneric</id><coordinates><x>470</x><y>350</y><w>100</w><h>30</h></coordinates><panel_attributes>_:UI_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>340</y><w>290</w><h>80</h></coordinates><panel_attributes>lt=&lt;-
+1.createNewOrder(customerPhoneNo)
+2.scanProduct(barcode, qty)
+3.applyVoucher(code)
+4.confirmSale()</panel_attributes><additional_attributes>270;20;10;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>470</x><y>520</y><w>100</w><h>30</h></coordinates><panel_attributes>_:OrderController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>510</x><y>370</y><w>330</w><h>170</h></coordinates><panel_attributes>lt=&lt;-
+1.1.findCustomerByPhoneNo(phoneNo:String):Customer
+1.2.createOrder(c:Customer)
+2.1. *[i=1..n] addProduct(barcode:int, qty:int);
+3.1.applyVoucher(code:String);
+4.1.confirmOrder()
+4.2.printInvoice()
+4.3.dispatchCourier()</panel_attributes><additional_attributes>10;150;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>910</x><y>520</y><w>120</w><h>30</h></coordinates><panel_attributes>_:CustomerController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>520</y><w>370</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+1.1.1.findCustomerByPhoneNo(phoneNo:String):Customer</panel_attributes><additional_attributes>350;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>910</x><y>620</y><w>120</w><h>30</h></coordinates><panel_attributes>_:CustomerDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>960</x><y>540</y><w>300</w><h>100</h></coordinates><panel_attributes>lt=&lt;-
+1.1.1.1.findByPhoneNo(phoneNo:String):Customer
+</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1120</x><y>720</y><w>100</w><h>40</h></coordinates><panel_attributes>_:Customer_
+{NEW}</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1020</x><y>630</y><w>120</w><h>140</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>100;120;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>1080</x><y>640</y><w>340</w><h>80</h></coordinates><panel_attributes>1.1.1.2.3.[findByPhoneNo(phoneNo:String) == null]
+c = &lt;&lt;create&gt;&gt;(a:Address, phoneNo:String, email:String)
+1.1.1.2.4.[findByPhoneNo(phoneNo:String)==null]
+save(c:Customer)
+style=wordwrap
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>370</x><y>710</y><w>100</w><h>40</h></coordinates><panel_attributes>_:Order_
+{NEW}</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>540</y><w>130</w><h>190</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;170;10;100;110;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>80</x><y>520</y><w>120</w><h>30</h></coordinates><panel_attributes>_:ProductController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>80</x><y>660</y><w>120</w><h>30</h></coordinates><panel_attributes>_:ProductDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>190</x><y>520</y><w>300</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+2.1.1. p = findByBarcode(barcode:int):Product</panel_attributes><additional_attributes>10;20;280;20</additional_attributes></element><element><id>Relation</id><coordinates><x>130</x><y>540</y><w>30</w><h>140</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;120;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>660</y><w>100</w><h>40</h></coordinates><panel_attributes>_:OrderLine_
+{NEW}</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>510</x><y>540</y><w>260</w><h>140</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>240;120;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>640</x><y>580</y><w>220</w><h>40</h></coordinates><panel_attributes>2.2.1.ol = &lt;&lt;create&gt;&gt;(p:Product, qty:int);
+style=autoresize</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>450</y><w>560</w><h>90</h></coordinates><panel_attributes>lt=&lt;-
+3.1.1. v = findByCode(code:String):Voucher
+3.1.2. v.checkIfValid()</panel_attributes><additional_attributes>320;10;300;60;10;70</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>870</x><y>430</y><w>120</w><h>30</h></coordinates><panel_attributes>_:VoucherController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>860</x><y>350</y><w>120</w><h>30</h></coordinates><panel_attributes>_:VoucherDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>920</x><y>370</y><w>270</w><h>80</h></coordinates><panel_attributes>lt=&lt;-
+3.1.1.1. v = findByCode(code:String):Voucher</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>Text</id><coordinates><x>520</x><y>670</y><w>120</w><h>70</h></coordinates><panel_attributes>4.1.2.saveOrder(o:Order):boolean
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>540</y><w>110</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>90;180;90;110;10;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>540</x><y>720</y><w>100</w><h>30</h></coordinates><panel_attributes>_:OrderDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>510</x><y>540</y><w>300</w><h>250</h></coordinates><panel_attributes>lt=&lt;-
+4.2.1.createInvoice(o:Order)</panel_attributes><additional_attributes>270;230;160;190;10;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>780</x><y>750</y><w>120</w><h>30</h></coordinates><panel_attributes>_:InvoiceController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>780</x><y>850</y><w>120</w><h>30</h></coordinates><panel_attributes>_:InvoiceDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>880</x><y>850</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+4.2.1.1.1.i = &lt;&lt;create&gt;&gt;(o:Order)</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>830</x><y>770</y><w>230</w><h>100</h></coordinates><panel_attributes>lt=&lt;-
+4.2.1.1.createInvoice(o:Order)
+4.2.1.2.saveInvoice(i:Invoice):boolean</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1090</x><y>850</y><w>120</w><h>40</h></coordinates><panel_attributes>_:Invoice_
+{NEW}</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>540</y><w>280</w><h>290</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>150;270;10;200;10;90;180;90;260;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>330</x><y>820</y><w>110</w><h>30</h></coordinates><panel_attributes>_:CourierController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>330</x><y>930</y><w>110</w><h>30</h></coordinates><panel_attributes>_:CourierDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>840</y><w>230</w><h>110</h></coordinates><panel_attributes>lt=&lt;-
+4.3.1.1.findAvailableCourier()
+4.3.2.1.dispatchOrder(courier:Courier,
+o:Order)</panel_attributes><additional_attributes>10;90;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>160</x><y>730</y><w>210</w><h>80</h></coordinates><panel_attributes>4.3.1.findAvailableCourier()
+4.3.2.dispatchOrder(courier:Courier,
+o:Order)
+style=autoresize
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>290</x><y>650</y><w>200</w><h>70</h></coordinates><panel_attributes>1.2.1.o = &lt;&lt;create&gt;&gt;(c:Customer)
+2.3.1.addOrderLine(ol:OrderLine)
+3.1.3.applyDiscount(v:Voucher)
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>0</x><y>570</y><w>270</w><h>50</h></coordinates><panel_attributes>2.1.1.1. p = findByBarcode(barcode:int):Product
+style=autoresize
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>520</x><y>800</y><w>100</w><h>40</h></coordinates><panel_attributes>&lt;&lt;metaclass&gt;&gt;
+_:Date_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>540</y><w>90</w><h>280</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>70;260;10;210;20;10</additional_attributes></element><element><id>Text</id><coordinates><x>460</x><y>610</y><w>120</w><h>70</h></coordinates><panel_attributes>4.1.1.o.orderDate=&lt;&lt;create&gt;&gt;(currentTime)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1410</x><y>520</y><w>110</w><h>30</h></coordinates><panel_attributes>_:AddressController_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1020</x><y>510</y><w>410</w><h>60</h></coordinates><panel_attributes>lt=&lt;-
+1.1.1.2.[findByPhoneNo(phoneNo:String) == null]
+createAddress(street:String,streetNumber:String,
+floor:String,city:String,postalCode:String);</panel_attributes><additional_attributes>390;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1397</x><y>630</y><w>120</w><h>30</h></coordinates><panel_attributes>_:AddressDB_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1460</x><y>540</y><w>170</w><h>110</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>150;90;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1564</x><y>630</y><w>100</w><h>40</h></coordinates><panel_attributes>_:Address_
+{NEW}</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1533</x><y>540</y><w>340</w><h>80</h></coordinates><panel_attributes>1.1.1.2.1.[findByPhoneNo(phoneNo:String) == null]
+a = &lt;&lt;create&gt;&gt;(street:String,streetNumber:String,
+floor:String,city:String,postalCode:String)
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1460</x><y>540</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;90;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>1281</x><y>570</y><w>240</w><h>80</h></coordinates><panel_attributes>1.1.1.2.2.[findByPhoneNo(phoneNo:String)
+ == null]save(a)
+
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>

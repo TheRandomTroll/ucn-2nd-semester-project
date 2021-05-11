@@ -1,0 +1,51 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLGeneric</id><coordinates><x>730</x><y>380</y><w>370</w><h>160</h></coordinates><panel_attributes>addProduct(barcode, qty)
+-
+*pre:*
+A Product p with p.barcode = barcode must exist
+qty must have a value of 1 or higher
+*post:*
+An OrderLine ol is created
+ol.product = p
+ol.qty = qty
+ol has been added to o</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>620</x><y>190</y><w>30</w><h>580</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;560</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>580</x><y>170</y><w>100</w><h>30</h></coordinates><panel_attributes>_:System_</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLActor</id><coordinates><x>280</x><y>130</y><w>60</w><h>110</h></coordinates><panel_attributes>Clerk</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>470</y><w>350</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+addProduct(barcode, qty);
+</panel_attributes><additional_attributes>330;20;10;20</additional_attributes></element><element><id>UMLFrame</id><coordinates><x>260</x><y>450</y><w>420</w><h>100</h></coordinates><panel_attributes>loop</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>510</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+orderLine(product, qty);</panel_attributes><additional_attributes>10;20;330;20</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>670</y><w>350</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+finishSale();
+</panel_attributes><additional_attributes>330;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>710</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+confirm();</panel_attributes><additional_attributes>10;20;330;20</additional_attributes></element><element><id>UMLFrame</id><coordinates><x>260</x><y>560</y><w>420</w><h>100</h></coordinates><panel_attributes>opt</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>570</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+applyVoucher(code);</panel_attributes><additional_attributes>330;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>610</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+applyDiscount();</panel_attributes><additional_attributes>10;20;330;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>730</x><y>700</y><w>370</w><h>110</h></coordinates><panel_attributes>finishSale()
+-
+*pre:*
+o must have at least one ol
+*post:*
+o.orderDate = the current date
+o has been persisted</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>730</x><y>550</y><w>370</w><h>140</h></coordinates><panel_attributes>applyVoucher(code)
+-
+*pre:*
+A Voucher v with v.code = code exists
+v has not been used before
+*post:*
+discount = v.discount
+discountAmount = o.totalPrice * discount
+o.totalPrice = o.totalPrice - discountAmount</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>360</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+saveCustomerInfo(address, email, phoneNo,...);</panel_attributes><additional_attributes>330;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>400</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+confirm();</panel_attributes><additional_attributes>10;20;330;20</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>250</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+findCustomerByPhoneNo(phoneNo);</panel_attributes><additional_attributes>330;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>290</y><w>350</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+customerInfo(name, address, email, phoneNo,...);</panel_attributes><additional_attributes>10;20;330;20</additional_attributes></element><element><id>UMLFrame</id><coordinates><x>260</x><y>340</y><w>420</w><h>100</h></coordinates><panel_attributes>ifOnline</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>730</x><y>220</y><w>370</w><h>150</h></coordinates><panel_attributes>saveCustomerInfo(address, email, phoneNo)
+-
+*pre:*
+All variables are not empty
+A Customer c has not been persisted yet
+*post:*
+A Customer c is created
+c.address = address
+c.email = email
+c.phoneNo = phoneNo</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>730</x><y>100</y><w>370</w><h>110</h></coordinates><panel_attributes>findCustomerByPhoneNo(phoneNo)
+-
+*pre:*
+A Customer c with c.phoneNo = phoneNo exists
+- if c does not exist, use Customer c from saveCustomerInfo()
+*post:*
+Information about Customer c is retrieved</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLFrame</id><coordinates><x>260</x><y>230</y><w>420</w><h>100</h></coordinates><panel_attributes>ifOnline</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>190</y><w>30</w><h>580</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;560</additional_attributes></element></diagram>
