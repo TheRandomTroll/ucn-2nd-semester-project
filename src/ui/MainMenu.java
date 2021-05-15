@@ -1,72 +1,107 @@
-/*
- * Created by JFormDesigner on Thu May 13 15:55:52 CEST 2021
- */
-
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.EventQueue;
 
-/**
- * @author unknown
- */
-public class MainMenu extends JPanel {
-    public MainMenu() {
-        initComponents();
-    }
+import javax.swing.JFrame;
+import java.awt.GridBagLayout;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
-    private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - unknown
-        title1 = new JLabel();
-        employeeMenuB = new JButton();
-        customerMenuB = new JButton();
+public class MainMenu {
 
-        //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
-        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
-        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
-        throw new RuntimeException( ); }} );
-        setLayout(null);
+	private JFrame frame;
+	private JTextField userNameField;
+	private static final String[] validPassword = {
+			"25", "50", "1000"
+	};
+	private static final String[] validUsername = {
+			"jozo", "jure", "boban"
+	};
+	private JPasswordField passwordField;
 
-        //---- title1 ----
-        title1.setText("Main Menu");
-        add(title1);
-        title1.setBounds(new Rectangle(new Point(160, 10), title1.getPreferredSize()));
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainMenu window = new MainMenu();
+					window.showWindow();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-        //---- employeeMenuB ----
-        employeeMenuB.setText("Employee Menu");
-        add(employeeMenuB);
-        employeeMenuB.setBounds(new Rectangle(new Point(270, 75), employeeMenuB.getPreferredSize()));
+	/**
+	 * Create the application.
+	 */
+	public MainMenu() {
+	}
 
-        //---- customerMenuB ----
-        customerMenuB.setText("Customer Menu");
-        add(customerMenuB);
-        customerMenuB.setBounds(new Rectangle(new Point(270, 120), customerMenuB.getPreferredSize()));
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	public void showWindow() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 
-        {
-            // compute preferred size
-            Dimension preferredSize = new Dimension();
-            for(int i = 0; i < getComponentCount(); i++) {
-                Rectangle bounds = getComponent(i).getBounds();
-                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-            }
-            Insets insets = getInsets();
-            preferredSize.width += insets.right;
-            preferredSize.height += insets.bottom;
-            setMinimumSize(preferredSize);
-            setPreferredSize(preferredSize);
-        }
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
-    }
+		JLabel lblNewLabel = new JLabel("Main Menu");
+		lblNewLabel.setBounds(180, 11, 107, 14);
+		frame.getContentPane().add(lblNewLabel);
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - unknown
-    private JLabel title1;
-    private JButton employeeMenuB;
-    private JButton customerMenuB;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
+		JButton btnNewButton = new JButton("Employee Menu");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String username = userNameField.getText();
+				String password = String.valueOf(passwordField.getPassword());
+				if (Arrays.asList(validPassword).contains(password) && Arrays.asList(validUsername).contains(username)) {
+					EmployeeMenu em = new EmployeeMenu();
+					em.showWindow();
+					frame.setVisible(false);
+				}
+				else System.out.println("Wrong username/password! " + username + password);
+			}
+		});
+		btnNewButton.setBounds(265, 37, 129, 23);
+		frame.getContentPane().add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("Customer Menu");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		btnNewButton_1.setBounds(265, 72, 129, 23);
+		frame.getContentPane().add(btnNewButton_1);
+		
+		userNameField = new JTextField();
+		userNameField.setBounds(85, 38, 86, 20);
+		frame.getContentPane().add(userNameField);
+		userNameField.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Username:");
+		lblNewLabel_1.setBounds(10, 41, 65, 14);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Password:");
+		lblNewLabel_1_1.setBounds(10, 76, 65, 14);
+		frame.getContentPane().add(lblNewLabel_1_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(85, 73, 86, 20);
+		frame.getContentPane().add(passwordField);
+		frame.setVisible(true);
+	}
 }
