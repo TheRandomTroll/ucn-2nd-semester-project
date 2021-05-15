@@ -9,7 +9,9 @@ import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
@@ -17,12 +19,13 @@ public class MainMenu {
 
 	private JFrame frame;
 	private JTextField userNameField;
-	private static final String[] validPassword = {
-			"25", "50", "1000"
-	};
-	private static final String[] validUsername = {
-			"jozo", "jure", "boban"
-	};
+	private List<String> validPassword = new ArrayList<>();
+	private List<String> validUsername = new ArrayList<>();
+	private MainMenu mm;
+
+	//private static final String[] validUsername = {
+	//		"jozo", "jure", "boban"
+	//};
 	private JPasswordField passwordField;
 
 	/**
@@ -45,6 +48,11 @@ public class MainMenu {
 	 * Create the application.
 	 */
 	public MainMenu() {
+		validPassword.add("25");
+		validUsername.add("jozo");
+		validUsername.add("jure");
+		validUsername.add("boban");
+		mm = this;
 	}
 
 	/**
@@ -66,12 +74,16 @@ public class MainMenu {
 			public void mouseClicked(MouseEvent e) {
 				String username = userNameField.getText();
 				String password = String.valueOf(passwordField.getPassword());
-				if (Arrays.asList(validPassword).contains(password) && Arrays.asList(validUsername).contains(username)) {
-					EmployeeMenu em = new EmployeeMenu();
+				//String[] passwords = validPassword.toArray(new String[validPassword.size()]);
+				//System.out.println(validPassword.toString() + passwords);
+
+				if (validPassword.contains(password) && validUsername.contains(username)) {
+					EmployeeMenu em = new EmployeeMenu(validPassword, mm, validUsername);
 					em.showWindow();
 					frame.setVisible(false);
+					//(Arrays.asList(validPassword).contains(password) && Arrays.asList(validUsername).contains(username))
 				}
-				else System.out.println("Wrong username/password! " + username + password);
+				else System.out.println("Wrong username/password! " + username + password + " ");
 			}
 		});
 		btnNewButton.setBounds(265, 37, 129, 23);
