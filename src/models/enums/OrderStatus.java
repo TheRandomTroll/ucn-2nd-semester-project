@@ -7,5 +7,9 @@ public enum OrderStatus {
     SHIPPED,
     DELIVERED,
     NOT_ACCEPTED,
-    CANCELLED
+    CANCELLED;
+
+    public int getValue() {
+        return ordinal() + 1;
+    }
 }

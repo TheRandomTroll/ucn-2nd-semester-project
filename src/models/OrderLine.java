@@ -3,12 +3,10 @@ package models;
 public class OrderLine {
     private int quantity;
     private Product product;
-    private Order order;
 
-    public OrderLine(int quantity, Product product, Order order) {
+    public OrderLine(Product product, int quantity) {
         this.quantity = quantity;
         this.product = product;
-        this.order = order;
     }
 
     public int getQuantity() {
@@ -25,13 +23,5 @@ public class OrderLine {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }
