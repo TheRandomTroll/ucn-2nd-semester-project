@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * A data access class for the <i>ShoppingLists</i> table from the database.
+ */
 public class ShoppingListDB implements ShoppingListDBIF {
     private static final String CREATE_LIST_Q = "INSERT INTO ShoppingLists (CreationDate, OrderId, AppliedVoucherId, PaymentTypeId) VALUES (?, ?, ?, ?)";
 

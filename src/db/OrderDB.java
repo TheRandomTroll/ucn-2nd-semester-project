@@ -6,7 +6,9 @@ import models.Order;
 import models.OrderLine;
 
 import java.sql.*;
-
+/**
+ * A data access class for the <i>Orders</i> table from the database.
+ */
 public class OrderDB implements OrderDBIF {
     private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";

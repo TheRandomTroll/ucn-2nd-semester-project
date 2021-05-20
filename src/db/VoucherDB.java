@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * A data access class for the <i>Vouchers</i> table from the database.
+ */
 public class VoucherDB implements VoucherDBIF {
     private static final String FIND_BY_CODE_Q = "SELECT Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ?";
 
