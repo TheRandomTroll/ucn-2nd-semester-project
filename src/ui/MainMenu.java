@@ -80,62 +80,90 @@ public class MainMenu {
 		frame.getContentPane().setBackground(customColor);
 		frame.setBounds(100, 100, 561, 402);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-												frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(null);
 										
-												JLabel lblNewLabel = new JLabel("Main Menu");
-												lblNewLabel.setBounds(151, 0, 109, 14);
-												frame.getContentPane().add(lblNewLabel);
+		JLabel lblNewLabel = new JLabel("Main Menu");
+		lblNewLabel.setBounds(151, 0, 109, 14);
+		frame.getContentPane().add(lblNewLabel);
 								
-										JLabel lblNewLabel_1 = new JLabel("Username");
-										lblNewLabel_1.setBounds(10, 35, 146, 14);
-										lblNewLabel_1.setForeground(Color.WHITE);
-										frame.getContentPane().add(lblNewLabel_1);
+		JLabel lblNewLabel_1 = new JLabel("Username");
+		lblNewLabel_1.setBounds(10, 35, 146, 14);
+		lblNewLabel_1.setForeground(Color.WHITE);
+		frame.getContentPane().add(lblNewLabel_1);
 						
-								JButton btnNewButton_1 = new JButton("Customer Menu");
-								btnNewButton_1.setBounds(326, 329, 209, 23);
-								btnNewButton_1.addMouseListener(new MouseAdapter() {
-									@Override
-									public void mouseClicked(MouseEvent e) {
-									}
-								});
-								frame.getContentPane().add(btnNewButton_1);
+		JButton btnNewButton_1 = new JButton("Customer Menu");
+		btnNewButton_1.setBounds(326, 329, 209, 23);
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		frame.getContentPane().add(btnNewButton_1);
 						
-								userNameField = new JTextField();
-								userNameField.setBounds(10, 48, 146, 20);
-								frame.getContentPane().add(userNameField);
-								userNameField.setColumns(10);
+		userNameField = new JTextField();
+		userNameField.setToolTipText("Type in your Username!");
+		userNameField.setBounds(10, 48, 146, 20);
+		frame.getContentPane().add(userNameField);
+		userNameField.setColumns(10);
 				
-						JLabel lblNewLabel_1_1 = new JLabel("Password");
-						lblNewLabel_1_1.setBounds(10, 73, 146, 18);
-						lblNewLabel_1_1.setForeground(Color.WHITE);
-						frame.getContentPane().add(lblNewLabel_1_1);
+		JLabel lblNewLabel_1_1 = new JLabel("Password");
+		lblNewLabel_1_1.setBounds(10, 73, 146, 18);
+		lblNewLabel_1_1.setForeground(Color.WHITE);
+		frame.getContentPane().add(lblNewLabel_1_1);
 								
-										JButton btnNewButton = new JButton("Log in");
-										btnNewButton.setBackground(Color.ORANGE);
-										btnNewButton.setBounds(10, 121, 146, 23);
-										btnNewButton.addMouseListener(new MouseAdapter() {
-											@Override
-											public void mouseClicked(MouseEvent e) {
-												String username = userNameField.getText();
-												String password = String.valueOf(passwordField.getPassword());
-												// String[] passwords = validPassword.toArray(new String[validPassword.size()]);
-												// System.out.println(validPassword.toString() + passwords);
-
-												if (validPassword.contains(password) && validUsername.contains(username)) {
-													EmployeeMenu em = new EmployeeMenu(validPassword, mm, validUsername);
-													em.showWindow();
-													frame.setVisible(false);
-													// (Arrays.asList(validPassword).contains(password) &&
-													// Arrays.asList(validUsername).contains(username))
-												} else
-													System.out.println("Wrong username/password! " + username + password + " ");
-											}
-										});
+		JButton btnNewButton = new JButton("Log in");
+		btnNewButton.setBackground(Color.ORANGE);
+		btnNewButton.setBounds(10, 121, 146, 23);
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String username = userNameField.getText();
+				String password = String.valueOf(passwordField.getPassword());
+				// String[] passwords = validPassword.toArray(new String[validPassword.size()]);
+				// System.out.println(validPassword.toString() + passwords);
+        
+				if (validPassword.contains(password) && validUsername.contains(username)) {
+					EmployeeMenu em = new EmployeeMenu(validPassword, mm, validUsername);
+					em.showWindow();
+					frame.setVisible(false);
+				} else
+					System.out.println("Wrong username/password! " + username + password + " ");
+			}
+		});
 										
-												passwordField = new JPasswordField();
-												passwordField.setBounds(10, 90, 146, 20);
-												frame.getContentPane().add(passwordField);
-										frame.getContentPane().add(btnNewButton);
+		passwordField = new JPasswordField();
+		passwordField.setToolTipText("Type in your Password!");
+		passwordField.setBounds(10, 90, 146, 20);
+		frame.getContentPane().add(passwordField);
+		frame.getContentPane().add(btnNewButton);
+		frame.setVisible(true);
+	}
+
+		JButton btnNewButton_1 = new JButton("Customer Menu");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		btnNewButton_1.setBounds(265, 72, 129, 23);
+		frame.getContentPane().add(btnNewButton_1);
+		
+		userNameField = new JTextField();
+		userNameField.setBounds(85, 38, 86, 20);
+		frame.getContentPane().add(userNameField);
+		userNameField.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Username:");
+		lblNewLabel_1.setBounds(10, 41, 65, 14);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Password:");
+		lblNewLabel_1_1.setBounds(10, 76, 65, 14);
+		frame.getContentPane().add(lblNewLabel_1_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(85, 73, 86, 20);
+		frame.getContentPane().add(passwordField);
 		frame.setVisible(true);
 	}
 

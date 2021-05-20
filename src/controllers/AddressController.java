@@ -15,4 +15,7 @@ public class AddressController {
     public int createAddress(Address a) throws DataAccessException {
         return this.addressDB.createAddress(a);
     }
+    public Address findByID(int id) throws DataAccessException {
+        return this.addressDB.findById(id);
+    }
 }
