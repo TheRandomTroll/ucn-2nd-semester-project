@@ -69,9 +69,9 @@ CREATE TABLE Orders(
 	FOREIGN KEY (CustomerId) REFERENCES Customers(Id),
 	OrderStatusId INT,
 	FOREIGN KEY (OrderStatusId) REFERENCES OrderStatuses(Id),
-	InvoiceAddressId INT,
+	InvoiceAddressId INT NULL,
 	FOREIGN KEY (InvoiceAddressId) REFERENCES Addresses(Id),
-	DeliveryAddressId INT,
+	DeliveryAddressId INT NULL,
 	FOREIGN KEY (DeliveryAddressId) REFERENCES Addresses(Id),
 );
 

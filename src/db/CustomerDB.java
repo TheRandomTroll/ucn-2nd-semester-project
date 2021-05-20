@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * A data access class for the <i>Customers</i> table from the database.
+ */
 public class CustomerDB implements CustomerDBIF {
     private static final String FIND_BY_PHONE_NO_Q = "SELECT Id, Name, PhoneNumber, AddressId FROM Customers WHERE PhoneNumber = ?";
     private static final String CREATE_CUSTOMER_Q = "INSERT INTO Customers (Name, PhoneNumber, AddressId) VALUES (?, ?, ?)";

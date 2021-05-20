@@ -7,7 +7,11 @@ import models.Address;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+/**
+ * A data access class for the <i>Addresses</i> table from the database.
+ */
 public class AddressDB implements AddressDBIF {
     private static final String CREATE_ADDRESS_Q = "INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?)";
     private static final String FIND_BY_ID_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ?";
@@ -17,7 +21,7 @@ public class AddressDB implements AddressDBIF {
 
     public AddressDB() throws DataAccessException {
         try {
-            this.createAddressPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_ADDRESS_Q);
+            this.createAddressPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_ADDRESS_Q, Statement.RETURN_GENERATED_KEYS);
             this.findByIdPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_ID_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
@@ -25,13 +29,24 @@ public class AddressDB implements AddressDBIF {
     }
 
     @Override
-    public int createAddress(String street, String streetNumber, String floor, String city, String postalCode) throws DataAccessException {
+    public int createAddress(Address a) throws DataAccessException {
         try {
-            this.createAddressPS.setString(1, street);
-            this.createAddressPS.setString(2, streetNumber);
-            this.createAddressPS.setString(3, floor);
-            this.createAddressPS.setString(4, city);
-            this.createAddressPS.setString(5, postalCode);
+            this.createAddressPS.setString(1, a.getStreetName());
+            this.createAddressPS.setString(2, a.getStreetNumber());
+            this.createAddressPS.setString(3, a.getFloor());
+            this.createAddressPS.setString(4, a.getCity());
+            this.createAddressPS.setString(5, a.getPostalCode());
+
+            int addressId;
+
+            ResultSet generatedKeys = createAddressPS.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                addressId = generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Could not insert address, no ID obtained.");
+            }
+
+            a.setId(addressId);
 
             return this.createAddressPS.executeUpdate();
         } catch (SQLException e) {

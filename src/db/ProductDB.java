@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * A data access class for the <i>Products</i> table from the database.
+ */
 public class ProductDB implements ProductDBIF {
     private static final String FIND_BY_BARCODE_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock FROM Products WHERE Barcode = ?";
 

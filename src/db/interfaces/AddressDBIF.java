@@ -4,6 +4,6 @@ import exceptions.DataAccessException;
 import models.Address;
 
 public interface AddressDBIF {
-    int createAddress(String street, String streetNumber, String floor, String city, String postalCode) throws DataAccessException;
+    int createAddress(Address a) throws DataAccessException;
     Address findById(int id) throws DataAccessException;
 }

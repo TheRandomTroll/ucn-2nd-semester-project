@@ -1,16 +1,11 @@
 package ui;
 
-<<<<<<< Updated upstream
-=======
 import controllers.AddressController;
 import db.AddressDB;
 import exceptions.DataAccessException;
 import models.Address;
 
 import java.awt.Color;
->>>>>>> Stashed changes
-import java.awt.EventQueue;
-
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
