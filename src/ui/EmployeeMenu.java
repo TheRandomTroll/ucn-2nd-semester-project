@@ -1,15 +1,21 @@
 package ui;
 
+<<<<<<< Updated upstream
+=======
+import controllers.AddressController;
+import db.AddressDB;
+import exceptions.DataAccessException;
+import models.Address;
+
+import java.awt.Color;
+>>>>>>> Stashed changes
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
+import javax.swing.border.BevelBorder;
 
 public class EmployeeMenu {
 
@@ -19,6 +25,7 @@ public class EmployeeMenu {
 	private List<String> validPassword;
 	private List<String> validUsername;
 	private MainMenu mm;
+	private JTextField addressIDField;
 
 	/**
 	 * Launch the application.
@@ -40,7 +47,7 @@ public class EmployeeMenu {
 	 * Create the application.
 	 */
 	public EmployeeMenu(List<String> validPassword, MainMenu mm, List<String> validUsername) {
-		//showWindow();
+		showWindow();
 		this.validPassword = validPassword;
 		this.validUsername = validUsername;
 		this.mm = mm;
@@ -59,16 +66,16 @@ public class EmployeeMenu {
 		lblNewLabel.setBounds(187, 11, 91, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton("Main Menu");
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		JButton btnMainMenu = new JButton("Main Menu");
+		btnMainMenu.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				frame.setVisible(false);
 				mm.showWindow();
 			}
 		});
-		btnNewButton.setBounds(10, 227, 109, 23);
-		frame.getContentPane().add(btnNewButton);
+		btnMainMenu.setBounds(10, 227, 109, 23);
+		frame.getContentPane().add(btnMainMenu);
 		
 		JButton btnAddUser = new JButton("Add User");
 		btnAddUser.addMouseListener(new MouseAdapter() {
@@ -99,6 +106,45 @@ public class EmployeeMenu {
 		JLabel lblNewLabel_1_1 = new JLabel("Password:");
 		lblNewLabel_1_1.setBounds(10, 74, 65, 14);
 		frame.getContentPane().add(lblNewLabel_1_1);
+		
+		JButton btnPrintAddress = new JButton("Print Address");
+		btnPrintAddress.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					AddressController addressCont = new AddressController();
+					int id = Integer.parseInt(addressIDField.getText());
+					Address a = addressCont.findByID(id);
+					if (a == null) {
+						JOptionPane.showMessageDialog(frame,
+							    "Reenter the number!!!",
+							    "Error in number format",
+							    JOptionPane.WARNING_MESSAGE);
+					}
+					System.out.println(addressCont.findByID(id));
+				} catch (DataAccessException dataAccessException) {
+					JOptionPane.showMessageDialog (null, "Error in number format: Reenter the number");
+				}
+			}
+		});
+		btnPrintAddress.setBounds(335, 70, 89, 23);
+		frame.getContentPane().add(btnPrintAddress);
+		
+		addressIDField = new JTextField();
+		addressIDField.setBounds(85, 102, 86, 20);
+		frame.getContentPane().add(addressIDField);
+		addressIDField.setColumns(10);
+		
+		JButton btnOrderMenu = new JButton("Order Menu");
+		btnOrderMenu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				OrderMenu om = new OrderMenu();
+				om.showWindow();
+			}
+		});
+		btnOrderMenu.setBounds(335, 104, 89, 23);
+		frame.getContentPane().add(btnOrderMenu);
 		frame.setVisible(true);
 	}
 }
