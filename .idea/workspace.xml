@@ -1,59 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="72ac3c3a-4b49-4d8e-bb0f-27abf121b768" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ui/UIUtil.java" afterDir="false" />
+    <list default="true" id="72ac3c3a-4b49-4d8e-bb0f-27abf121b768" name="Default Changelist" comment="Merged with the main branch">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BioBio.iml" beforeDir="false" afterPath="$PROJECT_DIR$/BioBio.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/controllers/AddressController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/AddressController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/controllers/CustomerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/CustomerController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/controllers/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/OrderController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/controllers/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/ProductController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/controllers/ShoppingListController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/ShoppingListController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/controllers/VoucherController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/VoucherController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/db/OrderLineDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/db/OrderLineDB.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/db/ShoppingListDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/db/ShoppingListDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/CreateOrderMenu$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/CreateOrderMenu.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$5.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/OrderMenu$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/OrderMenu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/diagrams/[DCD] Order Processing - Online.uxf" beforeDir="false" afterPath="$PROJECT_DIR$/diagrams/[DCD] Order Processing - Online.uxf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diagrams/[Domain Model] Shopping remade.uxf" beforeDir="false" afterPath="$PROJECT_DIR$/diagrams/[Domain Model] Shopping remade.uxf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/CreateTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/CreateTables.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/InsertData.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/InsertData.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/ShoppingListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/ShoppingListController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/db/AddressDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/AddressDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/CustomerDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/CustomerDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/OrderDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/OrderDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/ShoppingListDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/ShoppingListDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/ProductDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/ProductDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/db/interfaces/AddressDBIF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/interfaces/AddressDBIF.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/interfaces/CustomerDBIF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/interfaces/CustomerDBIF.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/interfaces/OrderDBIF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/interfaces/OrderDBIF.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Address.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/OrderLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/OrderLine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ShoppingList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ShoppingList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Voucher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Voucher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/DBConnectivityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/DBConnectivityTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/ProductControllerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/CreateOrderMenu.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/EmployeeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/EmployeeMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/OrderMenu.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +90,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.MainMenu" />
@@ -135,7 +117,16 @@
       <updated>1621515477531</updated>
       <workItem from="1621515482922" duration="5772000" />
       <workItem from="1621526897630" duration="25527000" />
+      <workItem from="1621684783559" duration="11954000" />
     </task>
+    <task id="LOCAL-00001" summary="Merged with the main branch">
+      <created>1621684957728</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1621684957728</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,5 +142,10 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merged with the main branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merged with the main branch" />
   </component>
 </project>

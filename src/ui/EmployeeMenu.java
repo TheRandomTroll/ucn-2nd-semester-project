@@ -1,9 +1,11 @@
 package ui;
 
 import controllers.AddressController;
+import controllers.ProductController;
 import db.AddressDB;
 import exceptions.DataAccessException;
 import models.Address;
+import models.Product;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -23,6 +25,12 @@ public class EmployeeMenu {
 	private List<String> validUsername;
 	private MainMenu mm;
 	private JTextField addressIDField;
+	private JTextField barcodeField;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -40,7 +48,6 @@ public class EmployeeMenu {
 		});
 	}
 
-
 	/**
 	 * Create the application.
 	 */
@@ -56,12 +63,12 @@ public class EmployeeMenu {
 	 */
 	public void showWindow() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 532, 462);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Employee Menu");
-		lblNewLabel.setBounds(187, 11, 91, 14);
+		lblNewLabel.setBounds(212, 11, 91, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JButton btnMainMenu = new JButton("Main Menu");
@@ -72,7 +79,7 @@ public class EmployeeMenu {
 				mm.showWindow();
 			}
 		});
-		btnMainMenu.setBounds(10, 227, 109, 23);
+		btnMainMenu.setBounds(10, 389, 109, 23);
 		frame.getContentPane().add(btnMainMenu);
 		
 		JButton btnAddUser = new JButton("Add User");
@@ -85,7 +92,7 @@ public class EmployeeMenu {
 				validPassword.add(password);
 			}
 		});
-		btnAddUser.setBounds(335, 36, 89, 23);
+		btnAddUser.setBounds(319, 35, 120, 23);
 		frame.getContentPane().add(btnAddUser);
 		
 		JLabel lblNewLabel_1 = new JLabel("Username:");
@@ -94,18 +101,18 @@ public class EmployeeMenu {
 		
 		usernameField = new JTextField();
 		usernameField.setColumns(10);
-		usernameField.setBounds(85, 36, 86, 20);
+		usernameField.setBounds(119, 36, 86, 20);
 		frame.getContentPane().add(usernameField);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(85, 71, 86, 20);
+		passwordField.setBounds(119, 67, 86, 20);
 		frame.getContentPane().add(passwordField);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Password:");
 		lblNewLabel_1_1.setBounds(10, 74, 65, 14);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
-		JButton btnPrintAddress = new JButton("Print Address");
+		JButton btnPrintAddress = new JButton("Address Info");
 		btnPrintAddress.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -119,23 +126,119 @@ public class EmployeeMenu {
 							    "Error in number format",
 							    JOptionPane.WARNING_MESSAGE);
 					}
+					JOptionPane.showMessageDialog(frame, addressCont.findById(id));
 					System.out.println(addressCont.findById(id));
 				} catch (DataAccessException dataAccessException) {
 					JOptionPane.showMessageDialog (null, "Error in number format: Reenter the number");
 				}
 			}
 		});
-		btnPrintAddress.setBounds(335, 70, 89, 23);
+		btnPrintAddress.setBounds(319, 70, 120, 23);
 		frame.getContentPane().add(btnPrintAddress);
 		
 		addressIDField = new JTextField();
-		addressIDField.setBounds(85, 102, 86, 20);
+		addressIDField.setBounds(119, 102, 86, 20);
 		frame.getContentPane().add(addressIDField);
 		addressIDField.setColumns(10);
 		
-		JButton btnOrderMenu = new JButton("Order Menu");
-		btnOrderMenu.setBounds(335, 104, 89, 23);
-		frame.getContentPane().add(btnOrderMenu);
+		JLabel lblNewLabel_1_1_1 = new JLabel("Address ID:");
+		lblNewLabel_1_1_1.setBounds(10, 108, 65, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1);
+
+		JButton btnPrintAddress_1 = new JButton("Remove Address");
+		btnPrintAddress_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					AddressController addressCont = new AddressController();
+					int id = Integer.parseInt(addressIDField.getText());
+					addressCont.removeById1(id);
+					//JOptionPane.showMessageDialog(frame, addressCont.removeById1(id));
+				} catch (DataAccessException dataAccessException) {
+					JOptionPane.showMessageDialog (null, "Error in number format: Reenter the number");
+				}
+			}
+		});
+		btnPrintAddress_1.setBounds(319, 104, 120, 23);
+		frame.getContentPane().add(btnPrintAddress_1);
+
+		JButton btnProductInfo = new JButton("Product Info");
+		btnProductInfo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+				ProductController prodCont = new ProductController();
+				int barcode = Integer.parseInt(barcodeField.getText());
+				Product p = prodCont.findByBarcode(barcode);
+
+				if (p == null) {
+					JOptionPane.showMessageDialog(frame,
+							"Reenter the barcode!!!",
+							"Wrong Barcode",
+							JOptionPane.WARNING_MESSAGE);
+				}
+				else JOptionPane.showMessageDialog(frame, prodCont.findByBarcode(barcode));
+			}catch (DataAccessException dataAccessException) {
+					JOptionPane.showMessageDialog(null, "Error in number format: Reenter the number");
+				}
+		}
+		});
+		btnProductInfo.setBounds(319, 138, 120, 23);
+		frame.getContentPane().add(btnProductInfo);
+
+		JLabel lblNewLabel_1_1_1_1 = new JLabel("Product Barcode:");
+		lblNewLabel_1_1_1_1.setBounds(10, 142, 109, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1_1);
+
+		barcodeField = new JTextField();
+		barcodeField.setColumns(10);
+		barcodeField.setBounds(119, 136, 86, 20);
+		frame.getContentPane().add(barcodeField);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(119, 167, 86, 20);
+		frame.getContentPane().add(textField);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(119, 198, 86, 20);
+		frame.getContentPane().add(textField_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(119, 229, 86, 20);
+		frame.getContentPane().add(textField_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(119, 260, 86, 20);
+		frame.getContentPane().add(textField_3);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.setBounds(119, 291, 86, 20);
+		frame.getContentPane().add(textField_4);
+		
+		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Street:");
+		lblNewLabel_1_1_1_1_1.setBounds(10, 170, 109, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1_1_1);
+		
+		JLabel lblNewLabel_1_1_1_1_2 = new JLabel("Street Number:");
+		lblNewLabel_1_1_1_1_2.setBounds(10, 201, 109, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1_1_2);
+		
+		JLabel lblNewLabel_1_1_1_1_3 = new JLabel("Floor:");
+		lblNewLabel_1_1_1_1_3.setBounds(10, 232, 109, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1_1_3);
+		
+		JLabel lblNewLabel_1_1_1_1_4 = new JLabel("City:");
+		lblNewLabel_1_1_1_1_4.setBounds(10, 263, 109, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1_1_4);
+		
+		JLabel lblNewLabel_1_1_1_1_5 = new JLabel("Postal Code:");
+		lblNewLabel_1_1_1_1_5.setBounds(10, 294, 109, 14);
+		frame.getContentPane().add(lblNewLabel_1_1_1_1_5);
 		frame.setVisible(true);
 	}
 }
