@@ -8,7 +8,5 @@ import models.Product;
 public interface OrderDBIF {
     int createOrder(Order o) throws DataAccessException;
 
-    int updateOrder(Order o) throws DataAccessException;
-
     int saveOrder(Order o) throws DataAccessException;
 }

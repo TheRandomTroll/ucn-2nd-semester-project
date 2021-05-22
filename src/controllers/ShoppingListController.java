@@ -19,9 +19,9 @@ public class ShoppingListController {
         this.shoppingListDB = new ShoppingListDB();
     }
 
-    public ShoppingList createShoppingList(Order o, Voucher v, PaymentType paymentType) {
+    public ShoppingList createShoppingList(Order o, PaymentType paymentType) {
         Date today = Date.valueOf(LocalDate.now());
-        this.sl = new ShoppingList(today, o, v, paymentType);
+        this.sl = new ShoppingList(today, o, paymentType);
         return sl;
     }
 

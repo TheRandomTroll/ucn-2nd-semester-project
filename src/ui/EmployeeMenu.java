@@ -6,6 +6,8 @@ import exceptions.DataAccessException;
 import models.Address;
 
 import java.awt.Color;
+import java.awt.EventQueue;
+
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,6 +39,7 @@ public class EmployeeMenu {
 			}
 		});
 	}
+
 
 	/**
 	 * Create the application.
@@ -109,14 +112,14 @@ public class EmployeeMenu {
 				try {
 					AddressController addressCont = new AddressController();
 					int id = Integer.parseInt(addressIDField.getText());
-					Address a = addressCont.findByID(id);
+					Address a = addressCont.findById(id);
 					if (a == null) {
 						JOptionPane.showMessageDialog(frame,
 							    "Reenter the number!!!",
 							    "Error in number format",
 							    JOptionPane.WARNING_MESSAGE);
 					}
-					System.out.println(addressCont.findByID(id));
+					System.out.println(addressCont.findById(id));
 				} catch (DataAccessException dataAccessException) {
 					JOptionPane.showMessageDialog (null, "Error in number format: Reenter the number");
 				}
@@ -131,13 +134,6 @@ public class EmployeeMenu {
 		addressIDField.setColumns(10);
 		
 		JButton btnOrderMenu = new JButton("Order Menu");
-		btnOrderMenu.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				OrderMenu om = new OrderMenu();
-				om.showWindow();
-			}
-		});
 		btnOrderMenu.setBounds(335, 104, 89, 23);
 		frame.getContentPane().add(btnOrderMenu);
 		frame.setVisible(true);

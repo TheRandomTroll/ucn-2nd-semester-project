@@ -17,6 +17,14 @@ public class Address {
         this.postalCode = postalCode;
     }
 
+    public Address(String streetName, String streetNumber, String floor, String city, String postalCode) {
+        this.streetName = streetName;
+        this.streetNumber = streetNumber;
+        this.floor = floor;
+        this.city = city;
+        this.postalCode = postalCode;
+    }
+
     public int getId() {
         return id;
     }
@@ -67,13 +75,6 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", streetName='" + streetName + '\'' +
-                ", streetNumber='" + streetNumber + '\'' +
-                ", floor='" + floor + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                '}';
+        return this.streetName + " " + this.streetNumber + ",<br>Floor: " + this.floor + ", " + this.getPostalCode() + " " + this.getCity();
     }
 }

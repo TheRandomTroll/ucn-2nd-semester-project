@@ -7,13 +7,11 @@ import java.sql.Date;
 public class ShoppingList {
     private Date creationDate;
     private Order order;
-    private Voucher appliedVoucher;
     private PaymentType paymentType;
 
-    public ShoppingList(Date creationDate, Order order, Voucher appliedVoucher, PaymentType paymentType) {
+    public ShoppingList(Date creationDate, Order order, PaymentType paymentType) {
         this.creationDate = creationDate;
         this.order = order;
-        this.appliedVoucher = appliedVoucher;
         this.paymentType = paymentType;
     }
 
@@ -31,14 +29,6 @@ public class ShoppingList {
 
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public Voucher getAppliedVoucher() {
-        return appliedVoucher;
-    }
-
-    public void setAppliedVoucher(Voucher appliedVoucher) {
-        this.appliedVoucher = appliedVoucher;
     }
 
     public PaymentType getPaymentType() {

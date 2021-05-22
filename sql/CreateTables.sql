@@ -58,6 +58,7 @@ CREATE TABLE Customers(
 	Id INT PRIMARY KEY IDENTITY,
 	Name VARCHAR(100),
 	PhoneNumber VARCHAR(100),
+	Email VARCHAR(100),
 	AddressId INT,
 	FOREIGN KEY (AddressId) REFERENCES Addresses(Id)
 );
@@ -65,6 +66,9 @@ CREATE TABLE Customers(
 CREATE TABLE Orders(
 	Id INT PRIMARY KEY IDENTITY,
 	OrderNumber VARCHAR(100),
+	TotalPrice FLOAT,
+	AppliedVoucherId INT NULL,
+	FOREIGN KEY (AppliedVoucherId) REFERENCES Vouchers(Id),
 	CustomerId INT,
 	FOREIGN KEY (CustomerId) REFERENCES Customers(Id),
 	OrderStatusId INT,
@@ -80,8 +84,6 @@ CREATE TABLE ShoppingLists(
 	CreationDate DATE,
 	OrderId INT,
 	FOREIGN KEY (OrderId) REFERENCES Orders(Id),
-	AppliedVoucherId INT NULL,
-	FOREIGN KEY (AppliedVoucherId) REFERENCES Vouchers(Id),
 	PaymentTypeId INT,
 	FOREIGN KEY (PaymentTypeId) REFERENCES PaymentTypes(Id)
 );
