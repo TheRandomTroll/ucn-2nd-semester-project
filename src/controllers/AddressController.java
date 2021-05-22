@@ -23,11 +23,11 @@ public class AddressController {
         return this.addressDB.findByData(a);
     }
 
-    public Address removeById(int id) throws DataAccessException {
-        return this.addressDB.removeAddress(id);
+    public void removeById(int id) throws DataAccessException {
+        addressDB.removeAddress(id);
     }
 
-    public void removeById1(int id) throws DataAccessException {
-        addressDB.removeAddress1(id);
+    public void editStreet(int id, String source) throws DataAccessException {
+        addressDB.changeStreet(id, source);
     }
 }

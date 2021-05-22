@@ -13,16 +13,19 @@ import java.sql.Statement;
  * A data access class for the <i>Addresses</i> table from the database.
  */
 public class AddressDB implements AddressDBIF {
+    private static final String UPDATE_STREET_Q = "UPDATE Addresses SET Street = ? WHERE id = ?";
     private static final String CREATE_ADDRESS_Q = "INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?)";
     private static final String FIND_BY_ID_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ?";
     private static final String REMOVE_BY_ID_Q = "UPDATE Addresses SET Street = null, StreetNumber = null, Floor = null, City = null, PostalCode = null WHERE Id = ?";
     private static final String FIND_BY_DATA_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
             "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ?";
 
+
     private PreparedStatement createAddressPS;
     private PreparedStatement findByIdPS;
     private PreparedStatement findByDataPS;
     private PreparedStatement removeByIdPS;
+    private PreparedStatement changeStreet;
 
     public AddressDB() throws DataAccessException {
         try {
@@ -30,6 +33,7 @@ public class AddressDB implements AddressDBIF {
             this.findByIdPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_ID_Q);
             this.findByDataPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_DATA_Q);
             this.removeByIdPS = DBConnection.getInstance().getConnection().prepareStatement(REMOVE_BY_ID_Q);
+            this.changeStreet = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_STREET_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
         }
@@ -60,6 +64,17 @@ public class AddressDB implements AddressDBIF {
         } catch (SQLException e) {
             throw new DataAccessException("Could not insert data", e);
 
+        }
+    }
+
+    @Override
+    public void changeStreet(int id, String source) throws DataAccessException {
+        try {
+            this.changeStreet.setInt(2, id);
+            this.changeStreet.setString(1, source);
+            this.changeStreet.executeQuery();
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not fetch data", e);
         }
     }
 
@@ -104,18 +119,7 @@ public class AddressDB implements AddressDBIF {
         }
     }
 
-
-    public Address removeAddress(int id) throws DataAccessException {
-        try {
-            this.removeByIdPS.setInt(1, id);
-            ResultSet rs = this.removeByIdPS.executeQuery();
-        } catch (SQLException e) {
-            throw new DataAccessException("Could not fetch data", e);
-        }
-        return null;
-    }
-
-    public void removeAddress1(int id) throws DataAccessException {
+    public void removeAddress(int id) throws DataAccessException {
         try {
             this.removeByIdPS.setInt(1, id);
             this.removeByIdPS.executeQuery();

@@ -26,7 +26,7 @@ public class EmployeeMenu {
 	private MainMenu mm;
 	private JTextField addressIDField;
 	private JTextField barcodeField;
-	private JTextField textField;
+	private JTextField streetField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
@@ -152,10 +152,9 @@ public class EmployeeMenu {
 				try {
 					AddressController addressCont = new AddressController();
 					int id = Integer.parseInt(addressIDField.getText());
-					addressCont.removeById1(id);
-					//JOptionPane.showMessageDialog(frame, addressCont.removeById1(id));
+					addressCont.removeById(id);
 				} catch (DataAccessException dataAccessException) {
-					JOptionPane.showMessageDialog (null, "Error in number format: Reenter the number");
+					JOptionPane.showMessageDialog (null, "Address removed!!!");
 				}
 			}
 		});
@@ -195,10 +194,10 @@ public class EmployeeMenu {
 		barcodeField.setBounds(119, 136, 86, 20);
 		frame.getContentPane().add(barcodeField);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(119, 167, 86, 20);
-		frame.getContentPane().add(textField);
+		streetField = new JTextField();
+		streetField.setColumns(10);
+		streetField.setBounds(119, 167, 86, 20);
+		frame.getContentPane().add(streetField);
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
@@ -239,6 +238,39 @@ public class EmployeeMenu {
 		JLabel lblNewLabel_1_1_1_1_5 = new JLabel("Postal Code:");
 		lblNewLabel_1_1_1_1_5.setBounds(10, 294, 109, 14);
 		frame.getContentPane().add(lblNewLabel_1_1_1_1_5);
+		
+		JButton btnEditStreet = new JButton("Edit Street");
+		btnEditStreet.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					AddressController addressCont = new AddressController();
+					int id = Integer.parseInt(addressIDField.getText());
+					String source = streetField.getText();
+					addressCont.editStreet(id, source);
+				} catch (DataAccessException dataAccessException) {
+					JOptionPane.showMessageDialog (null, "Address Updated!!!");
+				}
+			}
+		});
+		btnEditStreet.setBounds(319, 172, 120, 23);
+		frame.getContentPane().add(btnEditStreet);
+		
+		JButton btnProductInfo_2 = new JButton("Product Info");
+		btnProductInfo_2.setBounds(319, 207, 120, 23);
+		frame.getContentPane().add(btnProductInfo_2);
+		
+		JButton btnProductInfo_3 = new JButton("Product Info");
+		btnProductInfo_3.setBounds(319, 241, 120, 23);
+		frame.getContentPane().add(btnProductInfo_3);
+		
+		JButton btnProductInfo_4 = new JButton("Product Info");
+		btnProductInfo_4.setBounds(319, 275, 120, 23);
+		frame.getContentPane().add(btnProductInfo_4);
+		
+		JButton btnProductInfo_4_1 = new JButton("Product Info");
+		btnProductInfo_4_1.setBounds(319, 309, 120, 23);
+		frame.getContentPane().add(btnProductInfo_4_1);
 		frame.setVisible(true);
 	}
 }

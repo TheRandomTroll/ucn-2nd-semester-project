@@ -1,30 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="72ac3c3a-4b49-4d8e-bb0f-27abf121b768" name="Default Changelist" comment="Merged with the main branch">
+    <list default="true" id="72ac3c3a-4b49-4d8e-bb0f-27abf121b768" name="Default Changelist" comment="Added &quot;remove address&quot; and started making CRUD for addresss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/controllers/AddressController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/AddressController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/controllers/CustomerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/CustomerController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/controllers/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/ProductController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/controllers/ShoppingListController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/ShoppingListController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/controllers/VoucherController.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/controllers/VoucherController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/db/OrderLineDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/db/OrderLineDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/db/ShoppingListDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/db/ShoppingListDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ui/CreateOrderMenu$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ui/CreateOrderMenu.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ui/EmployeeMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/EmployeeMenu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ui/MainMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ui/MainMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ui/OrderMenu$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ui/OrderMenu.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/AddressController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/db/AddressDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/AddressDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/ProductDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/ProductDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/db/interfaces/AddressDBIF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/interfaces/AddressDBIF.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/EmployeeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/EmployeeMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/MainMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +106,7 @@
       <updated>1621515477531</updated>
       <workItem from="1621515482922" duration="5772000" />
       <workItem from="1621526897630" duration="25527000" />
-      <workItem from="1621684783559" duration="11954000" />
+      <workItem from="1621684783559" duration="14252000" />
     </task>
     <task id="LOCAL-00001" summary="Merged with the main branch">
       <created>1621684957728</created>
@@ -126,7 +115,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621684957728</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added &quot;remove address&quot; and started making CRUD for addresss">
+      <created>1621697313394</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1621697313394</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,6 +142,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Merged with the main branch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged with the main branch" />
+    <MESSAGE value="Added &quot;remove address&quot; and started making CRUD for addresss" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added &quot;remove address&quot; and started making CRUD for addresss" />
   </component>
 </project>
