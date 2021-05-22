@@ -19,11 +19,15 @@ public class CustomerController {
         return this.customerDB.findByPhoneNo(phoneNo);
     }
 
-    public int createCustomer(String name, String phoneNo, Address a) throws DataAccessException {
-        if(a.getId() == 0) {
-            this.addressController.createAddress(a);
-        }
+    public int createCustomer(String name, String phoneNo, String email, Address a) throws DataAccessException {
+        return this.customerDB.createCustomer(name, phoneNo, email, a.getId());
+    }
 
-        return this.customerDB.createCustomer(name, phoneNo, a.getId());
+    public Address findAddressByData(Address a) throws DataAccessException {
+        return this.addressController.findByData(a);
+    }
+
+    public void createAddress(Address a) throws DataAccessException {
+        this.addressController.createAddress(a);
     }
 }

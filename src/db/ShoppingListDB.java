@@ -12,7 +12,7 @@ import java.sql.Statement;
  * A data access class for the <i>ShoppingLists</i> table from the database.
  */
 public class ShoppingListDB implements ShoppingListDBIF {
-    private static final String CREATE_LIST_Q = "INSERT INTO ShoppingLists (CreationDate, OrderId, AppliedVoucherId, PaymentTypeId) VALUES (?, ?, ?, ?)";
+    private static final String CREATE_LIST_Q = "INSERT INTO ShoppingLists (CreationDate, OrderId, PaymentTypeId) VALUES (?, ?, ?)";
 
     private PreparedStatement createListPS;
 
@@ -29,8 +29,7 @@ public class ShoppingListDB implements ShoppingListDBIF {
         try {
             this.createListPS.setDate(1, sl.getCreationDate());
             this.createListPS.setInt(2, sl.getOrder().getId());
-            this.createListPS.setInt(3, sl.getAppliedVoucher().getId());
-            this.createListPS.setInt(4, sl.getPaymentType().getValue());
+            this.createListPS.setInt(3, sl.getPaymentType().getValue());
 
             return this.createListPS.executeUpdate();
         } catch (SQLException e) {

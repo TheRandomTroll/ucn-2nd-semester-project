@@ -24,4 +24,9 @@ public class OrderLine {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    @Override
+    public String toString() {
+        return "<html>" + product.getName() + " (" + quantity + " * " + product.getPrice() + ")<br>" + String.format("%.2f", product.getPrice() * quantity) + "kn";
+    }
 }

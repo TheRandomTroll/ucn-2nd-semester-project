@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Voucher {
     private int id;
@@ -54,5 +55,11 @@ public class Voucher {
             throw new IllegalArgumentException("discount should be a value between 0 and 1.");
         }
         this.discount = discount;
+    }
+
+    public boolean checkIfValid() {
+        int result = Date.valueOf(LocalDate.now()).compareTo(this.expirationDate);
+        System.out.println(result);
+        return Date.valueOf(LocalDate.now()).compareTo(this.expirationDate) < 0;
     }
 }

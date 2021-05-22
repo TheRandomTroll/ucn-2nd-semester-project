@@ -4,14 +4,22 @@ public class Customer {
     private int id;
     private String name;
     private String phoneNumber;
-    private int addressId;
+    private String email;
     private Address address;
 
-    public Customer(int id, String name, String phoneNumber, int addressId) {
+    public Customer(int id, String name, String phoneNumber, String email, Address address) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.addressId = addressId;
+        this.email = email;
+        this.address = address;
+    }
+
+    public Customer(String name, String phoneNumber, String email, Address address) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
     }
 
     public int getId() {
@@ -38,12 +46,12 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getAddressId() {
-        return addressId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Address getAddress() {

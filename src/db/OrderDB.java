@@ -11,7 +11,7 @@ import java.sql.*;
  */
 public class OrderDB implements OrderDBIF {
     private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
+    private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
 
     private PreparedStatement createOrderPS;
     private PreparedStatement updateOrderPS;
@@ -62,13 +62,19 @@ public class OrderDB implements OrderDBIF {
         }
     }
 
-    @Override
-    public int updateOrder(Order o) throws DataAccessException {
+    private int updateOrder(Order o) throws DataAccessException {
         try {
-            this.updateOrderPS.setInt(1, o.getStatus().getValue());
-            this.updateOrderPS.setInt(2, o.getInvoiceAddress().getId());
-            this.updateOrderPS.setInt(3, o.getDeliveryAddress().getId());
-            this.updateOrderPS.setInt(4, o.getId());
+            this.updateOrderPS.setString(1, o.getOrderNumber());
+            this.updateOrderPS.setDouble(2, o.getTotalPrice());
+            if(o.getAppliedVoucher() == null) {
+                this.updateOrderPS.setNull(3, Types.NULL);
+            } else {
+                this.updateOrderPS.setInt(3, o.getAppliedVoucher().getId());
+            }
+            this.updateOrderPS.setInt(4, o.getStatus().getValue());
+            this.updateOrderPS.setInt(5, o.getInvoiceAddress().getId());
+            this.updateOrderPS.setInt(6, o.getDeliveryAddress().getId());
+            this.updateOrderPS.setInt(7, o.getId());
 
             return this.updateOrderPS.executeUpdate();
 

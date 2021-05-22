@@ -15,14 +15,18 @@ import java.sql.Statement;
 public class AddressDB implements AddressDBIF {
     private static final String CREATE_ADDRESS_Q = "INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?)";
     private static final String FIND_BY_ID_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ?";
+    private static final String FIND_BY_DATA_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
+            "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ?";
 
     private PreparedStatement createAddressPS;
     private PreparedStatement findByIdPS;
+    private PreparedStatement findByDataPS;
 
     public AddressDB() throws DataAccessException {
         try {
             this.createAddressPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_ADDRESS_Q, Statement.RETURN_GENERATED_KEYS);
             this.findByIdPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_ID_Q);
+            this.findByDataPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_DATA_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
         }
@@ -38,6 +42,7 @@ public class AddressDB implements AddressDBIF {
             this.createAddressPS.setString(5, a.getPostalCode());
 
             int addressId;
+            int rows = this.createAddressPS.executeUpdate();
 
             ResultSet generatedKeys = createAddressPS.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -48,7 +53,7 @@ public class AddressDB implements AddressDBIF {
 
             a.setId(addressId);
 
-            return this.createAddressPS.executeUpdate();
+            return rows;
         } catch (SQLException e) {
             throw new DataAccessException("Could not insert data", e);
 
@@ -72,11 +77,34 @@ public class AddressDB implements AddressDBIF {
         }
     }
 
+    @Override
+    public Address findByData(Address a) throws DataAccessException {
+        try {
+            this.findByDataPS.setString(1, a.getStreetName());
+            this.findByDataPS.setString(2, a.getStreetNumber());
+            this.findByDataPS.setString(3, a.getFloor());
+            this.findByDataPS.setString(4, a.getCity());
+            this.findByDataPS.setString(5, a.getPostalCode());
+
+
+            ResultSet rs = findByDataPS.executeQuery();
+            Address value = null;
+
+            if(rs.next()) {
+                value = buildObject(rs);
+            }
+
+            return value;
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not insert data", e);
+
+        }
+    }
+
     private Address buildObject(ResultSet rs) throws DataAccessException {
         try {
-            Address a = new Address(rs.getInt("Id"), rs.getString("Street"), rs.getString("StreetNumber"),
+            return new Address(rs.getInt("Id"), rs.getString("Street"), rs.getString("StreetNumber"),
                                     rs.getString("Floor"), rs.getString("City"), rs.getString("PostalCode"));
-            return a;
         } catch (SQLException e) {
             throw new DataAccessException("Could not parse data", e);
 
