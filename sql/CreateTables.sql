@@ -83,7 +83,7 @@ CREATE TABLE ShoppingLists(
 	Id INT PRIMARY KEY IDENTITY,
 	CreationDate DATE,
 	OrderId INT,
-	FOREIGN KEY (OrderId) REFERENCES Orders(Id),
+	FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE,
 	PaymentTypeId INT,
 	FOREIGN KEY (PaymentTypeId) REFERENCES PaymentTypes(Id)
 );
@@ -94,7 +94,7 @@ CREATE TABLE OrderLines(
 	ProductId INT,
 	FOREIGN KEY (ProductId) REFERENCES Products(Id),
 	OrderId INT,
-	FOREIGN KEY (OrderId) REFERENCES Orders(Id)
+	FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE Couriers(

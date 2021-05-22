@@ -68,7 +68,7 @@ public class Order {
         return (1 - appliedVoucher.getDiscount()) * totalPrice;
     }
 
-    public void updateTotalPrice() {
+    private void updateTotalPrice() {
         double total = 0;
         for(OrderLine ol : orderLines) {
             total += ol.getQuantity() * ol.getProduct().getPrice();
@@ -125,7 +125,7 @@ public class Order {
         return appliedVoucher;
     }
 
-    public void setAppliedVoucher(Voucher appliedVoucher) {
+    private void setAppliedVoucher(Voucher appliedVoucher) {
         this.appliedVoucher = appliedVoucher;
     }
 
@@ -147,5 +147,21 @@ public class Order {
         return IntStream.range(0, orderLines.size())
                 .filter(x -> orderLines.get(x).getProduct().getBarcode() == p.getBarcode())
                 .findFirst();
+    }
+
+    public int applyVoucher(Voucher v) {
+        if(v == null) {
+            return -1;
+        } else if (!v.checkIfValid()) {
+            return -2;
+        } else {
+            this.appliedVoucher = v;
+        }
+        return 0;
+    }
+
+    public void removeOrderLine(int selectedIndex) {
+        this.orderLines.remove(selectedIndex);
+        this.updateTotalPrice();
     }
 }

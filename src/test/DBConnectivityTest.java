@@ -8,10 +8,9 @@ import org.junit.Before;
 import db.DBConnection;
 import org.junit.Test;
 
-class DBConnectivityTest {
-	DBConnection con = null;
+public class DBConnectivityTest {
+	private DBConnection con = null;
 
-	/** Fixture for pay station testing. */
 	@Before
 	public void setUp() {
 		con = DBConnection.getInstance();

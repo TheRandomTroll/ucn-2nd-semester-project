@@ -3,6 +3,7 @@ package controllers;
 import db.OrderDB;
 import db.interfaces.OrderDBIF;
 import exceptions.DataAccessException;
+import exceptions.InsufficientDataException;
 import models.*;
 import models.enums.OrderStatus;
 import models.enums.PaymentType;
@@ -38,7 +39,11 @@ public class OrderController {
         return order;
     }
 
-    public int finishSale(PaymentType paymentType) throws DataAccessException {
+    public int finishSale(PaymentType paymentType) throws DataAccessException, InsufficientDataException {
+        if(order.getOrderLines().size() == 0) {
+            throw new InsufficientDataException("Not enough order lines to finish order.");
+        }
+
         this.shoppingListController.createShoppingList(order, paymentType);
         this.shoppingListController.saveShoppingList();
         this.order.setStatus(OrderStatus.ALLOCATED);

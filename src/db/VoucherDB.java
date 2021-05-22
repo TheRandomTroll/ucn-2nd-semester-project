@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * A data access class for the <i>Vouchers</i> table from the database.
  */
 public class VoucherDB implements VoucherDBIF {
-    private static final String FIND_BY_CODE_Q = "SELECT Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ?";
+    private static final String FIND_BY_CODE_Q = "SELECT Id, Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ?";
 
     private PreparedStatement findByCodePS;
 
@@ -44,7 +44,7 @@ public class VoucherDB implements VoucherDBIF {
 
     private Voucher buildObject(ResultSet rs) throws DataAccessException {
         try {
-            return new Voucher(rs.getString("Code"), rs.getDate("ExpirationDate"), rs.getDouble("Discount"));
+            return new Voucher(rs.getInt("Id"), rs.getString("Code"), rs.getDate("ExpirationDate"), rs.getDouble("Discount"));
         } catch (SQLException e) {
             throw new DataAccessException("Could not parse data", e);
         }
