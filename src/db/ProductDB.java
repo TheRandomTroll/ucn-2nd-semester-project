@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class ProductDB implements ProductDBIF {
     private static final String FIND_BY_BARCODE_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock FROM Products WHERE Barcode = ?";
 
-    private PreparedStatement findByBarcodePS;
+    private final PreparedStatement findByBarcodePS;
 
     public ProductDB() throws DataAccessException {
         try {

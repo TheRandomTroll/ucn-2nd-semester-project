@@ -18,9 +18,9 @@ public class AddressDB implements AddressDBIF {
     private static final String FIND_BY_DATA_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
             "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ?";
 
-    private PreparedStatement createAddressPS;
-    private PreparedStatement findByIdPS;
-    private PreparedStatement findByDataPS;
+    private final PreparedStatement createAddressPS;
+    private final PreparedStatement findByIdPS;
+    private final PreparedStatement findByDataPS;
 
     public AddressDB() throws DataAccessException {
         try {

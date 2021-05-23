@@ -67,14 +67,9 @@ public class CreateOrderCustomerMenu {
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        JLabel lblWelcome = new JLabel();
-        lblWelcome.setText("<html>Welcome,<br>" + customer.getName() + "!");
-        lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblWelcome.setBounds(10, 11, 251, 47);
-        frame.getContentPane().add(lblWelcome);
-
-        JLabel lblNewLabel = new JLabel("Here you can create a new\r\n order.");
-        lblNewLabel.setBounds(10, 54, 197, 14);
+        JLabel lblNewLabel = new JLabel("Create New Order");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblNewLabel.setBounds(10, 18, 197, 14);
         frame.getContentPane().add(lblNewLabel);
 
         JScrollPane scrollPane = new JScrollPane();

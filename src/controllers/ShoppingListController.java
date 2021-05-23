@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 public class ShoppingListController {
     private ShoppingList sl;
-    private ShoppingListDBIF shoppingListDB;
+    private final ShoppingListDBIF shoppingListDB;
 
     public ShoppingListController() throws DataAccessException {
         this.shoppingListDB = new ShoppingListDB();

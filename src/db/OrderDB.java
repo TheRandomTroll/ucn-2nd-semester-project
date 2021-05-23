@@ -13,8 +13,8 @@ public class OrderDB implements OrderDBIF {
     private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
 
-    private PreparedStatement createOrderPS;
-    private PreparedStatement updateOrderPS;
+    private final PreparedStatement createOrderPS;
+    private final PreparedStatement updateOrderPS;
 
     public OrderDB() throws DataAccessException {
         try {

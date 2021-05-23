@@ -6,7 +6,7 @@ import exceptions.DataAccessException;
 import models.Address;
 
 public class AddressController {
-    private AddressDBIF addressDB;
+    private final AddressDBIF addressDB;
 
     public AddressController() throws DataAccessException {
         this.addressDB = new AddressDB();

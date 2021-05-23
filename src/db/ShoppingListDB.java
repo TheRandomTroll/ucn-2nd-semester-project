@@ -14,7 +14,7 @@ import java.sql.Statement;
 public class ShoppingListDB implements ShoppingListDBIF {
     private static final String CREATE_LIST_Q = "INSERT INTO ShoppingLists (CreationDate, OrderId, PaymentTypeId) VALUES (?, ?, ?)";
 
-    private PreparedStatement createListPS;
+    private final PreparedStatement createListPS;
 
     public ShoppingListDB() throws DataAccessException {
         try {

@@ -3,6 +3,11 @@ package ui;
 import models.Address;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UIUtil {
     public static void displayDBErrorMsg(String exceptionMessage) {
@@ -24,5 +29,12 @@ public class UIUtil {
         String postalCode = textFieldPostalCode.getText();
 
         return new Address(street, streetNumber, floor, city, postalCode);
+    }
+
+    public static List<JTextField> getTextFields(Container container) {
+        return Stream.of(container.getComponents()).filter(x -> x instanceof JTextField).map(x -> (JTextField) x).collect(Collectors.toList());
+    }
+    public static List<String> getEmptyTextFields(List<JTextField> fields) {
+        return fields.stream().filter(x -> x.getText().equals("")).map(Component::getName).collect(Collectors.toList());
     }
 }

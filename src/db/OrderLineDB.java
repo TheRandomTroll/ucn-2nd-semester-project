@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class OrderLineDB implements OrderLineDBIF {
     private static final String CREATE_ORDER_LINE_Q = "INSERT INTO OrderLines (Quantity, ProductId, OrderId) VALUES (?, ?, ?)";
 
-    private PreparedStatement createOrderLinePS;
+    private final PreparedStatement createOrderLinePS;
 
     public OrderLineDB() throws DataAccessException {
         try {

@@ -15,9 +15,9 @@ public class MainMenu {
 
     private JFrame frame;
     private JTextField userNameField;
-    private List<String> validPassword = new ArrayList<>();
-    private List<String> validUsername = new ArrayList<>();
-    private MainMenu mm;
+    private final List<String> validPassword = new ArrayList<>();
+    private final List<String> validUsername = new ArrayList<>();
+    private final MainMenu mm;
 
     // private static final String[] validUsername = {
     // "jozo", "jure", "boban"
@@ -29,6 +29,12 @@ public class MainMenu {
      * Launch the application.
      */
     public static void main(String[] args) {
+        setUIFont(new javax.swing.plaf.FontUIResource("Tahoma",Font.PLAIN,11));
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -45,7 +51,6 @@ public class MainMenu {
      * Create the application.
      */
     public MainMenu() {
-		setUIFont (new javax.swing.plaf.FontUIResource("Tahoma",Font.PLAIN,11));
 		validPassword.add("25");
         validUsername.add("jozo");
         validUsername.add("jure");
@@ -58,7 +63,7 @@ public class MainMenu {
      */
     public void showWindow() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 222, 259);
+        frame.setBounds(100, 100, 222, 232);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -74,13 +79,13 @@ public class MainMenu {
         frame.getContentPane().add(lblNewLabel_1);
 
         JButton btnNewButton_1 = new JButton("Customer Menu");
-        btnNewButton_1.setBounds(10, 186, 186, 23);
+        btnNewButton_1.setBounds(10, 155, 186, 23);
         btnNewButton_1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                CustomerMenu cm = null;
+                CustomerLoginMenu cm = null;
                 try {
-                    cm = new CustomerMenu();
+                    cm = new CustomerLoginMenu();
                 } catch (DataAccessException dataAccessException) {
                     dataAccessException.printStackTrace();
                 }

@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class VoucherDB implements VoucherDBIF {
     private static final String FIND_BY_CODE_Q = "SELECT Id, Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ?";
 
-    private PreparedStatement findByCodePS;
+    private final PreparedStatement findByCodePS;
 
     public VoucherDB() throws DataAccessException {
         try {

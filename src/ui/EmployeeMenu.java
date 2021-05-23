@@ -19,9 +19,9 @@ public class EmployeeMenu {
 	private JFrame frame;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	private List<String> validPassword;
-	private List<String> validUsername;
-	private MainMenu mm;
+	private final List<String> validPassword;
+	private final List<String> validUsername;
+	private final MainMenu mm;
 	private JTextField addressIDField;
 
 	/**

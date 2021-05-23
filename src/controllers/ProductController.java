@@ -6,7 +6,7 @@ import exceptions.DataAccessException;
 import models.Product;
 
 public class ProductController {
-    private ProductDBIF productDB;
+    private final ProductDBIF productDB;
 
     public ProductController() throws DataAccessException {
         this.productDB = new ProductDB();

@@ -6,7 +6,7 @@ import exceptions.DataAccessException;
 import models.Voucher;
 
 public class VoucherController {
-    private VoucherDBIF voucherDB;
+    private final VoucherDBIF voucherDB;
 
     public VoucherController() throws DataAccessException {
         this.voucherDB = new VoucherDB();

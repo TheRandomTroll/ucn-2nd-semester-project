@@ -8,15 +8,12 @@ import models.*;
 import models.enums.OrderStatus;
 import models.enums.PaymentType;
 
-import java.sql.Date;
-import java.time.LocalDate;
-
 public class OrderController {
     private Order order;
-    private OrderDBIF orderDB;
-    private AddressController addressController;
-    private VoucherController voucherController;
-    private ShoppingListController shoppingListController;
+    private final OrderDBIF orderDB;
+    private final AddressController addressController;
+    private final VoucherController voucherController;
+    private final ShoppingListController shoppingListController;
 
     public OrderController() throws DataAccessException {
         this.orderDB = new OrderDB();
@@ -39,7 +36,7 @@ public class OrderController {
         return order;
     }
 
-    public int finishSale(PaymentType paymentType) throws DataAccessException, InsufficientDataException {
+    public void finishSale(PaymentType paymentType) throws DataAccessException, InsufficientDataException {
         if(order.getOrderLines().size() == 0) {
             throw new InsufficientDataException("Not enough order lines to finish order.");
         }
@@ -47,7 +44,7 @@ public class OrderController {
         this.shoppingListController.createShoppingList(order, paymentType);
         this.shoppingListController.saveShoppingList();
         this.order.setStatus(OrderStatus.ALLOCATED);
-        return orderDB.saveOrder(order);
+        orderDB.saveOrder(order);
     }
 
     public Address findAddressByData(Address a) throws DataAccessException {

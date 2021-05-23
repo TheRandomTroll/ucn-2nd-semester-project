@@ -15,16 +15,19 @@ import java.sql.SQLException;
 public class CustomerDB implements CustomerDBIF {
     private static final String FIND_BY_PHONE_NO_Q = "SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE PhoneNumber = ?";
     private static final String CREATE_CUSTOMER_Q = "INSERT INTO Customers (Name, PhoneNumber, Email, AddressId) VALUES (?, ?, ?, ?)";
+    private static final String UPDATE_CUSTOMER_Q = "UPDATE Customers SET Name = ?, PhoneNumber = ?, Email = ?, AddressId = ? WHERE PhoneNumber = ?";
 
-    private PreparedStatement findByPhoneNoPS;
-    private PreparedStatement createCustomerPS;
-    private AddressDB addressDB;
+    private final PreparedStatement findByPhoneNoPS;
+    private final PreparedStatement createCustomerPS;
+    private final PreparedStatement updateCustomerPS;
+    private final AddressDB addressDB;
 
     public CustomerDB() throws DataAccessException {
         try {
             this.addressDB = new AddressDB();
             findByPhoneNoPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_PHONE_NO_Q);
             createCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_CUSTOMER_Q);
+            updateCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_CUSTOMER_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
         }
@@ -55,7 +58,22 @@ public class CustomerDB implements CustomerDBIF {
 
             return this.createCustomerPS.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Could not retrieve data", e);
+            throw new DataAccessException("Could not create data", e);
+        }
+    }
+
+    @Override
+    public int updateCustomer(String name, String phoneNo, String email, int addressId) throws DataAccessException {
+        try {
+            this.updateCustomerPS.setString(1, name);
+            this.updateCustomerPS.setString(2, phoneNo);
+            this.updateCustomerPS.setString(3, email);
+            this.updateCustomerPS.setInt(4, addressId);
+            this.updateCustomerPS.setString(5, phoneNo);
+
+            return this.updateCustomerPS.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not update data", e);
         }
     }
 

@@ -13,21 +13,35 @@ public class ProductControllerTests {
     private ProductController productController;
 
     @Before
-    public void setUp() throws DataAccessException {
-        this.productController = new ProductController();
+    public void setUp() {
+        try {
+            this.productController = new ProductController();
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void testFindProductByBarcode() throws DataAccessException {
-        Product p = this.productController.findByBarcode(93766442);
+    public void testFindProductByBarcode() {
+        Product p = null;
+        try {
+            p = this.productController.findByBarcode(93766442);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
 
-        assertEquals(p.getName(), "Dried Apple");
-        assertEquals(p.getId(), 17);
+        assertEquals("Dried Apple", p.getName());
+        assertEquals(17, p.getId());
     }
 
     @Test
-    public void testFindProductByInvalidBarcode() throws DataAccessException {
-        Product p = this.productController.findByBarcode(0);
+    public void testFindProductByInvalidBarcode() {
+        Product p = null;
+        try {
+            p = this.productController.findByBarcode(0);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
 
         assertNull(p);
     }
