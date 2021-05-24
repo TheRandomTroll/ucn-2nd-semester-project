@@ -11,4 +11,6 @@ public interface ProductDBIF {
     Product findByBarcode(int barcode) throws DataAccessException;
 
     int updateProduct(Product p) throws DataAccessException;
+
+    int deleteProduct(int productId) throws DataAccessException;
 }

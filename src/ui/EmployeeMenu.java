@@ -1,9 +1,7 @@
 package ui;
 
-import controllers.AddressController;
 import controllers.ProductController;
 import exceptions.DataAccessException;
-import models.Address;
 import models.Product;
 
 import javax.swing.*;
@@ -13,13 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.List;
-import java.awt.Font;
-import java.util.stream.Collectors;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 public class EmployeeMenu {
 
@@ -80,12 +72,39 @@ public class EmployeeMenu {
 				return column != 0;
 			}
 		});
-		TableModel productsModel = tableProducts.getModel();
-		productsModel.addTableModelListener(new TableModelListener() {
-			public void tableChanged(TableModelEvent e) {
+		tableProducts.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e)) {
+					JTable source = (JTable)e.getSource();
+					int row = source.rowAtPoint(e.getPoint());
+
+					JPopupMenu popup = new JPopupMenu();
+					JMenuItem menuItem = new JMenuItem("Delete product...");
+					menuItem.addActionListener(e1 -> {
+						int dialogButton = JOptionPane.YES_NO_OPTION;
+						int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this product?", "Delete product?", dialogButton);
+						if(dialogResult == JOptionPane.YES_OPTION) {
+							int productId = Integer.parseInt(UIUtil.getTableRowValues(tableProducts.getModel(), productColumns.length, row)[0]);
+							try {
+								productController.deleteProduct(productId);
+								((DefaultTableModel)tableProducts.getModel()).removeRow(row);
+								UIUtil.displayMessage("Successfully deleted product with id " + productId, "Success", JOptionPane.INFORMATION_MESSAGE);
+								tableProducts.revalidate();
+							} catch (DataAccessException dataAccessException) {
+								UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
+							}
+						}
+					});
+					popup.add(menuItem);
+					popup.show(productsPanel, e.getX(), e.getY());
+				}
+			}
+		});
+		tableProducts.getModel().addTableModelListener(e -> {
+			if(e.getType() == TableModelEvent.UPDATE) {
 				int row = e.getFirstRow();
-				int column = e.getColumn();
-				String[] updatedRow = getRowAt(row);
+				String[] updatedRow = UIUtil.getTableRowValues(tableProducts.getModel(), productColumns.length, row);
 
 				int id = Integer.parseInt(updatedRow[0]);
 				String name = updatedRow[1];
@@ -103,16 +122,6 @@ public class EmployeeMenu {
 				} catch (DataAccessException dataAccessException) {
 					UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
 				}
-			}
-
-			public String[] getRowAt(int row) {
-				String[] result = new String[productColumns.length];
-
-				for (int i = 0; i < productColumns.length; i++) {
-					result[i] = (String) productsModel.getValueAt(row, i);
-				}
-
-				return result;
 			}
 		});
 

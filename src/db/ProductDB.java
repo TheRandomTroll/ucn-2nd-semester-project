@@ -17,16 +17,19 @@ public class ProductDB implements ProductDBIF {
     private static final String FIND_BY_BARCODE_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products WHERE Barcode = ?";
     private static final String GET_PRODUCTS_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products";
     private static final String UPDATE_PRODUCT_Q = "UPDATE Products SET Name = ?, Barcode = ?, Description = ?, Price = ?, MaxStock = ?, MinStock = ?, Quantity = ? WHERE Id = ?";
+    private static final String DELETE_PRODUCT_Q = "DELETE FROM Products WHERE Id = ?";
 
     private final PreparedStatement findByBarcodePS;
     private final PreparedStatement getProductsPS;
     private final PreparedStatement updateProductPS;
+    private final PreparedStatement deleteProductPS;
 
     public ProductDB() throws DataAccessException {
         try {
             this.findByBarcodePS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_BARCODE_Q);
             this.getProductsPS = DBConnection.getInstance().getConnection().prepareStatement(GET_PRODUCTS_Q);
             this.updateProductPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_PRODUCT_Q);
+            this.deleteProductPS = DBConnection.getInstance().getConnection().prepareStatement(DELETE_PRODUCT_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
         }
@@ -72,6 +75,17 @@ public class ProductDB implements ProductDBIF {
             this.updateProductPS.setInt(8, p.getId());
 
             return this.updateProductPS.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not update data", e);
+        }
+    }
+
+    @Override
+    public int deleteProduct(int productId) throws DataAccessException {
+        try {
+            this.deleteProductPS.setInt(1, productId);;
+
+            return this.deleteProductPS.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Could not update data", e);
         }

@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,5 +62,15 @@ public class UIUtil {
             }
             tableColumn.setPreferredWidth(preferredWidth);
         }
+    }
+
+    public static String[] getTableRowValues(TableModel model, int columns, int row) {
+        String[] result = new String[columns];
+
+        for (int i = 0; i < columns; i++) {
+            result[i] = (String) model.getValueAt(row, i);
+        }
+
+        return result;
     }
 }

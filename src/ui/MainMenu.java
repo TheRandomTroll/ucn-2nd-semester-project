@@ -114,7 +114,6 @@ public class MainMenu {
                 if (validPassword.contains(password) && validUsername.contains(username)) {
                     EmployeeMenu em = new EmployeeMenu();
                     em.showWindow();
-                    frame.setVisible(false);
                 } else
                     System.out.println("Wrong username/password! " + username + password + " ");
             }

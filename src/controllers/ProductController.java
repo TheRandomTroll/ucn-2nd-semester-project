@@ -25,4 +25,8 @@ public class ProductController {
     public int updateProduct(Product p) throws DataAccessException {
         return this.productDB.updateProduct(p);
     }
+
+    public int deleteProduct(int productId) throws DataAccessException {
+        return this.productDB.deleteProduct(productId);
+    }
 }
