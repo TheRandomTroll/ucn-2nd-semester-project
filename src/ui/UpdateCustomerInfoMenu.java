@@ -1,15 +1,12 @@
 package ui;
 
-import java.awt.EventQueue;
-
-import javax.swing.*;
-
 import controllers.CustomerController;
 import exceptions.DataAccessException;
 import models.Address;
 import models.Customer;
 
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -158,12 +155,12 @@ public class UpdateCustomerInfoMenu {
 			public void mouseClicked(MouseEvent e) {
 				List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(frame.getContentPane()));
 				if(emptyFields.size() > 0) {
-					String errorMessage = "<html>Cannot complete update. The following fields are empty:<br>";
+					StringBuilder errorMessage = new StringBuilder("<html>Cannot complete update. The following fields are empty:<br>");
 					for(String field : emptyFields) {
-						errorMessage += "- " + field + "<br>";
+						errorMessage.append("- ").append(field).append("<br>");
 					}
 
-					UIUtil.displayMessage(errorMessage, "Error updating info", JOptionPane.ERROR_MESSAGE);
+					UIUtil.displayMessage(errorMessage.toString(), "Error updating info", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
@@ -196,25 +193,21 @@ public class UpdateCustomerInfoMenu {
 	}
 	
 	public void showWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
 
 	public void closeWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame.setVisible(false);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				frame.setVisible(false);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}

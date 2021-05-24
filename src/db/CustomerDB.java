@@ -14,10 +14,12 @@ import java.sql.SQLException;
  */
 public class CustomerDB implements CustomerDBIF {
     private static final String FIND_BY_PHONE_NO_Q = "SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE PhoneNumber = ?";
+    private static final String FIND_BY_ID_Q = "SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE Id = ?";
     private static final String CREATE_CUSTOMER_Q = "INSERT INTO Customers (Name, PhoneNumber, Email, AddressId) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_CUSTOMER_Q = "UPDATE Customers SET Name = ?, PhoneNumber = ?, Email = ?, AddressId = ? WHERE PhoneNumber = ?";
 
     private final PreparedStatement findByPhoneNoPS;
+    private final PreparedStatement findByIdPS;
     private final PreparedStatement createCustomerPS;
     private final PreparedStatement updateCustomerPS;
     private final AddressDB addressDB;
@@ -26,6 +28,7 @@ public class CustomerDB implements CustomerDBIF {
         try {
             this.addressDB = new AddressDB();
             findByPhoneNoPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_PHONE_NO_Q);
+            findByIdPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_ID_Q);
             createCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_CUSTOMER_Q);
             updateCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_CUSTOMER_Q);
         } catch (SQLException e) {
@@ -38,6 +41,21 @@ public class CustomerDB implements CustomerDBIF {
         try {
             this.findByPhoneNoPS.setString(1, phoneNo);
             ResultSet rs = this.findByPhoneNoPS.executeQuery();
+            Customer c = null;
+            if(rs.next()) {
+                c = buildObject(rs);
+            }
+            return c;
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not retrieve data", e);
+        }
+    }
+
+    @Override
+    public Customer findById(int id) throws DataAccessException {
+        try {
+            this.findByIdPS.setInt(1, id);
+            ResultSet rs = this.findByIdPS.executeQuery();
             Customer c = null;
             if(rs.next()) {
                 c = buildObject(rs);
@@ -80,9 +98,8 @@ public class CustomerDB implements CustomerDBIF {
     private Customer buildObject(ResultSet rs) throws DataAccessException {
         try {
             Address a = this.addressDB.findById(rs.getInt("AddressId"));
-            Customer c = new Customer(rs.getInt("Id"), rs.getString("Name"), rs.getString("PhoneNumber"),
+            return new Customer(rs.getInt("Id"), rs.getString("Name"), rs.getString("PhoneNumber"),
                     rs.getString("Email"), a);
-            return c;
         } catch (SQLException e) {
             throw new DataAccessException("Could not read result set", e);
         }

@@ -1,12 +1,11 @@
 package test;
 
+import db.DBConnection;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-
-import db.DBConnection;
-import org.junit.Test;
 
 public class DBConnectivityTest {
 	private DBConnection con = null;

@@ -4,7 +4,10 @@ import db.OrderDB;
 import db.interfaces.OrderDBIF;
 import exceptions.DataAccessException;
 import exceptions.InsufficientDataException;
-import models.*;
+import models.Address;
+import models.Order;
+import models.Product;
+import models.Voucher;
 import models.enums.OrderStatus;
 import models.enums.PaymentType;
 

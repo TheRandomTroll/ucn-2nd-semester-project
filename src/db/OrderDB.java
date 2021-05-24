@@ -2,22 +2,36 @@ package db;
 
 import db.interfaces.OrderDBIF;
 import exceptions.DataAccessException;
+import models.Address;
+import models.Customer;
 import models.Order;
 import models.OrderLine;
+import models.enums.OrderStatus;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A data access class for the <i>Orders</i> table from the database.
  */
 public class OrderDB implements OrderDBIF {
+    private static final String GET_ORDERS_Q = "SELECT Id, OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders";
     private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
 
+    private final PreparedStatement getOrdersPS;
     private final PreparedStatement createOrderPS;
     private final PreparedStatement updateOrderPS;
 
+    private final CustomerDB customerDB;
+    private final AddressDB addressDB;
+
     public OrderDB() throws DataAccessException {
         try {
+            this.customerDB = new CustomerDB();
+            this.addressDB = new AddressDB();
+            this.getOrdersPS = DBConnection.getInstance().getConnection().prepareStatement(GET_ORDERS_Q);
             this.createOrderPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_ORDER_Q, Statement.RETURN_GENERATED_KEYS);
             this.updateOrderPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_ORDER_Q);
         } catch (SQLException e) {
@@ -25,6 +39,16 @@ public class OrderDB implements OrderDBIF {
         }
     }
 
+    @Override
+    public List<Order> getOrders() throws DataAccessException {
+        try {
+            ResultSet rs = getOrdersPS.executeQuery();
+            return buildObjects(rs);
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not fetch data", e);
+        }
+
+    }
     @Override
     public int createOrder(Order o) throws DataAccessException {
         try {
@@ -91,5 +115,29 @@ public class OrderDB implements OrderDBIF {
         }
 
         return rows;
+    }
+
+    private List<Order> buildObjects(ResultSet rs) throws DataAccessException {
+        List<Order> orders = new ArrayList<>();
+        while(true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException e) {
+                throw new DataAccessException("Could not parse data", e);
+            }
+            orders.add(buildObject(rs));
+        }
+        return orders;
+    }
+
+    private Order buildObject(ResultSet rs) throws DataAccessException {
+        try {
+            Customer c = this.customerDB.findById(rs.getInt("CustomerId"));
+            Address invoice = this.addressDB.findById(rs.getInt("InvoiceAddressId"));
+            Address delivery = this.addressDB.findById(rs.getInt("DeliveryAddressId"));
+            return new Order(rs.getInt("Id"), rs.getString("OrderNumber"), c, OrderStatus.values()[rs.getInt("OrderStatusId") - 1], invoice, delivery);
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not parse data", e);
+        }
     }
 }

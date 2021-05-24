@@ -44,7 +44,7 @@ public class CustomerLoginMenu {
         frmCustomerMenu.getContentPane().setLayout(null);
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.setBounds(0, 0, 434, 261);
+        tabbedPane.setBounds(0, 0, 364, 226);
         frmCustomerMenu.getContentPane().add(tabbedPane);
 
         JPanel panelLogin = new JPanel();

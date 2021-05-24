@@ -73,8 +73,11 @@ public class Address {
         this.postalCode = postalCode;
     }
 
+    public String toHTMLString() {
+        return this.streetName + " " + this.streetNumber + ",<br>Floor: " + this.floor + ", " + this.getPostalCode() + " " + this.getCity();
+    }
     @Override
     public String toString() {
-        return this.streetName + " " + this.streetNumber + ",<br>Floor: " + this.floor + ", " + this.getPostalCode() + " " + this.getCity();
+        return this.streetName + " " + this.streetNumber + ", Floor: " + this.floor + ", " + this.getPostalCode() + " " + this.getCity();
     }
 }

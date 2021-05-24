@@ -5,7 +5,6 @@ import db.interfaces.ShoppingListDBIF;
 import exceptions.DataAccessException;
 import models.Order;
 import models.ShoppingList;
-import models.Voucher;
 import models.enums.PaymentType;
 
 import java.sql.Date;

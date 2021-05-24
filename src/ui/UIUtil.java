@@ -3,7 +3,9 @@ package ui;
 import models.Address;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,10 +13,7 @@ import java.util.stream.Stream;
 
 public class UIUtil {
     public static void displayDBErrorMsg(String exceptionMessage) {
-        JOptionPane.showMessageDialog(null,
-                "An error has occurred while connecting to the database. Message: " + exceptionMessage,
-                "Error connecting to database",
-                JOptionPane.ERROR_MESSAGE);
+        displayMessage("An error has occurred connecting to the database. Error message: " + exceptionMessage, "Error connecting to database", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void displayMessage(String message, String title, int level) {
@@ -36,5 +35,31 @@ public class UIUtil {
     }
     public static List<String> getEmptyTextFields(List<JTextField> fields) {
         return fields.stream().filter(x -> x.getText().equals("")).map(Component::getName).collect(Collectors.toList());
+    }
+
+    public static void resizeColumnWidth(JTable table) {
+        for (int column = 0; column < table.getColumnCount(); column++)
+        {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getPreferredWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++)
+            {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+
+                if (preferredWidth >= maxWidth)
+                {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
     }
 }

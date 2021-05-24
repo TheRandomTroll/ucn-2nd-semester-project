@@ -35,7 +35,8 @@ CREATE TABLE Products(
 	Description VARCHAR(255),
 	Price FLOAT,
 	MaxStock INT,
-	MinStock INT CHECK(MinStock > 1)
+	MinStock INT CHECK(MinStock > 1),
+	Quantity INT
 );
 
 CREATE TABLE Addresses(
@@ -70,7 +71,7 @@ CREATE TABLE Orders(
 	AppliedVoucherId INT NULL,
 	FOREIGN KEY (AppliedVoucherId) REFERENCES Vouchers(Id),
 	CustomerId INT,
-	FOREIGN KEY (CustomerId) REFERENCES Customers(Id),
+	FOREIGN KEY (CustomerId) REFERENCES Customers(Id) ON DELETE CASCADE,
 	OrderStatusId INT,
 	FOREIGN KEY (OrderStatusId) REFERENCES OrderStatuses(Id),
 	InvoiceAddressId INT NULL,
@@ -83,7 +84,7 @@ CREATE TABLE ShoppingLists(
 	Id INT PRIMARY KEY IDENTITY,
 	CreationDate DATE,
 	OrderId INT,
-	FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE,
+	FOREIGN KEY (OrderId) REFERENCES Orders(Id),
 	PaymentTypeId INT,
 	FOREIGN KEY (PaymentTypeId) REFERENCES PaymentTypes(Id)
 );

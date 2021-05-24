@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public class MainMenu {
@@ -18,12 +19,7 @@ public class MainMenu {
     private final List<String> validPassword = new ArrayList<>();
     private final List<String> validUsername = new ArrayList<>();
     private final MainMenu mm;
-
-    // private static final String[] validUsername = {
-    // "jozo", "jure", "boban"
-    // };
     private JPasswordField passwordField;
-    private Object key;
 
     /**
      * Launch the application.
@@ -35,14 +31,12 @@ public class MainMenu {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    MainMenu window = new MainMenu();
-                    window.showWindow();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                MainMenu window = new MainMenu();
+                window.showWindow();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -63,7 +57,7 @@ public class MainMenu {
      */
     public void showWindow() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 222, 232);
+        frame.setBounds(100, 100, 222, 264);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -89,6 +83,7 @@ public class MainMenu {
                 } catch (DataAccessException dataAccessException) {
                     dataAccessException.printStackTrace();
                 }
+                assert cm != null;
                 cm.showWindow();
             }
         });
@@ -106,9 +101,7 @@ public class MainMenu {
         frame.getContentPane().add(lblNewLabel_1_1);
 
         JButton btnNewButton = new JButton("Login to Employee Menu");
-        btnNewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
+        btnNewButton.addActionListener(e -> {
         });
         btnNewButton.setBackground(UIManager.getColor("Button.background"));
         btnNewButton.setBounds(10, 121, 186, 23);
@@ -119,7 +112,7 @@ public class MainMenu {
                 String password = String.valueOf(passwordField.getPassword());
 
                 if (validPassword.contains(password) && validUsername.contains(username)) {
-                    EmployeeMenu em = new EmployeeMenu(validPassword, mm, validUsername);
+                    EmployeeMenu em = new EmployeeMenu();
                     em.showWindow();
                     frame.setVisible(false);
                 } else
@@ -132,11 +125,22 @@ public class MainMenu {
         passwordField.setBounds(10, 90, 186, 20);
         frame.getContentPane().add(passwordField);
         frame.getContentPane().add(btnNewButton);
+        
+        JButton btnNewButton_1_1 = new JButton("Open DB Status");
+        btnNewButton_1_1.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        	    DBConnectivityUI dbcui = new DBConnectivityUI();
+        	    dbcui.showWindow();
+        	}
+        });
+        btnNewButton_1_1.setBounds(10, 189, 186, 23);
+        frame.getContentPane().add(btnNewButton_1_1);
         frame.setVisible(true);
     }
 
     public static void setUIFont(javax.swing.plaf.FontUIResource f) {
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        Enumeration<Object> keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);

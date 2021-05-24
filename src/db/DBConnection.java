@@ -2,6 +2,7 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -31,15 +32,14 @@ public class DBConnection {
             connection = DriverManager.getConnection(urlString, USERNAME, PASSWORD);
         } catch (SQLException e) {
             System.out.println("Cannot access database. Exception: " + e.getMessage());
-            return;
         }
     }
 
     /**
      * Gets an instance of the Connection class.
      *
-     * @see java.sql.Connection
      * @return An instance of a Connection class.
+     * @see java.sql.Connection
      */
     public Connection getConnection() {
         return connection;
@@ -47,6 +47,7 @@ public class DBConnection {
 
     /**
      * Gets an instance of the DBConnection class.
+     *
      * @return An instance of a DBConnection class.
      */
     public static DBConnection getInstance() {
@@ -56,20 +57,26 @@ public class DBConnection {
 
         return dbConnection;
     }
-    
+
     //closeDb: closes the connection to the database
-    public static void closeConnection()
-    {
-       	try{
+    public static void closeConnection() {
+        try {
             connection.close();
-            dbConnection= null;
+            dbConnection = null;
+        } catch (Exception e) {
+            System.out.println("Error trying to close the database " + e.getMessage());
         }
-         catch (Exception e){
-            System.out.println("Error trying to close the database " +  e.getMessage());
-         }
     }//end closeDB
 
-	public static boolean instanceIsNull() {
-		return dbConnection == null;
-	}
+    public static boolean instanceIsNull() {
+        return dbConnection == null;
+    }
+
+    public boolean isDbConnected() {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT 1")) {
+            return ps.execute();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

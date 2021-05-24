@@ -9,7 +9,9 @@ import models.enums.PaymentType;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
 
@@ -216,8 +218,8 @@ public class CreateOrderCustomerMenu {
         btnConfirmOrder.setBounds(427, 411, 205, 23);
         frame.getContentPane().add(btnConfirmOrder);
 
-        JLabel lblAddressInfo = new JLabel("<html>The package will be delivered<br>to the billing address you provided.<br><b>Address info:</b><br>" + order.getDeliveryAddress().toString());
-        lblAddressInfo.setBounds(10, 69, 197, 79);
+        JLabel lblAddressInfo = new JLabel("<html>The package will be delivered<br>to the billing address you provided.<br><b>Address info:</b><br>" + order.getDeliveryAddress().toHTMLString());
+        lblAddressInfo.setBounds(10, 43, 197, 105);
         frame.getContentPane().add(lblAddressInfo);
 
         JPanel newAddressPanel = new JPanel();
@@ -290,9 +292,10 @@ public class CreateOrderCustomerMenu {
                     order.setDeliveryAddress(a);
 
                     UIUtil.displayMessage("Delivery address successfully updated.", "Successfully updated address", JOptionPane.INFORMATION_MESSAGE);
-                    lblAddressInfo.setText("<br><b>Invoice will be sent to:</b><br>" + order.getInvoiceAddress().toString() +
-                            "<html><b>The package will be delivered to:</b><br>" + order.getDeliveryAddress().toString());
+                    lblAddressInfo.setText("<html><b>Invoice will be sent to:</b><br>" + order.getInvoiceAddress().toHTMLString() +
+                            "<br><b>The package will be delivered to:</b><br>" + order.getDeliveryAddress().toHTMLString());
                 } catch (DataAccessException dataAccessException) {
+                    dataAccessException.printStackTrace();
                     UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
                 }
             }
@@ -307,8 +310,8 @@ public class CreateOrderCustomerMenu {
             boolean checked = e.getStateChange() == ItemEvent.SELECTED;
             newAddressPanel.setVisible(checked);
             if (!checked) {
-                lblAddressInfo.setText("<html>The package will be delivered<br>to the billing address you provided.<br><b>Address info:</b><br>" + order.getDeliveryAddress().toString());
                 order.setDeliveryAddress(order.getInvoiceAddress());
+                lblAddressInfo.setText("<html>The package will be delivered<br>to the billing address you provided.<br><b>Address info:</b><br>" + order.getDeliveryAddress().toString());
             }
         });
         chckbxNewDeliveryAddress.setBounds(6, 155, 201, 23);

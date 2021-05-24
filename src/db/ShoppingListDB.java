@@ -6,7 +6,6 @@ import models.ShoppingList;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * A data access class for the <i>ShoppingLists</i> table from the database.

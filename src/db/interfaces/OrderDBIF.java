@@ -1,11 +1,13 @@
 package db.interfaces;
 
 import exceptions.DataAccessException;
-import models.Customer;
 import models.Order;
-import models.Product;
+
+import java.util.List;
 
 public interface OrderDBIF {
+    List<Order> getOrders() throws DataAccessException;
+
     int createOrder(Order o) throws DataAccessException;
 
     int saveOrder(Order o) throws DataAccessException;
