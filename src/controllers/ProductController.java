@@ -29,4 +29,8 @@ public class ProductController {
     public int deleteProduct(int productId) throws DataAccessException {
         return this.productDB.deleteProduct(productId);
     }
+
+    public int addProduct(Product p) throws DataAccessException {
+        return this.productDB.createProduct(p);
+    }
 }

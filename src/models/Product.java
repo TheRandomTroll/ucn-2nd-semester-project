@@ -21,6 +21,16 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public Product(String name, int barcode, String description, double price, int maxStock, int minStock, int quantity) {
+        this.name = name;
+        this.barcode = barcode;
+        this.description = description;
+        this.price = price;
+        this.maxStock = maxStock;
+        this.setMinStock(minStock);
+        this.quantity = quantity;
+    }
+
     public int getId() {
         return id;
     }

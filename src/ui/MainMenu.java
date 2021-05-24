@@ -112,8 +112,7 @@ public class MainMenu {
                 String password = String.valueOf(passwordField.getPassword());
 
                 if (validPassword.contains(password) && validUsername.contains(username)) {
-                    EmployeeMenu em = new EmployeeMenu();
-                    em.showWindow();
+                    new EmployeeMenu();
                 } else
                     System.out.println("Wrong username/password! " + username + password + " ");
             }

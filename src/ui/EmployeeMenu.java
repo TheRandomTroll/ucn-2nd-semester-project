@@ -2,6 +2,7 @@ package ui;
 
 import controllers.ProductController;
 import exceptions.DataAccessException;
+import interfaces.Observer;
 import models.Product;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class EmployeeMenu {
+public class EmployeeMenu implements Observer<Product> {
 
 	private JFrame frmEmployeeMenu;
 	private JTable tableOrders;
@@ -136,6 +137,14 @@ public class EmployeeMenu {
 		productsPanel.add(scrollPane);
 		
 		JButton btnNewProduct = new JButton("Create new product");
+		btnNewProduct.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CreateProductEmployeeMenu cpem = new CreateProductEmployeeMenu();
+				cpem.addObserver(getEmployeeMenu());
+				cpem.showWindow();
+			}
+		});
 		btnNewProduct.setBounds(370, 15, 176, 23);
 		productsPanel.add(btnNewProduct);
 		
@@ -151,5 +160,15 @@ public class EmployeeMenu {
 		btnDispatchOrder.setBounds(420, 15, 126, 23);
 		ordersPanel.add(btnDispatchOrder);
 		frmEmployeeMenu.setVisible(true);
+	}
+
+	private EmployeeMenu getEmployeeMenu() {
+		return EmployeeMenu.this;
+	}
+
+	@Override
+	public void notifyUpdate(Product item) {
+		((DefaultTableModel) tableProducts.getModel()).addRow(item.toStringArray());
+		tableProducts.revalidate();
 	}
 }
