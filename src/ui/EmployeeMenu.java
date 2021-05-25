@@ -1,5 +1,6 @@
 package ui;
 
+import controllers.CourierController;
 import controllers.OrderController;
 import controllers.ProductController;
 import exceptions.DataAccessException;
@@ -7,29 +8,51 @@ import interfaces.Observer;
 import models.Courier;
 import models.Order;
 import models.Product;
+import models.enums.CourierStatus;
 import models.enums.OrderStatus;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.table.TableModel;
+import java.util.Objects;
 
-public class EmployeeMenu implements Observer<Product> {
+public class EmployeeMenu {
+    private class ProductObserver implements Observer<Product> {
+        public void notifyUpdate(Product item) {
+            ((DefaultTableModel) tableProducts.getModel()).addRow(item.toStringArray());
+            tableProducts.revalidate();
+        }
+
+        public ProductObserver getThis() {
+            return ProductObserver.this;
+        }
+    }
+
+    private class CourierObserver implements Observer<Courier> {
+        public void notifyUpdate(Courier item) {
+            ((DefaultTableModel) tableCouriers.getModel()).addRow(item.toStringArray());
+            tableCouriers.revalidate();
+        }
+
+        public CourierObserver getThis() {
+            return CourierObserver.this;
+        }
+    }
+
     private ProductController productController;
     private OrderController orderController;
+    private CourierController courierController;
 
-    private JFrame frmEmployeeMenu;
-    private JTable tableOrders;
     private JTable tableProducts;
     private JTable tableCouriers;
 
@@ -37,9 +60,11 @@ public class EmployeeMenu implements Observer<Product> {
      * Create the application.
      */
     public EmployeeMenu() {
+
         try {
             this.productController = new ProductController();
             this.orderController = new OrderController();
+            this.courierController = new CourierController();
         } catch (DataAccessException e) {
             UIUtil.displayDBErrorMsg(e.getMessage());
         }
@@ -50,17 +75,18 @@ public class EmployeeMenu implements Observer<Product> {
      * Initialize the contents of the frame.
      */
     public void showWindow() {
-        frmEmployeeMenu = new JFrame();
+        JFrame frmEmployeeMenu = new JFrame();
+        frmEmployeeMenu.setIconImage(Toolkit.getDefaultToolkit().getImage(EmployeeMenu.class.getResource("/ui/img/icon.png")));
         frmEmployeeMenu.setTitle("Employee Menu");
         frmEmployeeMenu.setBounds(100, 100, 577, 309);
-        frmEmployeeMenu.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frmEmployeeMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frmEmployeeMenu.getContentPane().setLayout(null);
 
         BufferedImage addImage = null;
         BufferedImage dispatchImage = null;
         try {
-            addImage = ImageIO.read(EmployeeMenu.class.getResource("/ui/img/add.png"));
-            dispatchImage = ImageIO.read(EmployeeMenu.class.getResource("/ui/img/dispatch.png"));
+            addImage = ImageIO.read(Objects.requireNonNull(EmployeeMenu.class.getResource("/ui/img/add.png")));
+            dispatchImage = ImageIO.read(Objects.requireNonNull(EmployeeMenu.class.getResource("/ui/img/dispatch.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,35 +123,7 @@ public class EmployeeMenu implements Observer<Product> {
                 return column != 0;
             }
         });
-        tableProducts.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    JTable source = (JTable) e.getSource();
-                    int row = source.rowAtPoint(e.getPoint());
 
-                    JPopupMenu popup = new JPopupMenu();
-                    JMenuItem menuItem = new JMenuItem("Delete product...");
-                    menuItem.addActionListener(e1 -> {
-                        int dialogButton = JOptionPane.YES_NO_OPTION;
-                        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this product?", "Delete product?", dialogButton);
-                        if (dialogResult == JOptionPane.YES_OPTION) {
-                            int productId = Integer.parseInt(UIUtil.getTableRowValues(tableProducts.getModel(), productColumns.length, row)[0]);
-                            try {
-                                productController.deleteProduct(productId);
-                                ((DefaultTableModel) tableProducts.getModel()).removeRow(row);
-                                UIUtil.displayMessage("Successfully deleted product with id " + productId, "Success", JOptionPane.INFORMATION_MESSAGE);
-                                tableProducts.revalidate();
-                            } catch (DataAccessException dataAccessException) {
-                                UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
-                            }
-                        }
-                    });
-                    popup.add(menuItem);
-                    popup.show(manageProductsPanel, e.getX(), e.getY());
-                }
-            }
-        });
         tableProducts.getModel().addTableModelListener(e -> {
             if (e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
@@ -155,10 +153,42 @@ public class EmployeeMenu implements Observer<Product> {
         tableProducts.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         UIUtil.resizeColumnWidth(tableProducts);
 
-        JScrollPane scrollPane = new JScrollPane(tableProducts);
-        scrollPane.setLocation(10, 11);
-        scrollPane.setSize(496, 200);
-        manageProductsPanel.add(scrollPane);
+        JScrollPane scrollPaneProducts = new JScrollPane(tableProducts);
+        scrollPaneProducts.setLocation(10, 11);
+        scrollPaneProducts.setSize(496, 200);
+        manageProductsPanel.add(scrollPaneProducts);
+
+        tableProducts.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int horizontalScrollValue = scrollPaneProducts.getHorizontalScrollBar().getValue();
+                    int verticalScrollValue = scrollPaneProducts.getVerticalScrollBar().getValue();
+                    JTable source = (JTable) e.getSource();
+                    int row = source.rowAtPoint(e.getPoint());
+
+                    JPopupMenu popup = new JPopupMenu();
+                    JMenuItem menuItem = new JMenuItem("Delete product...");
+                    menuItem.addActionListener(e1 -> {
+                        int dialogButton = JOptionPane.YES_NO_OPTION;
+                        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this product?", "Delete product?", dialogButton);
+                        if (dialogResult == JOptionPane.YES_OPTION) {
+                            int productId = Integer.parseInt(UIUtil.getTableRowValues(tableProducts.getModel(), productColumns.length, row)[0]);
+                            try {
+                                productController.deleteProduct(productId);
+                                ((DefaultTableModel) tableProducts.getModel()).removeRow(row);
+                                UIUtil.displayMessage("Successfully deleted product with id " + productId, "Success", JOptionPane.INFORMATION_MESSAGE);
+                                tableProducts.revalidate();
+                            } catch (DataAccessException dataAccessException) {
+                                UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
+                            }
+                        }
+                    });
+                    popup.add(menuItem);
+                    popup.show(manageProductsPanel, e.getX() - horizontalScrollValue, e.getY() - verticalScrollValue);
+                }
+            }
+        });
 
         JButton btnNewProduct = new JButton(addButtonIcon);
         btnNewProduct.setToolTipText("Add new product");
@@ -168,7 +198,7 @@ public class EmployeeMenu implements Observer<Product> {
             @Override
             public void mouseClicked(MouseEvent e) {
                 CreateProductEmployeeMenu cpem = new CreateProductEmployeeMenu();
-                cpem.addObserver(getEmployeeMenu());
+                cpem.addObserver(new ProductObserver().getThis());
                 cpem.showWindow();
             }
         });
@@ -186,7 +216,8 @@ public class EmployeeMenu implements Observer<Product> {
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
-        tableOrders = new JTable(new DefaultTableModel(orderRows, Arrays.copyOf(orderColumns, orderColumns.length - 2)) {
+
+        JTable tableOrders = new JTable(new DefaultTableModel(orderRows, Arrays.copyOf(orderColumns, orderColumns.length - 2)) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -197,10 +228,10 @@ public class EmployeeMenu implements Observer<Product> {
         tableOrders.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         UIUtil.resizeColumnWidth(tableOrders);
 
-        JScrollPane scrollPane2 = new JScrollPane(tableOrders);
-        scrollPane2.setLocation(10, 11);
-        scrollPane2.setSize(496, 200);
-        manageOrdersPanel.add(scrollPane2);
+        JScrollPane scrollPaneOrders = new JScrollPane(tableOrders);
+        scrollPaneOrders.setLocation(10, 11);
+        scrollPaneOrders.setSize(496, 200);
+        manageOrdersPanel.add(scrollPaneOrders);
 
         JButton btnDispatchOrder = new JButton(dispatchButtonIcon);
         btnDispatchOrder.setToolTipText("Dispatch selected order");
@@ -208,17 +239,110 @@ public class EmployeeMenu implements Observer<Product> {
         btnDispatchOrder.setContentAreaFilled(false);
 
         String[][] orderRowsCopy = orderRows;
-        btnDispatchOrder.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        	    int row = tableOrders.getSelectedRow();
 
-        	    if(row < 0) {
-        	        UIUtil.displayMessage("Make sure a row is selected.", "No row selected", JOptionPane.ERROR_MESSAGE);
+        btnDispatchOrder.setBounds(516, 11, 30, 30);
+        manageOrdersPanel.add(btnDispatchOrder);
+        
+        JPanel manageCouriersPanel = new JPanel();
+        tabbedPane.addTab("Manage Couriers", null, manageCouriersPanel, null);
+        manageCouriersPanel.setLayout(null);
+
+        String[] couriersColumns = UIUtil.getClassFields(Courier.class);
+        String[][] couriersRows = null;
+        try {
+            couriersRows = this.courierController.getCouriers().stream().map(Courier::toStringArray).toArray(String[][]::new);
+        } catch (DataAccessException e) {
+            UIUtil.displayDBErrorMsg(e.getMessage());
+        }
+
+        tableCouriers = new JTable(new DefaultTableModel(couriersRows, couriersColumns) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column != 0;
+            }
+        });
+
+        TableColumn statusColumn = tableCouriers.getColumnModel().getColumn(4);
+
+        JComboBox<String> editCourierStatusComboBox = new JComboBox<>();
+        for(CourierStatus status : CourierStatus.values()) {
+            editCourierStatusComboBox.addItem(status.toString());
+        }
+
+        statusColumn.setCellEditor(new DefaultCellEditor(editCourierStatusComboBox));
+        tableCouriers.setLocation(10, 15);
+        tableCouriers.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        UIUtil.resizeColumnWidth(tableCouriers);
+
+        tableCouriers.getModel().addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                String[] updatedRow = UIUtil.getTableRowValues(tableCouriers.getModel(), couriersColumns.length, row);
+
+                int id = Integer.parseInt(updatedRow[0]);
+                String firstName = updatedRow[1];
+                String lastName = updatedRow[2];
+                String phoneNumber = updatedRow[3];
+                CourierStatus status = CourierStatus.valueOf(updatedRow[4]);
+                Courier c = new Courier(id, firstName, lastName, phoneNumber, status);
+
+                try {
+                    courierController.updateCourier(c);
+                    UIUtil.displayMessage("Successfully updated courier with id " + id, "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (DataAccessException dataAccessException) {
+                    UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
+                }
+            }
+        });
+        
+        JScrollPane scrollPaneCouriers = new JScrollPane(tableCouriers);
+        scrollPaneCouriers.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneCouriers.setBounds(10, 11, 400, 200);
+        manageCouriersPanel.add(scrollPaneCouriers);
+
+        tableCouriers.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int verticalScrollValue = scrollPaneCouriers.getVerticalScrollBar().getValue() - 10;
+                    JTable source = (JTable) e.getSource();
+                    int row = source.rowAtPoint(e.getPoint());
+
+                    JPopupMenu popup = new JPopupMenu();
+                    JMenuItem menuItem = new JMenuItem("Delete courier...");
+                    menuItem.addActionListener(e1 -> {
+                        int dialogButton = JOptionPane.YES_NO_OPTION;
+                        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this courier?", "Delete courier?", dialogButton);
+                        if (dialogResult == JOptionPane.YES_OPTION) {
+                            int courierId = Integer.parseInt(UIUtil.getTableRowValues(tableCouriers.getModel(), couriersColumns.length, row)[0]);
+                            try {
+                                courierController.deleteCourier(courierId);
+                                ((DefaultTableModel) tableCouriers.getModel()).removeRow(row);
+                                UIUtil.displayMessage("Successfully deleted courier with id " + courierId, "Success", JOptionPane.INFORMATION_MESSAGE);
+                                tableCouriers.revalidate();
+                            } catch (DataAccessException dataAccessException) {
+                                UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
+                            }
+                        }
+                    });
+                    popup.add(menuItem);
+                    popup.show(manageCouriersPanel, e.getX(), e.getY() - verticalScrollValue);
+                }
+            }
+        });
+
+        btnDispatchOrder.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = tableOrders.getSelectedRow();
+
+                if(row < 0) {
+                    UIUtil.displayMessage("Make sure a row is selected.", "No row selected", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
 
-        	    int id = Integer.parseInt(tableOrders.getModel().getValueAt(row, 0).toString());
-        	    String orderNumber = tableOrders.getModel().getValueAt(row, 1).toString();
+                int id = Integer.parseInt(tableOrders.getModel().getValueAt(row, 0).toString());
+                String orderNumber = tableOrders.getModel().getValueAt(row, 1).toString();
                 OrderStatus status = OrderStatus.valueOf(tableOrders.getModel().getValueAt(row, 4).toString());
 
                 if(status != OrderStatus.ALLOCATED) {
@@ -238,32 +362,23 @@ public class EmployeeMenu implements Observer<Product> {
                 }
             }
         });
-        btnDispatchOrder.setBounds(516, 11, 30, 30);
-        manageOrdersPanel.add(btnDispatchOrder);
-        
-        JPanel manageCouriersPanel = new JPanel();
-        tabbedPane.addTab("Manage Couriers", null, manageCouriersPanel, null);
-        manageCouriersPanel.setLayout(null);
-        
-        tableCouriers = new JTable(null);
-        tableCouriers.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        tableCouriers.setBounds(-171, 39, 525, 0);
-        manageCouriersPanel.add(tableCouriers);
-        
-        JScrollPane scrollPane3 = new JScrollPane(tableCouriers);
-        scrollPane3.setBounds(10, 11, 350, 200);
-        manageCouriersPanel.add(scrollPane3);
+
+        JButton btnNewCourier = new JButton(addButtonIcon);
+        btnNewCourier.setToolTipText("Add new courier");
+        btnNewCourier.setBorder(BorderFactory.createEmptyBorder());
+        btnNewCourier.setContentAreaFilled(false);
+        btnNewCourier.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                CreateCourierEmployeeMenu ccem = new CreateCourierEmployeeMenu();
+                ccem.addObserver(new CourierObserver().getThis());
+                ccem.showWindow();
+            }
+        });
+        btnNewCourier.setBounds(516, 11, 30, 30);
+        manageCouriersPanel.add(btnNewCourier);
+
         frmEmployeeMenu.setVisible(true);
-    }
-
-    private EmployeeMenu getEmployeeMenu() {
-        return EmployeeMenu.this;
-    }
-
-    @Override
-    public void notifyUpdate(Product item) {
-        ((DefaultTableModel) tableProducts.getModel()).addRow(item.toStringArray());
-        tableProducts.revalidate();
     }
 
     private Image fitImage(Image img , int w , int h)

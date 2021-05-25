@@ -1,76 +1,77 @@
 package ui;
 
-import exceptions.DataAccessException;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import exceptions.DataAccessException;
+import java.awt.Toolkit;
 
 public class MainMenu {
+	private JFrame frmBiobio;
+	private final String validPassword = "admin";
+    private final String validUsername = "admin";
 
-    private JFrame frame;
-    private JTextField userNameField;
-    private final List<String> validPassword = new ArrayList<>();
-    private final List<String> validUsername = new ArrayList<>();
-    private final MainMenu mm;
-    private JPasswordField passwordField;
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        setUIFont(new javax.swing.plaf.FontUIResource("Tahoma",Font.PLAIN,11));
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		setUIFont(new javax.swing.plaf.FontUIResource("Tahoma", Font.PLAIN,11));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        EventQueue.invokeLater(() -> {
+        
+		EventQueue.invokeLater(() -> {
             try {
                 MainMenu window = new MainMenu();
-                window.showWindow();
+                window.frmBiobio.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-    }
+	}
 
-    /**
-     * Create the application.
-     */
-    public MainMenu() {
-		validPassword.add("25");
-        validUsername.add("jozo");
-        validUsername.add("jure");
-        validUsername.add("boban");
-        mm = this;
-    }
+	/**
+	 * Create the application.
+	 */
+	public MainMenu() {
+		initialize();
+	}
 
-    /**
-     * Initialize the contents of the frame.
-     */
-    public void showWindow() {
-        frame = new JFrame();
-        frame.setBounds(100, 100, 222, 264);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmBiobio = new JFrame();
+		frmBiobio.setIconImage(Toolkit.getDefaultToolkit().getImage(MainMenu.class.getResource("/ui/img/icon.png")));
+		frmBiobio.setTitle("Bio&Bio");
+        frmBiobio.setBounds(100, 100, 222, 264);
+        frmBiobio.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmBiobio.getContentPane().setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Main Menu");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblNewLabel.setForeground(SystemColor.desktop);
         lblNewLabel.setBounds(10, 10, 146, 14);
-        frame.getContentPane().add(lblNewLabel);
+        frmBiobio.getContentPane().add(lblNewLabel);
 
         JLabel lblNewLabel_1 = new JLabel("Username");
         lblNewLabel_1.setBounds(10, 35, 146, 14);
         lblNewLabel_1.setForeground(SystemColor.desktop);
-        frame.getContentPane().add(lblNewLabel_1);
+        frmBiobio.getContentPane().add(lblNewLabel_1);
 
         JButton btnNewButton_1 = new JButton("Customer Menu");
         btnNewButton_1.setBounds(10, 155, 186, 23);
@@ -79,7 +80,7 @@ public class MainMenu {
             public void mouseClicked(MouseEvent e) {
                 CustomerLoginMenu cm = null;
                 try {
-                    cm = new CustomerLoginMenu();
+                    cm = new CustomerLoginMenu(frmBiobio);
                 } catch (DataAccessException dataAccessException) {
                     dataAccessException.printStackTrace();
                 }
@@ -87,18 +88,20 @@ public class MainMenu {
                 cm.showWindow();
             }
         });
-        frame.getContentPane().add(btnNewButton_1);
+        frmBiobio.getContentPane().add(btnNewButton_1);
 
-        userNameField = new JTextField();
-        userNameField.setToolTipText("Type in your Username!");
+        JTextField userNameField = new JTextField();
         userNameField.setBounds(10, 48, 186, 20);
-        frame.getContentPane().add(userNameField);
-        userNameField.setColumns(10);
+        frmBiobio.getContentPane().add(userNameField);
+
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(10, 90, 186, 20);
+        frmBiobio.getContentPane().add(passwordField);
 
         JLabel lblNewLabel_1_1 = new JLabel("Password");
         lblNewLabel_1_1.setBounds(10, 73, 146, 18);
         lblNewLabel_1_1.setForeground(SystemColor.desktop);
-        frame.getContentPane().add(lblNewLabel_1_1);
+        frmBiobio.getContentPane().add(lblNewLabel_1_1);
 
         JButton btnNewButton = new JButton("Login to Employee Menu");
         btnNewButton.addActionListener(e -> {
@@ -111,18 +114,14 @@ public class MainMenu {
                 String username = userNameField.getText();
                 String password = String.valueOf(passwordField.getPassword());
 
-                if (validPassword.contains(password) && validUsername.contains(username)) {
+                if (validPassword.equals(password) && validUsername.equals(username)) {
                     new EmployeeMenu();
-                } else
+                } else {
                     System.out.println("Wrong username/password! " + username + password + " ");
+                }
             }
         });
-
-        passwordField = new JPasswordField();
-        passwordField.setToolTipText("Type in your Password!");
-        passwordField.setBounds(10, 90, 186, 20);
-        frame.getContentPane().add(passwordField);
-        frame.getContentPane().add(btnNewButton);
+        frmBiobio.getContentPane().add(btnNewButton);
         
         JButton btnNewButton_1_1 = new JButton("Open DB Status");
         btnNewButton_1_1.addMouseListener(new MouseAdapter() {
@@ -133,11 +132,11 @@ public class MainMenu {
         	}
         });
         btnNewButton_1_1.setBounds(10, 189, 186, 23);
-        frame.getContentPane().add(btnNewButton_1_1);
-        frame.setVisible(true);
-    }
-
-    public static void setUIFont(javax.swing.plaf.FontUIResource f) {
+        frmBiobio.getContentPane().add(btnNewButton_1_1);
+        frmBiobio.setVisible(true);
+	}
+	
+	private static void setUIFont(javax.swing.plaf.FontUIResource f) {
         Enumeration<Object> keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();

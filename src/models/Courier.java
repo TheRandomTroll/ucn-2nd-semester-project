@@ -17,6 +17,13 @@ public class Courier {
         this.status = status;
     }
 
+    public Courier(String firstName, String lastName, String phoneNo, CourierStatus status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
+        this.status = status;
+    }
+
     public int getId() {
         return id;
     }
@@ -55,5 +62,9 @@ public class Courier {
 
     public void setStatus(CourierStatus status) {
         this.status = status;
+    }
+
+    public String[] toStringArray() {
+        return new String[] { String.valueOf(id), firstName, lastName, phoneNo, status.toString()};
     }
 }

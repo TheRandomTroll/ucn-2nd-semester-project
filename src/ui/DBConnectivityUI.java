@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 public class DBConnectivityUI {
 	private JFrame frmDatabaseStatus;
@@ -23,9 +24,10 @@ public class DBConnectivityUI {
 	 */
 	private void initialize() {
 		frmDatabaseStatus = new JFrame();
+		frmDatabaseStatus.setIconImage(Toolkit.getDefaultToolkit().getImage(DBConnectivityUI.class.getResource("/ui/img/icon.png")));
 		frmDatabaseStatus.setTitle("Database status");
 		frmDatabaseStatus.setBounds(100, 100, 383, 72);
-		frmDatabaseStatus.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frmDatabaseStatus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmDatabaseStatus.getContentPane().setLayout(null);
 		
 		JLabel lblStatus = new JLabel("Database status: ");
@@ -42,7 +44,7 @@ public class DBConnectivityUI {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						break;
 					}
 				}
 			}
@@ -53,13 +55,11 @@ public class DBConnectivityUI {
 	}
 
 	public void showWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frmDatabaseStatus.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				frmDatabaseStatus.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}

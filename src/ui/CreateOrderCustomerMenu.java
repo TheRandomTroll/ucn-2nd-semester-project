@@ -30,24 +30,15 @@ public class CreateOrderCustomerMenu {
 
     }
 
-    private JFrame frame;
+    private final JDialog dialog;
 
     private OrderController orderController;
-    private final Customer customer;
     private Order order;
-    private JTextField textFieldBarcode;
-    private JTextField textFieldQuantity;
-    private JTextField textFieldNewAddressStreet;
-    private JTextField textFieldNewAddressStreetNumber;
-    private JTextField textFieldNewAddressFloor;
-    private JTextField textFieldNewAddressCity;
-    private JTextField textFieldNewAddressPostalCode;
-    private JTextField textFieldVoucherCode;
 
     /**
      * Create the application.
      */
-    public CreateOrderCustomerMenu(Customer c) {
+    public CreateOrderCustomerMenu(Container parent, Customer c) {
         this.order = new Order(c);
         try {
             System.out.println("Order Created");
@@ -56,7 +47,9 @@ public class CreateOrderCustomerMenu {
         } catch (DataAccessException e) {
             UIUtil.displayDBErrorMsg(e.getMessage());
         }
-        this.customer = c;
+        dialog = new JDialog((Dialog) parent);
+        dialog.setIconImage(Toolkit.getDefaultToolkit().getImage(CreateOrderCustomerMenu.class.getResource("/ui/img/icon.png")));
+        dialog.setTitle("Create Order");
         initialize();
     }
 
@@ -64,25 +57,24 @@ public class CreateOrderCustomerMenu {
      * Initialize the contents of the frame.
      */
     private void initialize() {
-        frame = new JFrame();
-        frame.setBounds(100, 100, 658, 484);
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
+        dialog.setBounds(100, 100, 658, 484);
+        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dialog.getContentPane().setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Create New Order");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblNewLabel.setBounds(10, 18, 197, 14);
-        frame.getContentPane().add(lblNewLabel);
+        dialog.getContentPane().add(lblNewLabel);
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBounds(217, 35, 200, 330);
-        frame.getContentPane().add(scrollPane);
+        dialog.getContentPane().add(scrollPane);
 
         JLabel lblTotalPrice = new JLabel("<html>Total price:<br> 0,00 kn");
         lblTotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblTotalPrice.setBounds(427, 256, 205, 34);
-        frame.getContentPane().add(lblTotalPrice);
+        dialog.getContentPane().add(lblTotalPrice);
 
         JList<String> list = new JList<>();
         list.addMouseListener(new MouseAdapter() {
@@ -126,31 +118,31 @@ public class CreateOrderCustomerMenu {
 
         JLabel lblNewLabel_1 = new JLabel("Your products:");
         lblNewLabel_1.setBounds(217, 18, 200, 14);
-        frame.getContentPane().add(lblNewLabel_1);
+        dialog.getContentPane().add(lblNewLabel_1);
 
         JLabel lblNewLabel_3 = new JLabel("Barcode");
         lblNewLabel_3.setBounds(217, 371, 82, 14);
-        frame.getContentPane().add(lblNewLabel_3);
+        dialog.getContentPane().add(lblNewLabel_3);
 
-        textFieldBarcode = new JTextField();
+        JTextField textFieldBarcode = new JTextField();
         textFieldBarcode.setBounds(217, 385, 86, 20);
-        frame.getContentPane().add(textFieldBarcode);
+        dialog.getContentPane().add(textFieldBarcode);
         textFieldBarcode.setColumns(10);
 
-        textFieldQuantity = new JTextField();
+        JTextField textFieldQuantity = new JTextField();
         textFieldQuantity.setColumns(10);
         textFieldQuantity.setBounds(331, 385, 86, 20);
-        frame.getContentPane().add(textFieldQuantity);
+        dialog.getContentPane().add(textFieldQuantity);
 
         JLabel lblOrderNumber = new JLabel();
         lblOrderNumber.setText("<html>Order No.<br>" + order.getOrderNumber());
         lblOrderNumber.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblOrderNumber.setBounds(427, 17, 133, 41);
-        frame.getContentPane().add(lblOrderNumber);
+        dialog.getContentPane().add(lblOrderNumber);
 
         JLabel lblNewLabel_3_1 = new JLabel("Quantity");
         lblNewLabel_3_1.setBounds(331, 371, 86, 14);
-        frame.getContentPane().add(lblNewLabel_3_1);
+        dialog.getContentPane().add(lblNewLabel_3_1);
 
         JButton btnAddToCart = new JButton("Add to Cart");
         btnAddToCart.addMouseListener(new MouseAdapter() {
@@ -189,15 +181,15 @@ public class CreateOrderCustomerMenu {
             }
         });
         btnAddToCart.setBounds(217, 411, 200, 23);
-        frame.getContentPane().add(btnAddToCart);
+        dialog.getContentPane().add(btnAddToCart);
 
-        JComboBox comboBoxPaymentMethod = new JComboBox(Arrays.stream(PaymentType.values()).map(Enum::toString).toArray());
+        JComboBox<Object> comboBoxPaymentMethod = new JComboBox<>(Arrays.stream(PaymentType.values()).map(Enum::toString).toArray());
         comboBoxPaymentMethod.setBounds(427, 385, 205, 20);
-        frame.getContentPane().add(comboBoxPaymentMethod);
+        dialog.getContentPane().add(comboBoxPaymentMethod);
 
         JLabel lblNewLabel_5 = new JLabel("Select payment method");
         lblNewLabel_5.setBounds(427, 371, 205, 14);
-        frame.getContentPane().add(lblNewLabel_5);
+        dialog.getContentPane().add(lblNewLabel_5);
         JButton btnConfirmOrder = new JButton("Confirm Order");
         btnConfirmOrder.addMouseListener(new MouseAdapter() {
             @Override
@@ -206,7 +198,7 @@ public class CreateOrderCustomerMenu {
                 try {
                     orderController.finishSale(paymentType);
                     UIUtil.displayMessage("Order " + order.getOrderNumber() + " has been processed successfully!", "Success!", JOptionPane.INFORMATION_MESSAGE);
-                    frame.setVisible(false);
+                    dialog.setVisible(false);
                 } catch (DataAccessException dataAccessException) {
                     dataAccessException.printStackTrace();
                     UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
@@ -216,16 +208,16 @@ public class CreateOrderCustomerMenu {
             }
         });
         btnConfirmOrder.setBounds(427, 411, 205, 23);
-        frame.getContentPane().add(btnConfirmOrder);
+        dialog.getContentPane().add(btnConfirmOrder);
 
         JLabel lblAddressInfo = new JLabel("<html>The package will be delivered<br>to the billing address you provided.<br><b>Address info:</b><br>" + order.getDeliveryAddress().toHTMLString());
         lblAddressInfo.setBounds(10, 43, 197, 105);
-        frame.getContentPane().add(lblAddressInfo);
+        dialog.getContentPane().add(lblAddressInfo);
 
         JPanel newAddressPanel = new JPanel();
         newAddressPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
         newAddressPanel.setBounds(10, 185, 200, 200);
-        frame.getContentPane().add(newAddressPanel);
+        dialog.getContentPane().add(newAddressPanel);
         newAddressPanel.setLayout(null);
 
         JLabel lblAddressInfo_1 = new JLabel("Address Info");
@@ -240,17 +232,17 @@ public class CreateOrderCustomerMenu {
         lblNewLabel_2_2_1.setBounds(106, 35, 86, 14);
         newAddressPanel.add(lblNewLabel_2_2_1);
 
-        textFieldNewAddressStreet = new JTextField();
+        JTextField textFieldNewAddressStreet = new JTextField();
         textFieldNewAddressStreet.setColumns(10);
         textFieldNewAddressStreet.setBounds(10, 49, 86, 20);
         newAddressPanel.add(textFieldNewAddressStreet);
 
-        textFieldNewAddressStreetNumber = new JTextField();
+        JTextField textFieldNewAddressStreetNumber = new JTextField();
         textFieldNewAddressStreetNumber.setColumns(10);
         textFieldNewAddressStreetNumber.setBounds(106, 49, 86, 20);
         newAddressPanel.add(textFieldNewAddressStreetNumber);
 
-        textFieldNewAddressFloor = new JTextField();
+        JTextField textFieldNewAddressFloor = new JTextField();
         textFieldNewAddressFloor.setColumns(10);
         textFieldNewAddressFloor.setBounds(10, 94, 86, 20);
         newAddressPanel.add(textFieldNewAddressFloor);
@@ -259,7 +251,7 @@ public class CreateOrderCustomerMenu {
         lblNewLabel_2_2_1_1.setBounds(10, 80, 46, 14);
         newAddressPanel.add(lblNewLabel_2_2_1_1);
 
-        textFieldNewAddressCity = new JTextField();
+        JTextField textFieldNewAddressCity = new JTextField();
         textFieldNewAddressCity.setColumns(10);
         textFieldNewAddressCity.setBounds(106, 94, 86, 20);
         newAddressPanel.add(textFieldNewAddressCity);
@@ -272,7 +264,7 @@ public class CreateOrderCustomerMenu {
         lblNewLabel_2_2_1_3.setBounds(10, 125, 86, 14);
         newAddressPanel.add(lblNewLabel_2_2_1_3);
 
-        textFieldNewAddressPostalCode = new JTextField();
+        JTextField textFieldNewAddressPostalCode = new JTextField();
         textFieldNewAddressPostalCode.setColumns(10);
         textFieldNewAddressPostalCode.setBounds(10, 139, 86, 20);
         newAddressPanel.add(textFieldNewAddressPostalCode);
@@ -315,20 +307,20 @@ public class CreateOrderCustomerMenu {
             }
         });
         chckbxNewDeliveryAddress.setBounds(6, 155, 201, 23);
-        frame.getContentPane().add(chckbxNewDeliveryAddress);
+        dialog.getContentPane().add(chckbxNewDeliveryAddress);
 
         JLabel lblNewLabel_2 = new JLabel("Got a voucher?");
         lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNewLabel_2.setBounds(427, 185, 115, 14);
-        frame.getContentPane().add(lblNewLabel_2);
+        dialog.getContentPane().add(lblNewLabel_2);
 
         JLabel lblNewLabel_4 = new JLabel("Code");
         lblNewLabel_4.setBounds(427, 210, 46, 14);
-        frame.getContentPane().add(lblNewLabel_4);
+        dialog.getContentPane().add(lblNewLabel_4);
 
-        textFieldVoucherCode = new JTextField();
+        JTextField textFieldVoucherCode = new JTextField();
         textFieldVoucherCode.setBounds(427, 235, 115, 20);
-        frame.getContentPane().add(textFieldVoucherCode);
+        dialog.getContentPane().add(textFieldVoucherCode);
         textFieldVoucherCode.setColumns(10);
 
         JButton btnApplyVoucher = new JButton("Apply");
@@ -359,13 +351,13 @@ public class CreateOrderCustomerMenu {
             }
         });
         btnApplyVoucher.setBounds(543, 234, 89, 21);
-        frame.getContentPane().add(btnApplyVoucher);
+        dialog.getContentPane().add(btnApplyVoucher);
     }
 
     public void showWindow() {
         EventQueue.invokeLater(() -> {
             try {
-                frame.setVisible(true);
+                dialog.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

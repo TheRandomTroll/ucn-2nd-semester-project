@@ -11,25 +11,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class CustomerLoginMenu {
-
-    private JFrame frmCustomerMenu;
-    private JTextField textFieldLoginPhoneNumber;
-    private JTextField textFieldRegisterName;
-    private JTextField textFieldRegisterPhoneNumber;
-    private JTextField textFieldRegisterStreet;
-    private JTextField textFieldRegisterStreetNumber;
-    private JTextField textFieldRegisterFloor;
-    private JTextField textFieldRegisterCity;
-    private JTextField textFieldRegisterPostalCode;
-
+    private final JDialog dialogCustomerMenu;
     private final CustomerController customerController;
-    private JTextField textFieldRegisterEmail;
 
     /**
      * Create the application.
      */
-    public CustomerLoginMenu() throws DataAccessException {
+    public CustomerLoginMenu(JFrame frame) throws DataAccessException {
         this.customerController = new CustomerController();
+        this.dialogCustomerMenu = new JDialog(frame);
+        dialogCustomerMenu.setIconImage(Toolkit.getDefaultToolkit().getImage(CustomerLoginMenu.class.getResource("/ui/img/icon.png")));
         initialize();
     }
 
@@ -37,15 +28,14 @@ public class CustomerLoginMenu {
      * Initialize the contents of the frame.
      */
     private void initialize() {
-        frmCustomerMenu = new JFrame();
-        frmCustomerMenu.setTitle("Customer Menu");
-        frmCustomerMenu.setBounds(100, 100, 380, 265);
-        frmCustomerMenu.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frmCustomerMenu.getContentPane().setLayout(null);
+        dialogCustomerMenu.setTitle("Customer Menu");
+        dialogCustomerMenu.setBounds(100, 100, 380, 265);
+        dialogCustomerMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dialogCustomerMenu.getContentPane().setLayout(null);
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBounds(0, 0, 364, 226);
-        frmCustomerMenu.getContentPane().add(tabbedPane);
+        dialogCustomerMenu.getContentPane().add(tabbedPane);
 
         JPanel panelLogin = new JPanel();
         tabbedPane.addTab("Login", null, panelLogin, null);
@@ -56,7 +46,7 @@ public class CustomerLoginMenu {
         lblNewLabel.setBounds(10, 11, 121, 27);
         panelLogin.add(lblNewLabel);
 
-        textFieldLoginPhoneNumber = new JTextField();
+        JTextField textFieldLoginPhoneNumber = new JTextField();
         textFieldLoginPhoneNumber.setBounds(10, 49, 121, 20);
         panelLogin.add(textFieldLoginPhoneNumber);
         textFieldLoginPhoneNumber.setColumns(10);
@@ -75,14 +65,14 @@ public class CustomerLoginMenu {
                 try {
                     c = customerController.findByPhoneNo(phoneNumber);
                 } catch (DataAccessException dataAccessException) {
-                    JOptionPane.showMessageDialog(frmCustomerMenu,
+                    JOptionPane.showMessageDialog(dialogCustomerMenu,
                         "An error has occurred while connecting to the database. Message: " + dataAccessException.getMessage(),
                         "Error connecting to database",
                         JOptionPane.ERROR_MESSAGE);
                 }
 
                 if(c == null) {
-                    JOptionPane.showMessageDialog(frmCustomerMenu,
+                    JOptionPane.showMessageDialog(dialogCustomerMenu,
                             "This phone number is invalid!",
                             "Invalid phone number",
                             JOptionPane.ERROR_MESSAGE);
@@ -105,7 +95,7 @@ public class CustomerLoginMenu {
         lblNewHere.setFont(new Font("Tahoma", Font.PLAIN, 16));
         panelRegister.add(lblNewHere);
 
-        textFieldRegisterName = new JTextField();
+        JTextField textFieldRegisterName = new JTextField();
         textFieldRegisterName.setBounds(10, 80, 86, 20);
         panelRegister.add(textFieldRegisterName);
         textFieldRegisterName.setColumns(10);
@@ -114,7 +104,7 @@ public class CustomerLoginMenu {
         lblNewLabel_2.setBounds(10, 66, 46, 14);
         panelRegister.add(lblNewLabel_2);
 
-        textFieldRegisterPhoneNumber = new JTextField();
+        JTextField textFieldRegisterPhoneNumber = new JTextField();
         textFieldRegisterPhoneNumber.setColumns(10);
         textFieldRegisterPhoneNumber.setBounds(10, 125, 86, 20);
         panelRegister.add(textFieldRegisterPhoneNumber);
@@ -123,7 +113,7 @@ public class CustomerLoginMenu {
         lblNewLabel_2_1.setBounds(10, 111, 86, 14);
         panelRegister.add(lblNewLabel_2_1);
 
-        textFieldRegisterStreet = new JTextField();
+        JTextField textFieldRegisterStreet = new JTextField();
         textFieldRegisterStreet.setColumns(10);
         textFieldRegisterStreet.setBounds(156, 80, 86, 20);
         panelRegister.add(textFieldRegisterStreet);
@@ -132,7 +122,7 @@ public class CustomerLoginMenu {
         lblNewLabel_2_2.setBounds(156, 66, 46, 14);
         panelRegister.add(lblNewLabel_2_2);
 
-        textFieldRegisterStreetNumber = new JTextField();
+        JTextField textFieldRegisterStreetNumber = new JTextField();
         textFieldRegisterStreetNumber.setColumns(10);
         textFieldRegisterStreetNumber.setBounds(252, 80, 86, 20);
         panelRegister.add(textFieldRegisterStreetNumber);
@@ -141,7 +131,7 @@ public class CustomerLoginMenu {
         lblNewLabel_2_2_1.setBounds(252, 66, 86, 14);
         panelRegister.add(lblNewLabel_2_2_1);
 
-        textFieldRegisterFloor = new JTextField();
+        JTextField textFieldRegisterFloor = new JTextField();
         textFieldRegisterFloor.setColumns(10);
         textFieldRegisterFloor.setBounds(156, 125, 86, 20);
         panelRegister.add(textFieldRegisterFloor);
@@ -150,7 +140,7 @@ public class CustomerLoginMenu {
         lblNewLabel_2_2_1_1.setBounds(156, 111, 46, 14);
         panelRegister.add(lblNewLabel_2_2_1_1);
 
-        textFieldRegisterCity = new JTextField();
+        JTextField textFieldRegisterCity = new JTextField();
         textFieldRegisterCity.setColumns(10);
         textFieldRegisterCity.setBounds(252, 125, 86, 20);
         panelRegister.add(textFieldRegisterCity);
@@ -159,7 +149,7 @@ public class CustomerLoginMenu {
         lblNewLabel_2_2_1_2.setBounds(252, 111, 46, 14);
         panelRegister.add(lblNewLabel_2_2_1_2);
 
-        textFieldRegisterPostalCode = new JTextField();
+        JTextField textFieldRegisterPostalCode = new JTextField();
         textFieldRegisterPostalCode.setColumns(10);
         textFieldRegisterPostalCode.setBounds(156, 170, 86, 20);
         panelRegister.add(textFieldRegisterPostalCode);
@@ -168,38 +158,6 @@ public class CustomerLoginMenu {
         lblNewLabel_2_2_1_3.setBounds(156, 156, 86, 14);
         panelRegister.add(lblNewLabel_2_2_1_3);
 
-        JButton btnRegister = new JButton("Register");
-        btnRegister.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    Address a = UIUtil.parseAddress(textFieldRegisterStreet, textFieldRegisterStreetNumber, textFieldRegisterFloor, textFieldRegisterCity, textFieldRegisterPostalCode);
-
-
-                    Address lookup = customerController.findAddressByData(a);
-                    if(lookup == null) {
-                    	customerController.createAddress(a);
-					} else {
-                    	a = lookup;
-					}
-
-                    String name = textFieldRegisterName.getText();
-                    String phoneNumber = textFieldRegisterPhoneNumber.getText();
-                    String email = textFieldRegisterEmail.getText();
-
-                    int rows = customerController.createCustomer(name, phoneNumber, email, a);
-                    if(rows > 0) {
-                        UIUtil.displayMessage("Successfully registered as a new customer!", "Success", JOptionPane.INFORMATION_MESSAGE);
-					}
-                } catch (DataAccessException dataAccessException) {
-                	dataAccessException.printStackTrace();
-                    UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
-                }
-            }
-        });
-        btnRegister.setBounds(252, 169, 86, 23);
-        panelRegister.add(btnRegister);
-        
         JLabel lblPersonalInfo = new JLabel("Personal Info");
         lblPersonalInfo.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblPersonalInfo.setBounds(10, 42, 92, 20);
@@ -209,8 +167,8 @@ public class CustomerLoginMenu {
         lblAddressInfo.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblAddressInfo.setBounds(156, 42, 92, 20);
         panelRegister.add(lblAddressInfo);
-        
-        textFieldRegisterEmail = new JTextField();
+
+        JTextField textFieldRegisterEmail = new JTextField();
         textFieldRegisterEmail.setColumns(10);
         textFieldRegisterEmail.setBounds(10, 170, 86, 20);
         panelRegister.add(textFieldRegisterEmail);
@@ -218,6 +176,40 @@ public class CustomerLoginMenu {
         JLabel lblNewLabel_2_3 = new JLabel("Email");
         lblNewLabel_2_3.setBounds(10, 156, 46, 14);
         panelRegister.add(lblNewLabel_2_3);
+
+        JButton btnRegister = new JButton("Register");
+
+        btnRegister.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Address a = UIUtil.parseAddress(textFieldRegisterStreet, textFieldRegisterStreetNumber, textFieldRegisterFloor, textFieldRegisterCity, textFieldRegisterPostalCode);
+
+
+                    Address lookup = customerController.findAddressByData(a);
+                    if(lookup == null) {
+                        customerController.createAddress(a);
+                    } else {
+                        a = lookup;
+                    }
+
+                    String name = textFieldRegisterName.getText();
+                    String phoneNumber = textFieldRegisterPhoneNumber.getText();
+                    String email = textFieldRegisterEmail.getText();
+
+                    int rows = customerController.createCustomer(name, phoneNumber, email, a);
+                    if(rows > 0) {
+                        UIUtil.displayMessage("Successfully registered as a new customer!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (DataAccessException dataAccessException) {
+                    dataAccessException.printStackTrace();
+                    UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
+                }
+            }
+        });
+        btnRegister.setBounds(252, 169, 86, 23);
+        panelRegister.add(btnRegister);
+
     }
 
 
@@ -225,7 +217,7 @@ public class CustomerLoginMenu {
     private void closeWindow() {
         EventQueue.invokeLater(() -> {
             try {
-                frmCustomerMenu.setVisible(false);
+                dialogCustomerMenu.setVisible(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -235,7 +227,7 @@ public class CustomerLoginMenu {
     public void showWindow() {
         EventQueue.invokeLater(() -> {
             try {
-                frmCustomerMenu.setVisible(true);
+                dialogCustomerMenu.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

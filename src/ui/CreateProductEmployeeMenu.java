@@ -13,15 +13,10 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.concurrent.Flow;
+import java.awt.Toolkit;
 
 public class CreateProductEmployeeMenu implements Observable<Product> {
-	private JFrame frmCreateProduct;
-	private JTextField textName;
-	private JTextField textBarcode;
-	private JTextField textPrice;
-	private JTextField textMinStock;
-	private JTextField textMaxStock;
+	private JDialog dialogCreateProduct;
 
 	private ProductController productController;
 	private Observer<Product> observer;
@@ -42,80 +37,81 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmCreateProduct = new JFrame();
-		frmCreateProduct.setTitle("Create Product");
-		frmCreateProduct.setBounds(100, 100, 226, 295);
-		frmCreateProduct.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frmCreateProduct.getContentPane().setLayout(null);
+		dialogCreateProduct = new JDialog();
+		dialogCreateProduct.setIconImage(Toolkit.getDefaultToolkit().getImage(CreateProductEmployeeMenu.class.getResource("/ui/img/icon.png")));
+		dialogCreateProduct.setTitle("Create Product");
+		dialogCreateProduct.setBounds(100, 100, 226, 295);
+		dialogCreateProduct.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		dialogCreateProduct.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Create Product");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel.setBounds(10, 11, 122, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel);
+		dialogCreateProduct.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Name");
 		lblNewLabel_1.setBounds(10, 36, 86, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel_1);
-		
-		textName = new JTextField();
+		dialogCreateProduct.getContentPane().add(lblNewLabel_1);
+
+		JTextField textName = new JTextField();
 		textName.setName("Name");
 		textName.setBounds(10, 50, 86, 20);
-		frmCreateProduct.getContentPane().add(textName);
+		dialogCreateProduct.getContentPane().add(textName);
 		textName.setColumns(10);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Barcode");
 		lblNewLabel_1_1.setBounds(10, 81, 86, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel_1_1);
-		
-		textBarcode = new JTextField();
+		dialogCreateProduct.getContentPane().add(lblNewLabel_1_1);
+
+		JTextField textBarcode = new JTextField();
 		textBarcode.setName("Barcode");
 		textBarcode.setColumns(10);
 		textBarcode.setBounds(10, 95, 86, 20);
-		frmCreateProduct.getContentPane().add(textBarcode);
+		dialogCreateProduct.getContentPane().add(textBarcode);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Price");
 		lblNewLabel_1_2.setBounds(10, 126, 86, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel_1_2);
-		
-		textPrice = new JTextField();
+		dialogCreateProduct.getContentPane().add(lblNewLabel_1_2);
+
+		JTextField textPrice = new JTextField();
 		textPrice.setName("Price");
 		textPrice.setColumns(10);
 		textPrice.setBounds(10, 140, 86, 20);
-		frmCreateProduct.getContentPane().add(textPrice);
+		dialogCreateProduct.getContentPane().add(textPrice);
 		
 		JLabel lblNewLabel_1_3 = new JLabel("Description");
 		lblNewLabel_1_3.setBounds(106, 36, 86, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel_1_3);
+		dialogCreateProduct.getContentPane().add(lblNewLabel_1_3);
 		
 		JTextArea textDescription = new JTextArea();
 		textDescription.setBounds(106, 50, 86, 110);
-		frmCreateProduct.getContentPane().add(textDescription);
+		dialogCreateProduct.getContentPane().add(textDescription);
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("Minimal Stock");
 		lblNewLabel_1_2_1.setBounds(10, 171, 86, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel_1_2_1);
-		
-		textMinStock = new JTextField();
+		dialogCreateProduct.getContentPane().add(lblNewLabel_1_2_1);
+
+		JTextField textMinStock = new JTextField();
 		textMinStock.setName("Minimal Stock");
 		textMinStock.setColumns(10);
 		textMinStock.setBounds(10, 185, 86, 20);
-		frmCreateProduct.getContentPane().add(textMinStock);
+		dialogCreateProduct.getContentPane().add(textMinStock);
 		
 		JLabel lblNewLabel_1_2_3 = new JLabel("Maximal Stock");
 		lblNewLabel_1_2_3.setBounds(106, 171, 86, 14);
-		frmCreateProduct.getContentPane().add(lblNewLabel_1_2_3);
-		
-		textMaxStock = new JTextField();
+		dialogCreateProduct.getContentPane().add(lblNewLabel_1_2_3);
+
+		JTextField textMaxStock = new JTextField();
 		textMaxStock.setName("Maximal Stock");
 		textMaxStock.setColumns(10);
 		textMaxStock.setBounds(106, 185, 86, 20);
-		frmCreateProduct.getContentPane().add(textMaxStock);
+		dialogCreateProduct.getContentPane().add(textMaxStock);
 		
 		JButton btnNewButton = new JButton("Create Product");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(frmCreateProduct.getContentPane()));
+				List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(dialogCreateProduct.getContentPane()));
 				if(emptyFields.size() > 0) {
 					StringBuilder errorMessage = new StringBuilder("<html>Cannot insert new product. The following fields are empty:<br><ul>");
 					for(String field : emptyFields) {
@@ -148,13 +144,13 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 			}
 		});
 		btnNewButton.setBounds(10, 222, 182, 23);
-		frmCreateProduct.getContentPane().add(btnNewButton);
+		dialogCreateProduct.getContentPane().add(btnNewButton);
 	}
 
 	public void showWindow() {
 		EventQueue.invokeLater(() -> {
 			try {
-				frmCreateProduct.setVisible(true);
+				dialogCreateProduct.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -164,7 +160,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 	private void closeWindow() {
 		EventQueue.invokeLater(() -> {
 			try {
-				frmCreateProduct.setVisible(false);
+				dialogCreateProduct.setVisible(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
