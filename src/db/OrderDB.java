@@ -1,11 +1,11 @@
 package db;
 
+import db.interfaces.AddressDBIF;
+import db.interfaces.CourierBatchDBIF;
+import db.interfaces.CustomerDBIF;
 import db.interfaces.OrderDBIF;
 import exceptions.DataAccessException;
-import models.Address;
-import models.Customer;
-import models.Order;
-import models.OrderLine;
+import models.*;
 import models.enums.OrderStatus;
 
 import java.sql.*;
@@ -16,33 +16,38 @@ import java.util.List;
  * A data access class for the <i>Orders</i> table from the database.
  */
 public class OrderDB implements OrderDBIF {
-    private static final String GET_ORDERS_Q = "SELECT Id, OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders";
+    private static final String GET_FINISHED_ORDERS_Q = "SELECT Id, OrderNumber, TotalPrice, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders WHERE OrderStatusId <> 1";
     private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
+    private static final String UPDATE_ORDER_STATUS_Q = "UPDATE Orders SET OrderStatusId = ? WHERE Id = ?";
 
-    private final PreparedStatement getOrdersPS;
+    private final PreparedStatement getFinishedOrdersPS;
     private final PreparedStatement createOrderPS;
     private final PreparedStatement updateOrderPS;
+    private final PreparedStatement updateOrderStatusPS;
 
-    private final CustomerDB customerDB;
-    private final AddressDB addressDB;
+    private final CustomerDBIF customerDB;
+    private final AddressDBIF addressDB;
+    private final CourierBatchDBIF courierBatchDB;
 
     public OrderDB() throws DataAccessException {
         try {
             this.customerDB = new CustomerDB();
             this.addressDB = new AddressDB();
-            this.getOrdersPS = DBConnection.getInstance().getConnection().prepareStatement(GET_ORDERS_Q);
+            this.courierBatchDB = new CourierBatchDB();
+            this.getFinishedOrdersPS = DBConnection.getInstance().getConnection().prepareStatement(GET_FINISHED_ORDERS_Q);
             this.createOrderPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_ORDER_Q, Statement.RETURN_GENERATED_KEYS);
             this.updateOrderPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_ORDER_Q);
+            this.updateOrderStatusPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_ORDER_STATUS_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
         }
     }
 
     @Override
-    public List<Order> getOrders() throws DataAccessException {
+    public List<Order> getFinishedOrders() throws DataAccessException {
         try {
-            ResultSet rs = getOrdersPS.executeQuery();
+            ResultSet rs = getFinishedOrdersPS.executeQuery();
             return buildObjects(rs);
         } catch (SQLException e) {
             throw new DataAccessException("Could not fetch data", e);
@@ -114,7 +119,21 @@ public class OrderDB implements OrderDBIF {
             rows += new OrderLineDB().createOrderLine(o, ol);
         }
 
+        this.courierBatchDB.dispatchOrder(o.getId());
         return rows;
+    }
+
+    @Override
+    public int updateOrderStatus(int id, OrderStatus status) throws DataAccessException {
+        try {
+            this.updateOrderStatusPS.setInt(1, status.getValue());
+            this.updateOrderStatusPS.setInt(2, id);
+
+            return this.updateOrderStatusPS.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not update data", e);
+        }
     }
 
     private List<Order> buildObjects(ResultSet rs) throws DataAccessException {
@@ -135,7 +154,7 @@ public class OrderDB implements OrderDBIF {
             Customer c = this.customerDB.findById(rs.getInt("CustomerId"));
             Address invoice = this.addressDB.findById(rs.getInt("InvoiceAddressId"));
             Address delivery = this.addressDB.findById(rs.getInt("DeliveryAddressId"));
-            return new Order(rs.getInt("Id"), rs.getString("OrderNumber"), c, OrderStatus.values()[rs.getInt("OrderStatusId") - 1], invoice, delivery);
+            return new Order(rs.getInt("Id"), rs.getString("OrderNumber"), rs.getDouble("TotalPrice"), c, OrderStatus.values()[rs.getInt("OrderStatusId") - 1], invoice, delivery);
         } catch (SQLException e) {
             throw new DataAccessException("Could not parse data", e);
         }

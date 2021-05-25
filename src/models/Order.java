@@ -18,10 +18,10 @@ public class Order {
     private List<OrderLine> orderLines;
     private Voucher appliedVoucher;
 
-    public Order(int id, String orderNumber, Customer customer, OrderStatus status, Address invoiceAddress, Address deliveryAddress) {
+    public Order(int id, String orderNumber, double totalPrice, Customer customer, OrderStatus status, Address invoiceAddress, Address deliveryAddress) {
         this.id = id;
         this.orderNumber = orderNumber;
-        this.totalPrice = 0;
+        this.totalPrice = totalPrice;
         this.customer = customer;
         this.status = status;
         this.invoiceAddress = invoiceAddress;
@@ -127,6 +127,10 @@ public class Order {
 
     private void setAppliedVoucher(Voucher appliedVoucher) {
         this.appliedVoucher = appliedVoucher;
+    }
+
+    public String[] toStringArray() {
+        return new String[]{String.valueOf(id), orderNumber, String.valueOf(totalPrice), customer.toString(), status.toString(), invoiceAddress.toString(), deliveryAddress.toString()};
     }
 
     public void addOrderLine(Product p, int qty) {

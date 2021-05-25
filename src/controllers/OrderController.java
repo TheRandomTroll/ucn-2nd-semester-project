@@ -4,12 +4,12 @@ import db.OrderDB;
 import db.interfaces.OrderDBIF;
 import exceptions.DataAccessException;
 import exceptions.InsufficientDataException;
-import models.Address;
-import models.Order;
-import models.Product;
-import models.Voucher;
+import models.*;
+import models.enums.CourierStatus;
 import models.enums.OrderStatus;
 import models.enums.PaymentType;
+
+import java.util.List;
 
 public class OrderController {
     private Order order;
@@ -17,12 +17,17 @@ public class OrderController {
     private final AddressController addressController;
     private final VoucherController voucherController;
     private final ShoppingListController shoppingListController;
+    private final CourierController courierController;
 
     public OrderController() throws DataAccessException {
         this.orderDB = new OrderDB();
         this.addressController = new AddressController();
         this.voucherController = new VoucherController();
         this.shoppingListController = new ShoppingListController();
+        this.courierController = new CourierController();
+    }
+    public List<Order> getFinishedOrders() throws DataAccessException {
+        return this.orderDB.getFinishedOrders();
     }
 
     public void createOrder(Order o) throws DataAccessException {
@@ -60,5 +65,13 @@ public class OrderController {
 
     public Voucher findVoucherByCode(String voucherCode) throws DataAccessException {
         return this.voucherController.findByCode(voucherCode);
+    }
+
+    public int updateOrderStatus(int orderId, OrderStatus status) throws DataAccessException {
+        return this.orderDB.updateOrderStatus(orderId, status);
+    }
+
+    public Courier dispatchOrder(int orderId) throws DataAccessException {
+        return this.courierController.dispatchOrder(orderId);
     }
 }

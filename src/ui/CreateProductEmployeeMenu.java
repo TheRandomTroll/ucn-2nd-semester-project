@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.concurrent.Flow;
 
 public class CreateProductEmployeeMenu implements Observable<Product> {
@@ -57,6 +58,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 		frmCreateProduct.getContentPane().add(lblNewLabel_1);
 		
 		textName = new JTextField();
+		textName.setName("Name");
 		textName.setBounds(10, 50, 86, 20);
 		frmCreateProduct.getContentPane().add(textName);
 		textName.setColumns(10);
@@ -66,6 +68,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 		frmCreateProduct.getContentPane().add(lblNewLabel_1_1);
 		
 		textBarcode = new JTextField();
+		textBarcode.setName("Barcode");
 		textBarcode.setColumns(10);
 		textBarcode.setBounds(10, 95, 86, 20);
 		frmCreateProduct.getContentPane().add(textBarcode);
@@ -75,6 +78,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 		frmCreateProduct.getContentPane().add(lblNewLabel_1_2);
 		
 		textPrice = new JTextField();
+		textPrice.setName("Price");
 		textPrice.setColumns(10);
 		textPrice.setBounds(10, 140, 86, 20);
 		frmCreateProduct.getContentPane().add(textPrice);
@@ -92,6 +96,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 		frmCreateProduct.getContentPane().add(lblNewLabel_1_2_1);
 		
 		textMinStock = new JTextField();
+		textMinStock.setName("Minimal Stock");
 		textMinStock.setColumns(10);
 		textMinStock.setBounds(10, 185, 86, 20);
 		frmCreateProduct.getContentPane().add(textMinStock);
@@ -101,6 +106,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 		frmCreateProduct.getContentPane().add(lblNewLabel_1_2_3);
 		
 		textMaxStock = new JTextField();
+		textMaxStock.setName("Maximal Stock");
 		textMaxStock.setColumns(10);
 		textMaxStock.setBounds(106, 185, 86, 20);
 		frmCreateProduct.getContentPane().add(textMaxStock);
@@ -109,22 +115,35 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String name = textName.getText();
-				int barcode = Integer.parseInt(textBarcode.getText());
-				String description = textDescription.getText();
-				double price = Double.parseDouble(textPrice.getText());
-				int maxStock = Integer.parseInt(textMaxStock.getText());
-				int minStock = Integer.parseInt(textMinStock.getText());
+				List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(frmCreateProduct.getContentPane()));
+				if(emptyFields.size() > 0) {
+					StringBuilder errorMessage = new StringBuilder("<html>Cannot insert new product. The following fields are empty:<br><ul>");
+					for(String field : emptyFields) {
+						errorMessage.append("<li>").append(field).append("</li>");
+					}
 
-				Product p = new Product(name, barcode, description, price, maxStock, minStock, maxStock);
+					errorMessage.append("</ul>");
 
+					UIUtil.displayMessage(errorMessage.toString(), "Error creating product", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				try {
+					String name = textName.getText();
+					int barcode = Integer.parseInt(textBarcode.getText());
+					String description = textDescription.getText();
+					double price = Double.parseDouble(textPrice.getText());
+					int maxStock = Integer.parseInt(textMaxStock.getText());
+					int minStock = Integer.parseInt(textMinStock.getText());
+
+					Product p = new Product(name, barcode, description, price, maxStock, minStock, maxStock);
 					productController.addProduct(p);
 					observer.notifyUpdate(p);
 					UIUtil.displayMessage("Product with id " + p.getId() + " created successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 					closeWindow();
-				} catch (DataAccessException ex) {
-					UIUtil.displayDBErrorMsg(ex.getMessage());
+				} catch (DataAccessException dae) {
+					UIUtil.displayDBErrorMsg(dae.getMessage());
+				} catch (NumberFormatException nfe) {
+					UIUtil.displayMessage("Error parsing input data. Please check that the values are valid.", "Error parsing data", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -133,25 +152,21 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 	}
 
 	public void showWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frmCreateProduct.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				frmCreateProduct.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
 
 	private void closeWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frmCreateProduct.setVisible(false);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				frmCreateProduct.setVisible(false);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}

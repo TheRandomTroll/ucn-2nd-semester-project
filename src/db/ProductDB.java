@@ -117,7 +117,7 @@ public class ProductDB implements ProductDBIF {
     @Override
     public int deleteProduct(int productId) throws DataAccessException {
         try {
-            this.deleteProductPS.setInt(1, productId);;
+            this.deleteProductPS.setInt(1, productId);
 
             return this.deleteProductPS.executeUpdate();
         } catch (SQLException e) {

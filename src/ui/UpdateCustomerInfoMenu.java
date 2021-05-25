@@ -155,10 +155,12 @@ public class UpdateCustomerInfoMenu {
 			public void mouseClicked(MouseEvent e) {
 				List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(frame.getContentPane()));
 				if(emptyFields.size() > 0) {
-					StringBuilder errorMessage = new StringBuilder("<html>Cannot complete update. The following fields are empty:<br>");
+					StringBuilder errorMessage = new StringBuilder("<html>Cannot complete update. The following fields are empty:<br><ul>");
 					for(String field : emptyFields) {
-						errorMessage.append("- ").append(field).append("<br>");
+						errorMessage.append("<li>").append(field).append("</li>");
 					}
+
+					errorMessage.append("</ul>");
 
 					UIUtil.displayMessage(errorMessage.toString(), "Error updating info", JOptionPane.ERROR_MESSAGE);
 					return;
