@@ -142,7 +142,7 @@ public class ProductDB implements ProductDBIF {
     private Product buildObject(ResultSet rs) throws DataAccessException {
         try {
             return new Product(rs.getInt("Id"), rs.getString("Name"), rs.getInt("Barcode"), rs.getString("Description"),
-                                    rs.getDouble("Price"), rs.getInt("MaxStock"), rs.getInt("MinStock"), rs.getInt("Quantity"));
+                                    rs.getFloat("Price"), rs.getInt("MaxStock"), rs.getInt("MinStock"), rs.getInt("Quantity"));
         } catch (SQLException e) {
             throw new DataAccessException("Could not parse data", e);
         }

@@ -154,7 +154,7 @@ public class OrderDB implements OrderDBIF {
             Customer c = this.customerDB.findById(rs.getInt("CustomerId"));
             Address invoice = this.addressDB.findById(rs.getInt("InvoiceAddressId"));
             Address delivery = this.addressDB.findById(rs.getInt("DeliveryAddressId"));
-            return new Order(rs.getInt("Id"), rs.getString("OrderNumber"), rs.getDouble("TotalPrice"), c, OrderStatus.values()[rs.getInt("OrderStatusId") - 1], invoice, delivery);
+            return new Order(rs.getInt("Id"), rs.getString("OrderNumber"), rs.getFloat("TotalPrice"), c, OrderStatus.values()[rs.getInt("OrderStatusId") - 1], invoice, delivery);
         } catch (SQLException e) {
             throw new DataAccessException("Could not parse data", e);
         }

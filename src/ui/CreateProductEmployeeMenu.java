@@ -131,7 +131,7 @@ public class CreateProductEmployeeMenu implements Observable<Product> {
 					String name = textName.getText();
 					int barcode = Integer.parseInt(textBarcode.getText());
 					String description = textDescription.getText();
-					double price = Double.parseDouble(textPrice.getText());
+					float price = Float.parseFloat(textPrice.getText());
 					int maxStock = Integer.parseInt(textMaxStock.getText());
 					int minStock = Integer.parseInt(textMinStock.getText());
 

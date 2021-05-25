@@ -1,7 +1,5 @@
 package controllers;
 
-import db.CourierDB;
-import db.interfaces.CourierDBIF;
 import exceptions.DataAccessException;
 import models.Courier;
 

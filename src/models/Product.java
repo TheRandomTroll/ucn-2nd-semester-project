@@ -5,12 +5,12 @@ public class Product {
     private String name;
     private int barcode;
     private String description;
-    private double price;
+    private float price;
     private int maxStock;
     private int minStock;
     private int quantity;
 
-    public Product(int id, String name, int barcode, String description, double price, int maxStock, int minStock, int quantity) {
+    public Product(int id, String name, int barcode, String description, float price, int maxStock, int minStock, int quantity) {
         this.id = id;
         this.name = name;
         this.barcode = barcode;
@@ -21,7 +21,7 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Product(String name, int barcode, String description, double price, int maxStock, int minStock, int quantity) {
+    public Product(String name, int barcode, String description, float price, int maxStock, int minStock, int quantity) {
         this.name = name;
         this.barcode = barcode;
         this.description = description;
@@ -63,11 +63,11 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

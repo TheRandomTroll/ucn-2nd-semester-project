@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 public class Order {
     private int id;
     private String orderNumber;
-    private double totalPrice;
+    private float totalPrice;
     private Customer customer;
     private OrderStatus status;
     private Address invoiceAddress;
@@ -18,7 +18,7 @@ public class Order {
     private List<OrderLine> orderLines;
     private Voucher appliedVoucher;
 
-    public Order(int id, String orderNumber, double totalPrice, Customer customer, OrderStatus status, Address invoiceAddress, Address deliveryAddress) {
+    public Order(int id, String orderNumber, float totalPrice, Customer customer, OrderStatus status, Address invoiceAddress, Address deliveryAddress) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.totalPrice = totalPrice;
@@ -56,7 +56,7 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
-    public double getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
@@ -69,7 +69,7 @@ public class Order {
     }
 
     private void updateTotalPrice() {
-        double total = 0;
+        float total = 0;
         for(OrderLine ol : orderLines) {
             total += ol.getQuantity() * ol.getProduct().getPrice();
         }
@@ -117,7 +117,7 @@ public class Order {
         this.orderLines = orderLines;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
 

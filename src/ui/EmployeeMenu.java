@@ -9,13 +9,20 @@ import models.Order;
 import models.Product;
 import models.enums.OrderStatus;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.table.TableModel;
 
 public class EmployeeMenu implements Observer<Product> {
     private ProductController productController;
@@ -24,6 +31,7 @@ public class EmployeeMenu implements Observer<Product> {
     private JFrame frmEmployeeMenu;
     private JTable tableOrders;
     private JTable tableProducts;
+    private JTable tableCouriers;
 
     /**
      * Create the application.
@@ -48,13 +56,25 @@ public class EmployeeMenu implements Observer<Product> {
         frmEmployeeMenu.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frmEmployeeMenu.getContentPane().setLayout(null);
 
+        BufferedImage addImage = null;
+        BufferedImage dispatchImage = null;
+        try {
+            addImage = ImageIO.read(EmployeeMenu.class.getResource("/ui/img/add.png"));
+            dispatchImage = ImageIO.read(EmployeeMenu.class.getResource("/ui/img/dispatch.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ImageIcon addButtonIcon = new ImageIcon(fitImage(addImage, 15, 15));
+        ImageIcon dispatchButtonIcon = new ImageIcon(fitImage(dispatchImage, 30, 30));
+
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBounds(0, 0, 561, 261);
         frmEmployeeMenu.getContentPane().add(tabbedPane);
 
-        JPanel productsPanel = new JPanel();
-        tabbedPane.addTab("Manage Products", null, productsPanel, null);
-        productsPanel.setLayout(null);
+        JPanel manageProductsPanel = new JPanel();
+        tabbedPane.addTab("Manage Products", null, manageProductsPanel, null);
+        manageProductsPanel.setLayout(null);
 
         List<Product> products = null;
         try {
@@ -102,7 +122,7 @@ public class EmployeeMenu implements Observer<Product> {
                         }
                     });
                     popup.add(menuItem);
-                    popup.show(productsPanel, e.getX(), e.getY());
+                    popup.show(manageProductsPanel, e.getX(), e.getY());
                 }
             }
         });
@@ -115,7 +135,7 @@ public class EmployeeMenu implements Observer<Product> {
                 String name = updatedRow[1];
                 int barcode = Integer.parseInt(updatedRow[2]);
                 String description = updatedRow[3];
-                float price = Float.parseFloat(updatedRow[4]);
+                float price = new BigDecimal(updatedRow[4]).floatValue();
                 int maxStock = Integer.parseInt(updatedRow[5]);
                 int minStock = Integer.parseInt(updatedRow[6]);
                 int quantity = Integer.parseInt(updatedRow[7]);
@@ -137,10 +157,13 @@ public class EmployeeMenu implements Observer<Product> {
 
         JScrollPane scrollPane = new JScrollPane(tableProducts);
         scrollPane.setLocation(10, 11);
-        scrollPane.setSize(350, 200);
-        productsPanel.add(scrollPane);
+        scrollPane.setSize(496, 200);
+        manageProductsPanel.add(scrollPane);
 
-        JButton btnNewProduct = new JButton("Create new product");
+        JButton btnNewProduct = new JButton(addButtonIcon);
+        btnNewProduct.setToolTipText("Add new product");
+        btnNewProduct.setBorder(BorderFactory.createEmptyBorder());
+        btnNewProduct.setContentAreaFilled(false);
         btnNewProduct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -149,12 +172,12 @@ public class EmployeeMenu implements Observer<Product> {
                 cpem.showWindow();
             }
         });
-        btnNewProduct.setBounds(370, 15, 176, 23);
-        productsPanel.add(btnNewProduct);
+        btnNewProduct.setBounds(516, 11, 30, 30);
+        manageProductsPanel.add(btnNewProduct);
 
-        JPanel ordersPanel = new JPanel();
-        tabbedPane.addTab("Manage Orders", null, ordersPanel, null);
-        ordersPanel.setLayout(null);
+        JPanel manageOrdersPanel = new JPanel();
+        tabbedPane.addTab("Manage Orders", null, manageOrdersPanel, null);
+        manageOrdersPanel.setLayout(null);
 
         String[] orderColumns = UIUtil.getClassFields(Order.class);
         String[][] orderRows = null;
@@ -176,15 +199,23 @@ public class EmployeeMenu implements Observer<Product> {
 
         JScrollPane scrollPane2 = new JScrollPane(tableOrders);
         scrollPane2.setLocation(10, 11);
-        scrollPane2.setSize(350, 200);
-        ordersPanel.add(scrollPane2);
+        scrollPane2.setSize(496, 200);
+        manageOrdersPanel.add(scrollPane2);
 
-        JButton btnDispatchOrder = new JButton("Dispatch Selected Order");
+        JButton btnDispatchOrder = new JButton(dispatchButtonIcon);
+        btnDispatchOrder.setToolTipText("Dispatch selected order");
+        btnDispatchOrder.setBorder(BorderFactory.createEmptyBorder());
+        btnDispatchOrder.setContentAreaFilled(false);
+
         String[][] orderRowsCopy = orderRows;
         btnDispatchOrder.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         	    int row = tableOrders.getSelectedRow();
+
+        	    if(row < 0) {
+        	        UIUtil.displayMessage("Make sure a row is selected.", "No row selected", JOptionPane.ERROR_MESSAGE);
+                }
 
         	    int id = Integer.parseInt(tableOrders.getModel().getValueAt(row, 0).toString());
         	    String orderNumber = tableOrders.getModel().getValueAt(row, 1).toString();
@@ -207,8 +238,21 @@ public class EmployeeMenu implements Observer<Product> {
                 }
             }
         });
-        btnDispatchOrder.setBounds(370, 15, 176, 23);
-        ordersPanel.add(btnDispatchOrder);
+        btnDispatchOrder.setBounds(516, 11, 30, 30);
+        manageOrdersPanel.add(btnDispatchOrder);
+        
+        JPanel manageCouriersPanel = new JPanel();
+        tabbedPane.addTab("Manage Couriers", null, manageCouriersPanel, null);
+        manageCouriersPanel.setLayout(null);
+        
+        tableCouriers = new JTable(null);
+        tableCouriers.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tableCouriers.setBounds(-171, 39, 525, 0);
+        manageCouriersPanel.add(tableCouriers);
+        
+        JScrollPane scrollPane3 = new JScrollPane(tableCouriers);
+        scrollPane3.setBounds(10, 11, 350, 200);
+        manageCouriersPanel.add(scrollPane3);
         frmEmployeeMenu.setVisible(true);
     }
 
@@ -220,5 +264,15 @@ public class EmployeeMenu implements Observer<Product> {
     public void notifyUpdate(Product item) {
         ((DefaultTableModel) tableProducts.getModel()).addRow(item.toStringArray());
         tableProducts.revalidate();
+    }
+
+    private Image fitImage(Image img , int w , int h)
+    {
+        BufferedImage resizedImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = resizedImage.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(img, 0, 0,w,h,null);
+        g2.dispose();
+        return resizedImage;
     }
 }

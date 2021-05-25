@@ -2,11 +2,14 @@ package ui;
 
 import models.Address;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +77,7 @@ public class UIUtil {
 
     public static void updateRow(TableModel dtm, int row, String[] data) {
         for (int i = 0; i < dtm.getRowCount(); i++) {
-            dtm.setValueAt(row, i, data[i]);
+            dtm.setValueAt(data[i], row, i);
         }
     }
 
