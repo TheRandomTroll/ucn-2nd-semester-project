@@ -197,7 +197,9 @@ public class CustomerLoginMenu {
                     String phoneNumber = textFieldRegisterPhoneNumber.getText();
                     String email = textFieldRegisterEmail.getText();
 
-                    int rows = customerController.createCustomer(name, phoneNumber, email, a);
+                    Customer c = new Customer(name, phoneNumber, email, a);
+
+                    int rows = customerController.createCustomer(c);
                     if(rows > 0) {
                         UIUtil.displayMessage("Successfully registered as a new customer!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }

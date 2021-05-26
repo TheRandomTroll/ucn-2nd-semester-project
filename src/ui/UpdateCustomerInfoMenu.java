@@ -182,7 +182,8 @@ public class UpdateCustomerInfoMenu {
 					String phoneNumber = textFieldUpdatePhoneNumber.getText();
 					String email = textFieldUpdateEmail.getText();
 
-					int rows = customerController.updateCustomer(name, phoneNumber, email, a);
+					Customer c = new Customer(name, phoneNumber, email, a);
+					int rows = customerController.updateCustomer(c);
 					if(rows > 0) {
 						UIUtil.displayMessage("Successfully updated your info! Please re-enter your phone number.", "Success", JOptionPane.INFORMATION_MESSAGE);
 						closeWindow();

@@ -31,7 +31,7 @@ public class ProductControllerTests {
         }
 
         assertEquals("Dried Apple", p.getName());
-        assertEquals(17, p.getId());
+        assertEquals(16, p.getId());
     }
 
     @Test

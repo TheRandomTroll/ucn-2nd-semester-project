@@ -8,7 +8,9 @@ public interface CustomerDBIF {
 
     Customer findById(int id) throws DataAccessException;
 
-    int createCustomer(String name, String phoneNo, String email, int addressId) throws DataAccessException;
+    int createCustomer(Customer c) throws DataAccessException;
 
-    int updateCustomer(String name, String phoneNo, String email, int addressId) throws DataAccessException;
+    int updateCustomer(Customer c) throws DataAccessException;
+
+    int deleteCustomer(Customer c) throws DataAccessException;
 }

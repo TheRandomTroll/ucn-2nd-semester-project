@@ -19,19 +19,27 @@ public class CustomerController {
         return this.customerDB.findByPhoneNo(phoneNo);
     }
 
-    public int createCustomer(String name, String phoneNo, String email, Address a) throws DataAccessException {
-        return this.customerDB.createCustomer(name, phoneNo, email, a.getId());
+    public int createCustomer(Customer c) throws DataAccessException {
+        return this.customerDB.createCustomer(c);
+    }
+
+    public int updateCustomer(Customer c) throws DataAccessException {
+        return this.customerDB.updateCustomer(c);
+    }
+
+    public int deleteCustomer(Customer c) throws DataAccessException {
+        return this.customerDB.deleteCustomer(c);
     }
 
     public Address findAddressByData(Address a) throws DataAccessException {
         return this.addressController.findByData(a);
     }
 
-    public void createAddress(Address a) throws DataAccessException {
-        this.addressController.createAddress(a);
+    public Address findAddressById(int id) throws DataAccessException {
+        return this.addressController.findById(id);
     }
 
-    public int updateCustomer(String name, String phoneNumber, String email, Address a) throws DataAccessException {
-        return this.customerDB.updateCustomer(name, phoneNumber, email, a.getId());
+    public void createAddress(Address a) throws DataAccessException {
+        this.addressController.createAddress(a);
     }
 }

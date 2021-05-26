@@ -16,12 +16,15 @@ public class CustomerDB implements CustomerDBIF {
     private static final String FIND_BY_PHONE_NO_Q = "BEGIN TRAN SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE PhoneNumber = ? COMMIT TRAN";
     private static final String FIND_BY_ID_Q = "BEGIN TRAN SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE Id = ? COMMIT TRAN";
     private static final String CREATE_CUSTOMER_Q = "BEGIN TRAN INSERT INTO Customers (Name, PhoneNumber, Email, AddressId) VALUES (?, ?, ?, ?) COMMIT TRAN";
-    private static final String UPDATE_CUSTOMER_Q = "BEGIN TRAN UPDATE Customers SET Name = ?, PhoneNumber = ?, Email = ?, AddressId = ? WHERE PhoneNumber = ? COMMIT TRAN";
+    private static final String UPDATE_CUSTOMER_Q = "BEGIN TRAN UPDATE Customers SET Name = ?, PhoneNumber = ?, Email = ?, AddressId = ? WHERE Id = ? COMMIT TRAN";
+    private static final String DELETE_CUSTOMER_Q = "DELETE FROM Customers WHERE Id = ?";
 
     private final PreparedStatement findByPhoneNoPS;
     private final PreparedStatement findByIdPS;
     private final PreparedStatement createCustomerPS;
     private final PreparedStatement updateCustomerPS;
+    private final PreparedStatement deleteCustomerPS;
+
     private final AddressDB addressDB;
 
     public CustomerDB() throws DataAccessException {
@@ -31,6 +34,7 @@ public class CustomerDB implements CustomerDBIF {
             findByIdPS = DBConnection.getInstance().getConnection().prepareStatement(FIND_BY_ID_Q);
             createCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(CREATE_CUSTOMER_Q);
             updateCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(UPDATE_CUSTOMER_Q);
+            deleteCustomerPS = DBConnection.getInstance().getConnection().prepareStatement(DELETE_CUSTOMER_Q);
         } catch (SQLException e) {
             throw new DataAccessException("Could not prepare statement", e);
         }
@@ -67,12 +71,12 @@ public class CustomerDB implements CustomerDBIF {
     }
 
     @Override
-    public int createCustomer(String name, String phoneNo, String email, int addressId) throws DataAccessException {
+    public int createCustomer(Customer c) throws DataAccessException {
         try {
-            this.createCustomerPS.setString(1, name);
-            this.createCustomerPS.setString(2, phoneNo);
-            this.createCustomerPS.setString(3, email);
-            this.createCustomerPS.setInt(4, addressId);
+            this.createCustomerPS.setString(1, c.getName());
+            this.createCustomerPS.setString(2, c.getPhoneNumber());
+            this.createCustomerPS.setString(3, c.getEmail());
+            this.createCustomerPS.setInt(4, c.getAddress().getId());
 
             return this.createCustomerPS.executeUpdate();
         } catch (SQLException e) {
@@ -81,17 +85,28 @@ public class CustomerDB implements CustomerDBIF {
     }
 
     @Override
-    public int updateCustomer(String name, String phoneNo, String email, int addressId) throws DataAccessException {
+    public int updateCustomer(Customer c) throws DataAccessException {
         try {
-            this.updateCustomerPS.setString(1, name);
-            this.updateCustomerPS.setString(2, phoneNo);
-            this.updateCustomerPS.setString(3, email);
-            this.updateCustomerPS.setInt(4, addressId);
-            this.updateCustomerPS.setString(5, phoneNo);
+            this.updateCustomerPS.setString(1, c.getName());
+            this.updateCustomerPS.setString(2, c.getPhoneNumber());
+            this.updateCustomerPS.setString(3, c.getEmail());
+            this.updateCustomerPS.setInt(4, c.getAddress().getId());
+            this.updateCustomerPS.setInt(5, c.getId());
 
             return this.updateCustomerPS.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Could not update data", e);
+        }
+    }
+
+    @Override
+    public int deleteCustomer(Customer c) throws DataAccessException {
+        try {
+            this.deleteCustomerPS.setInt(1, c.getId());
+
+            return this.deleteCustomerPS.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not delete data", e);
         }
     }
 
