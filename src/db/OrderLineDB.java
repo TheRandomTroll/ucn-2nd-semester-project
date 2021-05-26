@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * A data access class for the <i>OrderLines</i> table from the database.
  */
 public class OrderLineDB implements OrderLineDBIF {
-    private static final String CREATE_ORDER_LINE_Q = "INSERT INTO OrderLines (Quantity, ProductId, OrderId) VALUES (?, ?, ?)";
+    private static final String CREATE_ORDER_LINE_Q = "BEGIN TRAN INSERT INTO OrderLines (Quantity, ProductId, OrderId) VALUES (?, ?, ?) COMMIT TRAN";
 
     private final PreparedStatement createOrderLinePS;
 

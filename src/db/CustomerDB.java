@@ -13,10 +13,10 @@ import java.sql.SQLException;
  * A data access class for the <i>Customers</i> table from the database.
  */
 public class CustomerDB implements CustomerDBIF {
-    private static final String FIND_BY_PHONE_NO_Q = "SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE PhoneNumber = ?";
-    private static final String FIND_BY_ID_Q = "SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE Id = ?";
-    private static final String CREATE_CUSTOMER_Q = "INSERT INTO Customers (Name, PhoneNumber, Email, AddressId) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE_CUSTOMER_Q = "UPDATE Customers SET Name = ?, PhoneNumber = ?, Email = ?, AddressId = ? WHERE PhoneNumber = ?";
+    private static final String FIND_BY_PHONE_NO_Q = "BEGIN TRAN SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE PhoneNumber = ? COMMIT TRAN";
+    private static final String FIND_BY_ID_Q = "BEGIN TRAN SELECT Id, Name, PhoneNumber, Email, AddressId FROM Customers WHERE Id = ? COMMIT TRAN";
+    private static final String CREATE_CUSTOMER_Q = "BEGIN TRAN INSERT INTO Customers (Name, PhoneNumber, Email, AddressId) VALUES (?, ?, ?, ?) COMMIT TRAN";
+    private static final String UPDATE_CUSTOMER_Q = "BEGIN TRAN UPDATE Customers SET Name = ?, PhoneNumber = ?, Email = ?, AddressId = ? WHERE PhoneNumber = ? COMMIT TRAN";
 
     private final PreparedStatement findByPhoneNoPS;
     private final PreparedStatement findByIdPS;

@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.sql.SQLException;
 
 public class DBConnectivityUI {
 	private JFrame frmDatabaseStatus;
@@ -39,7 +40,12 @@ public class DBConnectivityUI {
 			@Override
 			public void run() {
 				while(true) {
-					boolean success = DBConnection.getInstance().isDbConnected();
+					boolean success = false;
+					try {
+						success = DBConnection.getInstance().isDbConnected();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 					lblStatus.setText("Database status: " + (success ? "Connected" : "Error connecting."));
 					try {
 						Thread.sleep(500);

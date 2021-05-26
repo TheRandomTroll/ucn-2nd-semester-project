@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * A data access class for the <i>ShoppingLists</i> table from the database.
  */
 public class ShoppingListDB implements ShoppingListDBIF {
-    private static final String CREATE_LIST_Q = "INSERT INTO ShoppingLists (CreationDate, OrderId, PaymentTypeId) VALUES (?, ?, ?)";
+    private static final String CREATE_LIST_Q = "BEGIN TRAN INSERT INTO ShoppingLists (CreationDate, OrderId, PaymentTypeId) VALUES (?, ?, ?) COMMIT TRAN";
 
     private final PreparedStatement createListPS;
 

@@ -15,11 +15,11 @@ import java.util.List;
  * A data access class for the <i>Products</i> table from the database.
  */
 public class ProductDB implements ProductDBIF {
-    private static final String CREATE_PRODUCT_Q = "INSERT INTO Products (Name, Barcode, Description, Price, MaxStock, MinStock, Quantity) VALUES(?, ?, ?, ?, ?, ?, ?)";
-    private static final String FIND_BY_BARCODE_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products WHERE Barcode = ?";
-    private static final String GET_PRODUCTS_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products";
-    private static final String UPDATE_PRODUCT_Q = "UPDATE Products SET Name = ?, Barcode = ?, Description = ?, Price = ?, MaxStock = ?, MinStock = ?, Quantity = ? WHERE Id = ?";
-    private static final String DELETE_PRODUCT_Q = "DELETE FROM Products WHERE Id = ?";
+    private static final String CREATE_PRODUCT_Q = "BEGIN TRAN INSERT INTO Products (Name, Barcode, Description, Price, MaxStock, MinStock, Quantity) VALUES(?, ?, ?, ?, ?, ?, ?) COMMIT TRAN";
+    private static final String FIND_BY_BARCODE_Q = "BEGIN TRAN SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products WHERE Barcode = ? COMMIT TRAN";
+    private static final String GET_PRODUCTS_Q = "BEGIN TRAN SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products COMMIT TRAN";
+    private static final String UPDATE_PRODUCT_Q = "BEGIN TRAN UPDATE Products SET Name = ?, Barcode = ?, Description = ?, Price = ?, MaxStock = ?, MinStock = ?, Quantity = ? WHERE Id = ? COMMIT TRAN";
+    private static final String DELETE_PRODUCT_Q = "BEGIN TRAN DELETE FROM Products WHERE Id = ? COMMIT TRAN";
 
     private final PreparedStatement createProductPS;
     private final PreparedStatement findByBarcodePS;

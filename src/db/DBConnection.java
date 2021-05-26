@@ -24,7 +24,7 @@ public class DBConnection {
     private static DBConnection dbConnection = null;
 
 
-    private DBConnection() {
+    private DBConnection() throws SQLException {
         String urlString = String.format("jdbc:sqlserver://%s:%d;databaseName=%s", SERVER_NAME, PORT_NUMBER,
                 DATABASE_NAME);
         try {
@@ -33,6 +33,8 @@ public class DBConnection {
         } catch (SQLException e) {
             System.out.println("Cannot access database. Exception: " + e.getMessage());
         }
+
+        connection.setAutoCommit(false);
     }
 
     /**
@@ -50,7 +52,7 @@ public class DBConnection {
      *
      * @return An instance of a DBConnection class.
      */
-    public static DBConnection getInstance() {
+    public static DBConnection getInstance() throws SQLException {
         if (dbConnection == null) {
             dbConnection = new DBConnection();
         }

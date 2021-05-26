@@ -16,10 +16,10 @@ import java.util.List;
  * A data access class for the <i>Orders</i> table from the database.
  */
 public class OrderDB implements OrderDBIF {
-    private static final String GET_FINISHED_ORDERS_Q = "SELECT Id, OrderNumber, TotalPrice, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders WHERE OrderStatusId <> 1";
-    private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
-    private static final String UPDATE_ORDER_STATUS_Q = "UPDATE Orders SET OrderStatusId = ? WHERE Id = ?";
+    private static final String GET_FINISHED_ORDERS_Q = "BEGIN TRAN SELECT Id, OrderNumber, TotalPrice, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders WHERE OrderStatusId <> 1 COMMIT TRAN";
+    private static final String CREATE_ORDER_Q = "BEGIN TRAN INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?) COMMIT TRAN";
+    private static final String UPDATE_ORDER_Q = "BEGIN TRAN UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ? COMMIT TRAN";
+    private static final String UPDATE_ORDER_STATUS_Q = "BEGIN TRAN UPDATE Orders SET OrderStatusId = ? WHERE Id = ? COMMIT TRAN";
 
     private final PreparedStatement getFinishedOrdersPS;
     private final PreparedStatement createOrderPS;
@@ -51,6 +51,12 @@ public class OrderDB implements OrderDBIF {
             return buildObjects(rs);
         } catch (SQLException e) {
             throw new DataAccessException("Could not fetch data", e);
+        } finally {
+            try {
+                getFinishedOrdersPS.close();
+            } catch (SQLException e) {
+                throw new DataAccessException("Could not close connections", e);
+            }
         }
 
     }

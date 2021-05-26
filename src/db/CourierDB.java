@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourierDB implements CourierDBIF {
-    private static final String CREATE_COURIER_Q = "INSERT INTO Couriers (FirstName, LastName, PhoneNumber, CourierStatusId) VALUES (?, ?, ?, ?)";
-    private static final String GET_COURIERS_Q = "SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers";
-    private static final String FIND_AVAILABLE_COURIERS_Q = "SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers WHERE CourierStatusId = 1";
-    private static final String UPDATE_COURIER_Q = "UPDATE Couriers SET FirstName = ?, LastName = ?, PhoneNumber = ?, CourierStatusId = ? WHERE Id = ?";
-    private static final String UPDATE_COURIER_STATUS_Q = "UPDATE Couriers SET CourierStatusId = ? WHERE Id = ?";
-    private static final String DELETE_COURIER_Q = "DELETE FROM Couriers WHERE Id = ?";
+    private static final String CREATE_COURIER_Q = "BEGIN TRAN INSERT INTO Couriers (FirstName, LastName, PhoneNumber, CourierStatusId) VALUES (?, ?, ?, ?) COMMIT TRAN";
+    private static final String GET_COURIERS_Q = "BEGIN TRAN SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers COMMIT TRAN";
+    private static final String FIND_AVAILABLE_COURIERS_Q = "BEGIN TRAN SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers WHERE CourierStatusId = 1 COMMIT TRAN";
+    private static final String UPDATE_COURIER_Q = "BEGIN TRAN UPDATE Couriers SET FirstName = ?, LastName = ?, PhoneNumber = ?, CourierStatusId = ? WHERE Id = ? COMMIT TRAN";
+    private static final String UPDATE_COURIER_STATUS_Q = "BEGIN TRAN UPDATE Couriers SET CourierStatusId = ? WHERE Id = ? COMMIT TRAN";
+    private static final String DELETE_COURIER_Q = "BEGIN TRAN DELETE FROM Couriers WHERE Id = ? COMMIT TRAN";
 
     private final PreparedStatement createCourierPS;
     private final PreparedStatement getCouriersPS;

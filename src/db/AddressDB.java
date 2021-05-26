@@ -13,10 +13,10 @@ import java.sql.Statement;
  * A data access class for the <i>Addresses</i> table from the database.
  */
 public class AddressDB implements AddressDBIF {
-    private static final String CREATE_ADDRESS_Q = "INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?)";
-    private static final String FIND_BY_ID_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ?";
-    private static final String FIND_BY_DATA_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
-            "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ?";
+    private static final String CREATE_ADDRESS_Q = "BEGIN TRAN INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?) COMMIT TRAN";
+    private static final String FIND_BY_ID_Q = "BEGIN TRAN SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ? COMMIT TRAN";
+    private static final String FIND_BY_DATA_Q = "BEGIN TRAN SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
+            "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ? COMMIT TRAN";
 
     private final PreparedStatement createAddressPS;
     private final PreparedStatement findByIdPS;

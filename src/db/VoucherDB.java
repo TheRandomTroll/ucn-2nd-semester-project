@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * A data access class for the <i>Vouchers</i> table from the database.
  */
 public class VoucherDB implements VoucherDBIF {
-    private static final String FIND_BY_CODE_Q = "SELECT Id, Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ?";
+    private static final String FIND_BY_CODE_Q = "BEGIN TRAN SELECT Id, Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ? COMMIT TRAN";
 
     private final PreparedStatement findByCodePS;
 

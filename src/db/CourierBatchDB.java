@@ -15,7 +15,7 @@ import java.util.Random;
 public class CourierBatchDB implements CourierBatchDBIF {
     private final CourierDB courierDB;
 
-    private static final String DISPATCH_ORDER_Q = "INSERT INTO CourierBatches (CreationDate, OrderId, CourierId) VALUES (?, ?, ?)";
+    private static final String DISPATCH_ORDER_Q = "BEGIN TRAN INSERT INTO CourierBatches (CreationDate, OrderId, CourierId) VALUES (?, ?, ?) COMMIT TRAN";
 
     private final PreparedStatement dispatchOrderPS;
     public CourierBatchDB() throws DataAccessException {
