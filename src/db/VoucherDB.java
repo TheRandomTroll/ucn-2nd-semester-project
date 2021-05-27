@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * A data access class for the <i>Vouchers</i> table from the database.
  */
 public class VoucherDB implements VoucherDBIF {
-    private static final String FIND_BY_CODE_Q = "BEGIN TRAN SELECT Id, Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ? COMMIT TRAN";
+    private static final String FIND_BY_CODE_Q = "SELECT Id, Code, ExpirationDate, Discount FROM Vouchers WHERE Code = ?";
 
     private final PreparedStatement findByCodePS;
 
@@ -27,8 +27,10 @@ public class VoucherDB implements VoucherDBIF {
     @Override
     public Voucher findByCode(String code) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.findByCodePS.setString(1, code);
             ResultSet rs = this.findByCodePS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             Voucher v = null;
 
             if(rs.next()) {
@@ -37,6 +39,11 @@ public class VoucherDB implements VoucherDBIF {
 
             return v;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
 

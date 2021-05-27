@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourierDB implements CourierDBIF {
-    private static final String CREATE_COURIER_Q = "BEGIN TRAN INSERT INTO Couriers (FirstName, LastName, PhoneNumber, CourierStatusId) VALUES (?, ?, ?, ?) COMMIT TRAN";
-    private static final String GET_COURIERS_Q = "BEGIN TRAN SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers COMMIT TRAN";
-    private static final String FIND_AVAILABLE_COURIERS_Q = "BEGIN TRAN SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers WHERE CourierStatusId = 1 COMMIT TRAN";
-    private static final String UPDATE_COURIER_Q = "BEGIN TRAN UPDATE Couriers SET FirstName = ?, LastName = ?, PhoneNumber = ?, CourierStatusId = ? WHERE Id = ? COMMIT TRAN";
-    private static final String UPDATE_COURIER_STATUS_Q = "BEGIN TRAN UPDATE Couriers SET CourierStatusId = ? WHERE Id = ? COMMIT TRAN";
-    private static final String DELETE_COURIER_Q = "BEGIN TRAN DELETE FROM Couriers WHERE Id = ? COMMIT TRAN";
+    private static final String CREATE_COURIER_Q = "INSERT INTO Couriers (FirstName, LastName, PhoneNumber, CourierStatusId) VALUES (?, ?, ?, ?)";
+    private static final String GET_COURIERS_Q = "SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers";
+    private static final String FIND_AVAILABLE_COURIERS_Q = "SELECT Id, FirstName, LastName, PhoneNumber, CourierStatusId FROM Couriers WHERE CourierStatusId = 1";
+    private static final String UPDATE_COURIER_Q = "UPDATE Couriers SET FirstName = ?, LastName = ?, PhoneNumber = ?, CourierStatusId = ? WHERE Id = ?";
+    private static final String UPDATE_COURIER_STATUS_Q = "UPDATE Couriers SET CourierStatusId = ? WHERE Id = ?";
+    private static final String DELETE_COURIER_Q = "DELETE FROM Couriers WHERE Id = ?";
 
     private final PreparedStatement createCourierPS;
     private final PreparedStatement getCouriersPS;
@@ -43,11 +43,13 @@ public class CourierDB implements CourierDBIF {
     @Override
     public int createCourier(Courier c) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.createCourierPS.setString(1, c.getFirstName());
             this.createCourierPS.setString(2, c.getLastName());
             this.createCourierPS.setString(3, c.getPhoneNo());
             this.createCourierPS.setInt(4, c.getStatus().getValue());
             int rows = this.createCourierPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
 
             int courierId;
 
@@ -55,6 +57,11 @@ public class CourierDB implements CourierDBIF {
             if (generatedKeys.next()) {
                 courierId = generatedKeys.getInt(1);
             } else {
+                try {
+                    DBConnection.getInstance().rollbackTransaction();
+                } catch (SQLException e1) {
+                    throw new DataAccessException("Could not rollback transaction", e1);
+                }
                 throw new SQLException("Could not insert product, no ID obtained.");
             }
 
@@ -62,6 +69,11 @@ public class CourierDB implements CourierDBIF {
 
             return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not insert data", e);
         }
     }
@@ -69,9 +81,16 @@ public class CourierDB implements CourierDBIF {
     @Override
     public List<Courier> getCouriers() throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             ResultSet rs = this.getCouriersPS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             return buildObjects(rs);
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
     }
@@ -79,9 +98,16 @@ public class CourierDB implements CourierDBIF {
     @Override
     public List<Courier> findAvailableCouriers() throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             ResultSet rs = this.findAvailableCouriersPS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             return buildObjects(rs);
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
     }
@@ -89,15 +115,23 @@ public class CourierDB implements CourierDBIF {
     @Override
     public int updateCourier(Courier c) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.updateCourierPS.setString(1, c.getFirstName());
             this.updateCourierPS.setString(2, c.getLastName());
             this.updateCourierPS.setString(3, c.getPhoneNo());
             this.updateCourierPS.setInt(4, c.getStatus().getValue());
             this.updateCourierPS.setInt(5, c.getId());
 
-            return this.updateCourierPS.executeUpdate();
+            int rows = this.updateCourierPS.executeUpdate();
+
+            DBConnection.getInstance().commitTransaction();
+            return rows;
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not update data", e);
         }
     }
@@ -105,11 +139,19 @@ public class CourierDB implements CourierDBIF {
     @Override
     public int updateCourierStatus(int courierId, CourierStatus status) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.updateCourierStatusPS.setInt(1, status.getValue());
             this.updateCourierStatusPS.setInt(2, courierId);
 
-            return this.updateCourierStatusPS.executeUpdate();
+            int rows = this.updateCourierStatusPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
     }
@@ -117,9 +159,17 @@ public class CourierDB implements CourierDBIF {
     @Override
     public int deleteCourier(int id) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.deleteCourierPS.setInt(1, id);
-            return this.deleteCourierPS.executeUpdate();
+            int rows = this.deleteCourierPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not delete data", e);
         }
     }

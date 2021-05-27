@@ -60,7 +60,6 @@ public class DBConnection {
         return dbConnection;
     }
 
-    //closeDb: closes the connection to the database
     public static void closeConnection() {
         try {
             connection.close();
@@ -68,10 +67,26 @@ public class DBConnection {
         } catch (Exception e) {
             System.out.println("Error trying to close the database " + e.getMessage());
         }
-    }//end closeDB
+    }
 
     public static boolean instanceIsNull() {
         return dbConnection == null;
+    }
+
+
+    public void startTransaction() throws SQLException {
+        connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        connection.setAutoCommit(false);
+    }
+
+    public void commitTransaction() throws SQLException {
+        connection.commit();
+        connection.setAutoCommit(true);
+    }
+
+    public void rollbackTransaction() throws SQLException {
+        connection.rollback();
+        connection.setAutoCommit(true);
     }
 
     public boolean isDbConnected() {

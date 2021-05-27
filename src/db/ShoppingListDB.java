@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * A data access class for the <i>ShoppingLists</i> table from the database.
  */
 public class ShoppingListDB implements ShoppingListDBIF {
-    private static final String CREATE_LIST_Q = "BEGIN TRAN INSERT INTO ShoppingLists (CreationDate, OrderId, PaymentTypeId) VALUES (?, ?, ?) COMMIT TRAN";
+    private static final String CREATE_LIST_Q = "INSERT INTO ShoppingLists (CreationDate, OrderId, PaymentTypeId) VALUES (?, ?, ?)";
 
     private final PreparedStatement createListPS;
 
@@ -26,12 +26,20 @@ public class ShoppingListDB implements ShoppingListDBIF {
     @Override
     public int createShoppingList(ShoppingList sl) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.createListPS.setDate(1, sl.getCreationDate());
             this.createListPS.setInt(2, sl.getOrder().getId());
             this.createListPS.setInt(3, sl.getPaymentType().getValue());
 
-            return this.createListPS.executeUpdate();
+            int rows = this.createListPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not update data", e);
         }
     }

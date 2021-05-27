@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * A data access class for the <i>OrderLines</i> table from the database.
  */
 public class OrderLineDB implements OrderLineDBIF {
-    private static final String CREATE_ORDER_LINE_Q = "BEGIN TRAN INSERT INTO OrderLines (Quantity, ProductId, OrderId) VALUES (?, ?, ?) COMMIT TRAN";
+    private static final String CREATE_ORDER_LINE_Q = "INSERT INTO OrderLines (Quantity, ProductId, OrderId) VALUES (?, ?, ?)";
 
     private final PreparedStatement createOrderLinePS;
 
@@ -27,13 +27,21 @@ public class OrderLineDB implements OrderLineDBIF {
     @Override
     public int createOrderLine(Order o, OrderLine ol) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.createOrderLinePS.setInt(1, ol.getQuantity());
             this.createOrderLinePS.setInt(2, ol.getProduct().getId());
             this.createOrderLinePS.setInt(3, o.getId());
 
-            return this.createOrderLinePS.executeUpdate();
+            int rows = this.createOrderLinePS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
 
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not insert data", e);
 
         }

@@ -38,7 +38,7 @@ public class CreateOrderCustomerMenu {
     /**
      * Create the application.
      */
-    public CreateOrderCustomerMenu(Container parent, Customer c) {
+    public CreateOrderCustomerMenu(Customer c) {
         this.order = new Order(c);
         try {
             System.out.println("Order Created");
@@ -47,7 +47,7 @@ public class CreateOrderCustomerMenu {
         } catch (DataAccessException e) {
             UIUtil.displayDBErrorMsg(e.getMessage());
         }
-        dialog = new JDialog((Dialog) parent);
+        dialog = new JDialog();
         dialog.setIconImage(Toolkit.getDefaultToolkit().getImage(CreateOrderCustomerMenu.class.getResource("/ui/img/icon.png")));
         dialog.setTitle("Create Order");
         initialize();

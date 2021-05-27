@@ -5,7 +5,10 @@ import db.interfaces.CourierBatchDBIF;
 import db.interfaces.CustomerDBIF;
 import db.interfaces.OrderDBIF;
 import exceptions.DataAccessException;
-import models.*;
+import models.Address;
+import models.Customer;
+import models.Order;
+import models.OrderLine;
 import models.enums.OrderStatus;
 
 import java.sql.*;
@@ -16,10 +19,10 @@ import java.util.List;
  * A data access class for the <i>Orders</i> table from the database.
  */
 public class OrderDB implements OrderDBIF {
-    private static final String GET_FINISHED_ORDERS_Q = "BEGIN TRAN SELECT Id, OrderNumber, TotalPrice, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders WHERE OrderStatusId <> 1 COMMIT TRAN";
-    private static final String CREATE_ORDER_Q = "BEGIN TRAN INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?) COMMIT TRAN";
-    private static final String UPDATE_ORDER_Q = "BEGIN TRAN UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ? COMMIT TRAN";
-    private static final String UPDATE_ORDER_STATUS_Q = "BEGIN TRAN UPDATE Orders SET OrderStatusId = ? WHERE Id = ? COMMIT TRAN";
+    private static final String GET_FINISHED_ORDERS_Q = "SELECT Id, OrderNumber, TotalPrice, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId FROM Orders WHERE OrderStatusId <> 1";
+    private static final String CREATE_ORDER_Q = "INSERT INTO Orders (OrderNumber, CustomerId, OrderStatusId, InvoiceAddressId, DeliveryAddressId) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE_ORDER_Q = "UPDATE Orders SET OrderNumber = ?, TotalPrice = ?, AppliedVoucherId = ?, OrderStatusId = ?, InvoiceAddressId = ?, DeliveryAddressId = ? WHERE Id = ?";
+    private static final String UPDATE_ORDER_STATUS_Q = "UPDATE Orders SET OrderStatusId = ? WHERE Id = ?";
 
     private final PreparedStatement getFinishedOrdersPS;
     private final PreparedStatement createOrderPS;
@@ -47,22 +50,25 @@ public class OrderDB implements OrderDBIF {
     @Override
     public List<Order> getFinishedOrders() throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             ResultSet rs = getFinishedOrdersPS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             return buildObjects(rs);
         } catch (SQLException e) {
-            throw new DataAccessException("Could not fetch data", e);
-        } finally {
             try {
-                getFinishedOrdersPS.close();
-            } catch (SQLException e) {
-                throw new DataAccessException("Could not close connections", e);
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
             }
+            throw new DataAccessException("Could not fetch data", e);
         }
 
     }
+
     @Override
     public int createOrder(Order o) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.createOrderPS.setString(1, o.getOrderNumber());
             this.createOrderPS.setInt(2, o.getCustomer().getId());
             this.createOrderPS.setInt(3, o.getStatus().getValue());
@@ -79,6 +85,7 @@ public class OrderDB implements OrderDBIF {
             }
 
             int rows = this.createOrderPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
 
             int orderId;
 
@@ -93,15 +100,17 @@ public class OrderDB implements OrderDBIF {
 
             return rows;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DataAccessException("Could not insert data", e);
         }
     }
 
     private int updateOrder(Order o) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.updateOrderPS.setString(1, o.getOrderNumber());
             this.updateOrderPS.setDouble(2, o.getTotalPrice());
-            if(o.getAppliedVoucher() == null) {
+            if (o.getAppliedVoucher() == null) {
                 this.updateOrderPS.setNull(3, Types.NULL);
             } else {
                 this.updateOrderPS.setInt(3, o.getAppliedVoucher().getId());
@@ -111,9 +120,16 @@ public class OrderDB implements OrderDBIF {
             this.updateOrderPS.setInt(6, o.getDeliveryAddress().getId());
             this.updateOrderPS.setInt(7, o.getId());
 
-            return this.updateOrderPS.executeUpdate();
+            int rows = this.updateOrderPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
 
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not update data", e);
         }
     }
@@ -125,7 +141,6 @@ public class OrderDB implements OrderDBIF {
             rows += new OrderLineDB().createOrderLine(o, ol);
         }
 
-        this.courierBatchDB.dispatchOrder(o.getId());
         return rows;
     }
 
@@ -144,7 +159,7 @@ public class OrderDB implements OrderDBIF {
 
     private List<Order> buildObjects(ResultSet rs) throws DataAccessException {
         List<Order> orders = new ArrayList<>();
-        while(true) {
+        while (true) {
             try {
                 if (!rs.next()) break;
             } catch (SQLException e) {

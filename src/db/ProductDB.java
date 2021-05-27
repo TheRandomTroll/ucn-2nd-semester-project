@@ -15,11 +15,11 @@ import java.util.List;
  * A data access class for the <i>Products</i> table from the database.
  */
 public class ProductDB implements ProductDBIF {
-    private static final String CREATE_PRODUCT_Q = "BEGIN TRAN INSERT INTO Products (Name, Barcode, Description, Price, MaxStock, MinStock, Quantity) VALUES(?, ?, ?, ?, ?, ?, ?) COMMIT TRAN";
-    private static final String FIND_BY_BARCODE_Q = "BEGIN TRAN SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products WHERE Barcode = ? COMMIT TRAN";
-    private static final String GET_PRODUCTS_Q = "BEGIN TRAN SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products COMMIT TRAN";
-    private static final String UPDATE_PRODUCT_Q = "BEGIN TRAN UPDATE Products SET Name = ?, Barcode = ?, Description = ?, Price = ?, MaxStock = ?, MinStock = ?, Quantity = ? WHERE Id = ? COMMIT TRAN";
-    private static final String DELETE_PRODUCT_Q = "BEGIN TRAN DELETE FROM Products WHERE Id = ? COMMIT TRAN";
+    private static final String CREATE_PRODUCT_Q = "INSERT INTO Products (Name, Barcode, Description, Price, MaxStock, MinStock, Quantity) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_BY_BARCODE_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products WHERE Barcode = ?";
+    private static final String GET_PRODUCTS_Q = "SELECT Id, Name, Barcode, Description, Price, MaxStock, MinStock, Quantity FROM Products";
+    private static final String UPDATE_PRODUCT_Q = "UPDATE Products SET Name = ?, Barcode = ?, Description = ?, Price = ?, MaxStock = ?, MinStock = ?, Quantity = ? WHERE Id = ?";
+    private static final String DELETE_PRODUCT_Q = "DELETE FROM Products WHERE Id = ?";
 
     private final PreparedStatement createProductPS;
     private final PreparedStatement findByBarcodePS;
@@ -42,6 +42,7 @@ public class ProductDB implements ProductDBIF {
     @Override
     public int createProduct(Product p) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.createProductPS.setString(1, p.getName());
             this.createProductPS.setInt(2, p.getBarcode());
             this.createProductPS.setString(3, p.getDescription());
@@ -51,7 +52,7 @@ public class ProductDB implements ProductDBIF {
             this.createProductPS.setInt(7, p.getQuantity());
 
             int rows = this.createProductPS.executeUpdate();
-
+            DBConnection.getInstance().commitTransaction();
             int productId;
 
             ResultSet generatedKeys = this.createProductPS.getGeneratedKeys();
@@ -65,6 +66,11 @@ public class ProductDB implements ProductDBIF {
 
             return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not insert data", e);
         }
     }
@@ -72,10 +78,16 @@ public class ProductDB implements ProductDBIF {
     @Override
     public List<Product> getProducts() throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             ResultSet rs = this.getProductsPS.executeQuery();
-
+            DBConnection.getInstance().commitTransaction();
             return buildObjects(rs);
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
     }
@@ -83,8 +95,10 @@ public class ProductDB implements ProductDBIF {
     @Override
     public Product findByBarcode(int barcode) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.findByBarcodePS.setInt(1, barcode);
             ResultSet rs = this.findByBarcodePS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             Product p = null;
             if(rs.next()) {
                 p = buildObject(rs);
@@ -92,6 +106,11 @@ public class ProductDB implements ProductDBIF {
 
             return p;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
     }
@@ -99,6 +118,7 @@ public class ProductDB implements ProductDBIF {
     @Override
     public int updateProduct(Product p) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.updateProductPS.setString(1, p.getName());
             this.updateProductPS.setInt(2, p.getBarcode());
             this.updateProductPS.setString(3, p.getDescription());
@@ -108,8 +128,15 @@ public class ProductDB implements ProductDBIF {
             this.updateProductPS.setInt(7, p.getQuantity());
             this.updateProductPS.setInt(8, p.getId());
 
-            return this.updateProductPS.executeUpdate();
+            int rows = this.updateProductPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not update data", e);
         }
     }
@@ -117,10 +144,18 @@ public class ProductDB implements ProductDBIF {
     @Override
     public int deleteProduct(int productId) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.deleteProductPS.setInt(1, productId);
 
-            return this.deleteProductPS.executeUpdate();
+            int rows = this.deleteProductPS.executeUpdate();
+            DBConnection.getInstance().commitTransaction();
+            return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not update data", e);
         }
     }

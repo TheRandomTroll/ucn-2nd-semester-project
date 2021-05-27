@@ -15,23 +15,23 @@ DROP TABLE IF EXISTS Customers;
 
 CREATE TABLE PaymentTypes(
 	Id INT PRIMARY KEY IDENTITY,
-	PaymentType VARCHAR(100)
+	PaymentType VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE CourierStatuses(
 	Id INT PRIMARY KEY IDENTITY,
-	CourierStatus VARCHAR(100)
+	CourierStatus VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE OrderStatuses(
 	Id INT PRIMARY KEY IDENTITY,
-	OrderStatus VARCHAR(100)
+	OrderStatus VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE Products(
 	Id INT PRIMARY KEY IDENTITY,
 	Name VARCHAR(100),
-	Barcode INT,
+	Barcode INT UNIQUE,
 	Description VARCHAR(255),
 	Price FLOAT,
 	MaxStock INT,
@@ -58,8 +58,8 @@ CREATE TABLE Vouchers(
 CREATE TABLE Customers(
 	Id INT PRIMARY KEY IDENTITY,
 	Name VARCHAR(100),
-	PhoneNumber VARCHAR(100),
-	Email VARCHAR(100),
+	PhoneNumber VARCHAR(100) UNIQUE,
+	Email VARCHAR(100) UNIQUE,
 	AddressId INT,
 	FOREIGN KEY (AddressId) REFERENCES Addresses(Id)
 );
@@ -102,7 +102,7 @@ CREATE TABLE Couriers(
 	Id INT PRIMARY KEY IDENTITY,
 	FirstName VARCHAR(100),
 	LastName VARCHAR(100),
-	PhoneNumber VARCHAR(100),
+	PhoneNumber VARCHAR(100) UNIQUE,
 	CourierStatusId INT,
 	FOREIGN KEY (CourierStatusId) REFERENCES CourierStatuses(Id)
 );

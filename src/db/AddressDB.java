@@ -13,10 +13,10 @@ import java.sql.Statement;
  * A data access class for the <i>Addresses</i> table from the database.
  */
 public class AddressDB implements AddressDBIF {
-    private static final String CREATE_ADDRESS_Q = "BEGIN TRAN INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?) COMMIT TRAN";
-    private static final String FIND_BY_ID_Q = "BEGIN TRAN SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ? COMMIT TRAN";
-    private static final String FIND_BY_DATA_Q = "BEGIN TRAN SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
-            "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ? COMMIT TRAN";
+    private static final String CREATE_ADDRESS_Q = "INSERT INTO Addresses (Street, StreetNumber, Floor, City, PostalCode) VALUES (?, ?, ?, ?, ?)";
+    private static final String FIND_BY_ID_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Id = ?";
+    private static final String FIND_BY_DATA_Q = "SELECT Id, Street, StreetNumber, Floor, City, PostalCode FROM Addresses WHERE Street = ? AND " +
+            "StreetNumber = ? AND Floor = ? AND City = ? AND PostalCode = ?";
 
     private final PreparedStatement createAddressPS;
     private final PreparedStatement findByIdPS;
@@ -35,6 +35,7 @@ public class AddressDB implements AddressDBIF {
     @Override
     public int createAddress(Address a) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.createAddressPS.setString(1, a.getStreetName());
             this.createAddressPS.setString(2, a.getStreetNumber());
             this.createAddressPS.setString(3, a.getFloor());
@@ -43,6 +44,8 @@ public class AddressDB implements AddressDBIF {
 
             int addressId;
             int rows = this.createAddressPS.executeUpdate();
+
+            DBConnection.getInstance().commitTransaction();
 
             ResultSet generatedKeys = createAddressPS.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -55,16 +58,22 @@ public class AddressDB implements AddressDBIF {
 
             return rows;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not insert data", e);
-
         }
     }
 
     @Override
     public Address findById(int id) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.findByIdPS.setInt(1, id);
             ResultSet rs = this.findByIdPS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             Address a = null;
 
             if (rs.next()) {
@@ -73,6 +82,11 @@ public class AddressDB implements AddressDBIF {
 
             return a;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not fetch data", e);
         }
     }
@@ -80,6 +94,7 @@ public class AddressDB implements AddressDBIF {
     @Override
     public Address findByData(Address a) throws DataAccessException {
         try {
+            DBConnection.getInstance().startTransaction();
             this.findByDataPS.setString(1, a.getStreetName());
             this.findByDataPS.setString(2, a.getStreetNumber());
             this.findByDataPS.setString(3, a.getFloor());
@@ -88,6 +103,7 @@ public class AddressDB implements AddressDBIF {
 
 
             ResultSet rs = findByDataPS.executeQuery();
+            DBConnection.getInstance().commitTransaction();
             Address value = null;
 
             if(rs.next()) {
@@ -96,6 +112,11 @@ public class AddressDB implements AddressDBIF {
 
             return value;
         } catch (SQLException e) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e1) {
+                throw new DataAccessException("Could not rollback transaction", e1);
+            }
             throw new DataAccessException("Could not insert data", e);
 
         }

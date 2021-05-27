@@ -51,7 +51,7 @@ public class CustomerMenu {
 		btnCreateNewOrder.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CreateOrderCustomerMenu cocm = new CreateOrderCustomerMenu(frmWelcome, customer);
+				CreateOrderCustomerMenu cocm = new CreateOrderCustomerMenu(customer);
 				cocm.showWindow();
 				closeWindow();
 			}
