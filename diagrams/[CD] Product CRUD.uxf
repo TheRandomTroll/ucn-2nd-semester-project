@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>360</y>
+      <w>440</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+1.createProduct(name:String,barcode:int,description:String,
+price:float,maxStock:int,minStock:int,quantity:int)
+2.getProducts()
+3.updateProduct(newProduct:Product)
+4.deleteProduct(id:int)</panel_attributes>
+    <additional_attributes>10.0;20.0;420.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>730</x>
+      <y>360</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:UI_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>730</x>
+      <y>520</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:ProductController_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>790</x>
+      <y>390</y>
+      <w>410</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.createProduct(name:String,barcode:int,description:String,
+price:float,maxStock:int,minStock:int,quantity:int):int
+2.1.getProducts():List&lt;Product&gt;
+3.1.updateProduct(newProduct:Product):int
+4.1.deleteProduct(id:int):int</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>730</x>
+      <y>660</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:ProductDB_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>790</x>
+      <y>550</y>
+      <w>310</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.2.saveProduct(p:Product):int
+2.1.1.getProducts():List&lt;Product&gt;
+3.1.1.updateProduct(newProduct:Product):int
+4.1.1.deleteProduct(id:int):int</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>430</x>
+      <y>660</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:Product_
+{NEW}
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>530</y>
+      <w>300</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1.p=&lt;&lt;create&gt;&gt;(name,barcode,description,
+price,maxStock,minStock,quantity)
+</panel_attributes>
+    <additional_attributes>60.0;150.0;230.0;10.0</additional_attributes>
+  </element>
+</diagram>

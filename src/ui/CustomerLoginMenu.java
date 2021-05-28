@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class CustomerLoginMenu {
     private final JDialog dialogCustomerMenu;
@@ -96,6 +97,7 @@ public class CustomerLoginMenu {
         panelRegister.add(lblNewHere);
 
         JTextField textFieldRegisterName = new JTextField();
+        textFieldRegisterName.setName("Name");
         textFieldRegisterName.setBounds(10, 80, 86, 20);
         panelRegister.add(textFieldRegisterName);
         textFieldRegisterName.setColumns(10);
@@ -105,6 +107,7 @@ public class CustomerLoginMenu {
         panelRegister.add(lblNewLabel_2);
 
         JTextField textFieldRegisterPhoneNumber = new JTextField();
+        textFieldRegisterPhoneNumber.setName("Phone Number");
         textFieldRegisterPhoneNumber.setColumns(10);
         textFieldRegisterPhoneNumber.setBounds(10, 125, 86, 20);
         panelRegister.add(textFieldRegisterPhoneNumber);
@@ -114,15 +117,17 @@ public class CustomerLoginMenu {
         panelRegister.add(lblNewLabel_2_1);
 
         JTextField textFieldRegisterStreet = new JTextField();
+        textFieldRegisterStreet.setName("Street Name");
         textFieldRegisterStreet.setColumns(10);
         textFieldRegisterStreet.setBounds(156, 80, 86, 20);
         panelRegister.add(textFieldRegisterStreet);
 
-        JLabel lblNewLabel_2_2 = new JLabel("Street");
+        JLabel lblNewLabel_2_2 = new JLabel("Street Name");
         lblNewLabel_2_2.setBounds(156, 66, 46, 14);
         panelRegister.add(lblNewLabel_2_2);
 
         JTextField textFieldRegisterStreetNumber = new JTextField();
+        textFieldRegisterStreetNumber.setName("Street Number");
         textFieldRegisterStreetNumber.setColumns(10);
         textFieldRegisterStreetNumber.setBounds(252, 80, 86, 20);
         panelRegister.add(textFieldRegisterStreetNumber);
@@ -132,6 +137,7 @@ public class CustomerLoginMenu {
         panelRegister.add(lblNewLabel_2_2_1);
 
         JTextField textFieldRegisterFloor = new JTextField();
+        textFieldRegisterFloor.setName("Floor");
         textFieldRegisterFloor.setColumns(10);
         textFieldRegisterFloor.setBounds(156, 125, 86, 20);
         panelRegister.add(textFieldRegisterFloor);
@@ -141,6 +147,7 @@ public class CustomerLoginMenu {
         panelRegister.add(lblNewLabel_2_2_1_1);
 
         JTextField textFieldRegisterCity = new JTextField();
+        textFieldRegisterCity.setName("City");
         textFieldRegisterCity.setColumns(10);
         textFieldRegisterCity.setBounds(252, 125, 86, 20);
         panelRegister.add(textFieldRegisterCity);
@@ -150,6 +157,7 @@ public class CustomerLoginMenu {
         panelRegister.add(lblNewLabel_2_2_1_2);
 
         JTextField textFieldRegisterPostalCode = new JTextField();
+        textFieldRegisterPostalCode.setName("Postal Code");
         textFieldRegisterPostalCode.setColumns(10);
         textFieldRegisterPostalCode.setBounds(156, 170, 86, 20);
         panelRegister.add(textFieldRegisterPostalCode);
@@ -169,6 +177,7 @@ public class CustomerLoginMenu {
         panelRegister.add(lblAddressInfo);
 
         JTextField textFieldRegisterEmail = new JTextField();
+        textFieldRegisterEmail.setName("Email");
         textFieldRegisterEmail.setColumns(10);
         textFieldRegisterEmail.setBounds(10, 170, 86, 20);
         panelRegister.add(textFieldRegisterEmail);
@@ -183,6 +192,19 @@ public class CustomerLoginMenu {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
+                    List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(panelRegister));
+                    if(emptyFields.size() > 0) {
+                        StringBuilder errorMessage = new StringBuilder("<html>Cannot create new account. The following fields are empty:<br><ul>");
+                        for(String field : emptyFields) {
+                            errorMessage.append("<li>").append(field).append("</li>");
+                        }
+
+                        errorMessage.append("</ul>");
+
+                        UIUtil.displayMessage(errorMessage.toString(), "Error creating account", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
                     Address a = UIUtil.parseAddress(textFieldRegisterStreet, textFieldRegisterStreetNumber, textFieldRegisterFloor, textFieldRegisterCity, textFieldRegisterPostalCode);
 
 

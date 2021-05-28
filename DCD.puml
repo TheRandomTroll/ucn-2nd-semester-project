@@ -1,0 +1,610 @@
+@startuml
+class ui.CustomerMenu {
+- JFrame frmWelcome
+- Customer customer
++ <<Create>> CustomerMenu(Customer)
+- void initialize()
+- void closeWindow()
++ void showWindow()
+}
+class test.ProductControllerTests {
+- ProductController productController
++ void setUp()
++ void testFindProductByBarcode()
++ void testFindProductByInvalidBarcode()
++ void testCreateProduct()
++ void testUpdateProduct()
++ void testDeleteProduct()
++ {static} void cleanUpWhenFinish()
+}
+class ui.UpdateCustomerInfoMenu {
+- Customer customer
+- CustomerController customerController
+- JDialog dialog
+- JTextField textFieldUpdateName
+- JTextField textFieldUpdateStreetName
+- JTextField textFieldUpdateStreetNumber
+- JTextField textFieldUpdatePhoneNumber
+- JTextField textFieldUpdateFloor
+- JTextField textFieldUpdateCity
+- JTextField textFieldUpdateEmail
+- JTextField textFieldUpdatePostalCode
++ <<Create>> UpdateCustomerInfoMenu(Customer)
+- void initialize()
++ void showWindow()
++ void closeWindow()
+}
+interface db.interfaces.ShoppingListDBIF {
+~ int createShoppingList(ShoppingList)
+}
+interface interfaces.Observable {
+~ void addObserver(Observer<T>)
+}
+interface db.interfaces.OrderLineDBIF {
+~ int createOrderLine(Order,OrderLine)
+}
+class models.Voucher {
+- int id
+- String code
+- Date expirationDate
+- double discount
++ <<Create>> Voucher(String,Date,double)
++ <<Create>> Voucher(int,String,Date,double)
++ int getId()
++ void setId(int)
++ String getCode()
++ void setCode(String)
++ Date getExpirationDate()
++ void setExpirationDate(Date)
++ double getDiscount()
++ void setDiscount(double)
++ boolean checkIfValid()
+}
+interface db.interfaces.AddressDBIF {
+~ int createAddress(Address)
+~ Address findById(int)
+~ Address findByData(Address)
+}
+class ui.CreateOrderCustomerMenu {
+- JDialog dialog
+- OrderController orderController
+- Order order
++ <<Create>> CreateOrderCustomerMenu(Container,Customer)
+- void initialize()
++ void showWindow()
+}
+class ui.CreateOrderCustomerMenu.MyListCellRenderer {
++ Component getListCellRendererComponent(JList,Object,int,boolean,boolean)
+}
+class controllers.CourierController {
+- CourierDBIF courierDB
+- CourierBatchController courierBatchController
++ <<Create>> CourierController()
++ List<Courier> getCouriers()
++ int updateCourier(Courier)
++ int deleteCourier(int)
++ Courier dispatchOrder(int)
++ int addCourier(Courier)
+}
+class controllers.VoucherController {
+- VoucherDBIF voucherDB
++ <<Create>> VoucherController()
++ Voucher findByCode(String)
+}
+class ui.CreateCourierEmployeeMenu {
+- JDialog dialogCreateCourier
+- CourierController courierController
+- Observer<Courier> observer
++ <<Create>> CreateCourierEmployeeMenu()
+- void initialize()
++ void showWindow()
+- void closeWindow()
++ void addObserver(Observer<Courier>)
+}
+class db.CustomerDB {
+- {static} String FIND_BY_PHONE_NO_Q
+- {static} String FIND_BY_ID_Q
+- {static} String CREATE_CUSTOMER_Q
+- {static} String UPDATE_CUSTOMER_Q
+- {static} String DELETE_CUSTOMER_Q
+- PreparedStatement findByPhoneNoPS
+- PreparedStatement findByIdPS
+- PreparedStatement createCustomerPS
+- PreparedStatement updateCustomerPS
+- PreparedStatement deleteCustomerPS
+- AddressDB addressDB
++ <<Create>> CustomerDB()
++ Customer findByPhoneNo(String)
++ Customer findById(int)
++ int createCustomer(Customer)
++ int updateCustomer(Customer)
++ int deleteCustomer(Customer)
+- Customer buildObject(ResultSet)
+}
+interface db.interfaces.OrderDBIF {
+~ List<Order> getFinishedOrders()
+~ int createOrder(Order)
+~ int saveOrder(Order)
+~ int updateOrderStatus(int,OrderStatus)
+}
+class models.ShoppingList {
+- Date creationDate
+- Order order
+- PaymentType paymentType
++ <<Create>> ShoppingList(Date,Order,PaymentType)
++ Date getCreationDate()
++ void setCreationDate(Date)
++ Order getOrder()
++ void setOrder(Order)
++ PaymentType getPaymentType()
++ void setPaymentType(PaymentType)
+}
+interface db.interfaces.CustomerDBIF {
+~ Customer findByPhoneNo(String)
+~ Customer findById(int)
+~ int createCustomer(Customer)
+~ int updateCustomer(Customer)
+~ int deleteCustomer(Customer)
+}
+class controllers.ShoppingListController {
+- ShoppingList sl
+- ShoppingListDBIF shoppingListDB
++ <<Create>> ShoppingListController()
++ ShoppingList createShoppingList(Order,PaymentType)
++ int saveShoppingList()
+}
+class db.CourierDB {
+- {static} String CREATE_COURIER_Q
+- {static} String GET_COURIERS_Q
+- {static} String FIND_AVAILABLE_COURIERS_Q
+- {static} String UPDATE_COURIER_Q
+- {static} String UPDATE_COURIER_STATUS_Q
+- {static} String DELETE_COURIER_Q
+- PreparedStatement createCourierPS
+- PreparedStatement getCouriersPS
+- PreparedStatement findAvailableCouriersPS
+- PreparedStatement updateCourierPS
+- PreparedStatement updateCourierStatusPS
+- PreparedStatement deleteCourierPS
++ <<Create>> CourierDB()
++ int createCourier(Courier)
++ List<Courier> getCouriers()
++ List<Courier> findAvailableCouriers()
++ int updateCourier(Courier)
++ int updateCourierStatus(int,CourierStatus)
++ int deleteCourier(int)
+- List<Courier> buildObjects(ResultSet)
+- Courier buildObject(ResultSet)
+}
+class test.VoucherControllerTests {
+- VoucherController voucherController
++ void setUp()
++ void testFindVoucherByCode()
++ void testFindVoucherByInvalidCode()
+}
+class controllers.AddressController {
+- AddressDBIF addressDB
++ <<Create>> AddressController()
++ int createAddress(Address)
++ Address findById(int)
++ Address findByData(Address)
+}
+class db.CourierBatchDB {
+- CourierDB courierDB
+- {static} String DISPATCH_ORDER_Q
+- PreparedStatement dispatchOrderPS
++ <<Create>> CourierBatchDB()
++ Courier dispatchOrder(int)
+}
+interface db.interfaces.CourierDBIF {
+~ int createCourier(Courier)
+~ List<Courier> getCouriers()
+~ List<Courier> findAvailableCouriers()
+~ int updateCourierStatus(int,CourierStatus)
+~ int updateCourier(Courier)
+~ int deleteCourier(int)
+}
+class db.DBConnection {
+- {static} String SERVER_NAME
+- {static} int PORT_NUMBER
+- {static} String DATABASE_NAME
+- {static} String USERNAME
+- {static} String PASSWORD
+- {static} Connection connection
+- {static} DBConnection dbConnection
+- <<Create>> DBConnection()
++ Connection getConnection()
++ {static} DBConnection getInstance()
++ {static} void closeConnection()
++ {static} boolean instanceIsNull()
++ boolean isDbConnected()
+}
+class test.CustomerControllerTests {
+- CustomerController customerController
++ void setUp()
++ void testFindingByPhoneNumber()
++ void testFindingByInvalidPhoneNumber()
++ void testCommunicationWithAddressController()
++ void testCreateCustomer()
++ void testUpdateCustomer()
++ void testDeleteCustomer()
++ {static} void cleanUpWhenFinish()
+}
+class controllers.ProductController {
+- ProductDBIF productDB
++ <<Create>> ProductController()
++ Product findByBarcode(int)
++ List<Product> getProducts()
++ int updateProduct(Product)
++ int deleteProduct(int)
++ int addProduct(Product)
+}
+class models.Address {
+- int id
+- String streetName
+- String streetNumber
+- String floor
+- String city
+- String postalCode
++ <<Create>> Address(int,String,String,String,String,String)
++ <<Create>> Address(String,String,String,String,String)
++ int getId()
++ void setId(int)
++ String getStreetName()
++ void setStreetName(String)
++ String getStreetNumber()
++ void setStreetNumber(String)
++ String getFloor()
++ void setFloor(String)
++ String getCity()
++ void setCity(String)
++ String getPostalCode()
++ void setPostalCode(String)
++ String toHTMLString()
++ String toString()
+}
+class models.OrderLine {
+- int quantity
+- Product product
++ <<Create>> OrderLine(Product,int)
++ int getQuantity()
++ void setQuantity(int)
++ Product getProduct()
++ void setProduct(Product)
++ String toString()
+}
+class controllers.OrderController {
+- Order order
+- OrderDBIF orderDB
+- AddressController addressController
+- VoucherController voucherController
+- ShoppingListController shoppingListController
+- CourierController courierController
++ <<Create>> OrderController()
++ List<Order> getFinishedOrders()
++ void createOrder(Order)
++ Order addProduct(int,int)
++ void finishSale(PaymentType)
++ Address findAddressByData(Address)
++ int createAddress(Address)
++ Voucher findVoucherByCode(String)
++ int updateOrderStatus(int,OrderStatus)
++ Courier dispatchOrder(int)
+}
+class controllers.CustomerController {
+- CustomerDBIF customerDB
+- AddressController addressController
++ <<Create>> CustomerController()
++ Customer findByPhoneNo(String)
++ int createCustomer(Customer)
++ int updateCustomer(Customer)
++ int deleteCustomer(Customer)
++ Address findAddressByData(Address)
++ Address findAddressById(int)
++ void createAddress(Address)
+}
+class test.OrderControllerTests {
+- OrderController orderController
++ void setUp()
+}
+class db.ProductDB {
+- {static} String CREATE_PRODUCT_Q
+- {static} String FIND_BY_BARCODE_Q
+- {static} String GET_PRODUCTS_Q
+- {static} String UPDATE_PRODUCT_Q
+- {static} String DELETE_PRODUCT_Q
+- PreparedStatement createProductPS
+- PreparedStatement findByBarcodePS
+- PreparedStatement getProductsPS
+- PreparedStatement updateProductPS
+- PreparedStatement deleteProductPS
++ <<Create>> ProductDB()
++ int createProduct(Product)
++ List<Product> getProducts()
++ Product findByBarcode(int)
++ int updateProduct(Product)
++ int deleteProduct(int)
+- List<Product> buildObjects(ResultSet)
+- Product buildObject(ResultSet)
+}
+class models.Order {
+- int id
+- String orderNumber
+- float totalPrice
+- Customer customer
+- OrderStatus status
+- Address invoiceAddress
+- Address deliveryAddress
+- List<OrderLine> orderLines
+- Voucher appliedVoucher
++ <<Create>> Order(int,String,float,Customer,OrderStatus,Address,Address)
++ <<Create>> Order(Customer)
++ int getId()
++ void setId(int)
++ String getOrderNumber()
++ void setOrderNumber(String)
++ float getTotalPrice()
++ double getDiscountedPrice()
+- void updateTotalPrice()
++ Customer getCustomer()
++ void setCustomer(Customer)
++ OrderStatus getStatus()
++ void setStatus(OrderStatus)
++ Address getInvoiceAddress()
++ void setInvoiceAddress(Address)
++ Address getDeliveryAddress()
++ void setDeliveryAddress(Address)
++ List<OrderLine> getOrderLines()
++ void setOrderLines(List<OrderLine>)
++ void setTotalPrice(float)
++ Voucher getAppliedVoucher()
+- void setAppliedVoucher(Voucher)
++ String[] toStringArray()
++ void addOrderLine(Product,int)
+- OptionalInt hasProductInOrderLines(Product)
++ int applyVoucher(Voucher)
++ void removeOrderLine(int)
+}
+class models.Product {
+- int id
+- String name
+- int barcode
+- String description
+- float price
+- int maxStock
+- int minStock
+- int quantity
++ <<Create>> Product(int,String,int,String,float,int,int,int)
++ <<Create>> Product(String,int,String,float,int,int,int)
++ int getId()
++ void setId(int)
++ String getName()
++ void setName(String)
++ int getBarcode()
++ void setBarcode(int)
++ String getDescription()
++ void setDescription(String)
++ float getPrice()
++ void setPrice(float)
++ int getMaxStock()
++ void setMaxStock(int)
++ int getMinStock()
++ void setMinStock(int)
++ int getQuantity()
++ void setQuantity(int)
++ String[] toStringArray()
+}
+class db.ShoppingListDB {
+- {static} String CREATE_LIST_Q
+- PreparedStatement createListPS
++ <<Create>> ShoppingListDB()
++ int createShoppingList(ShoppingList)
+}
+class ui.DBConnectivityUI {
+- JFrame frmDatabaseStatus
++ <<Create>> DBConnectivityUI()
+- void initialize()
++ void showWindow()
+}
+class ui.DBConnectivityWorker {
++ void run()
+}
+interface db.interfaces.VoucherDBIF {
+~ Voucher findByCode(String)
+}
+interface db.interfaces.CourierBatchDBIF {
+~ Courier dispatchOrder(int)
+}
+class exceptions.DataAccessException {
++ <<Create>> DataAccessException(String,Throwable)
+}
+class controllers.CourierBatchController {
+- CourierBatchDBIF courierBatchDB
++ <<Create>> CourierBatchController()
++ Courier dispatchOrder(int)
+}
+class db.AddressDB {
+- {static} String CREATE_ADDRESS_Q
+- {static} String FIND_BY_ID_Q
+- {static} String FIND_BY_DATA_Q
+- PreparedStatement createAddressPS
+- PreparedStatement findByIdPS
+- PreparedStatement findByDataPS
++ <<Create>> AddressDB()
++ int createAddress(Address)
++ Address findById(int)
++ Address findByData(Address)
+- Address buildObject(ResultSet)
+}
+class models.Courier {
+- int id
+- String firstName
+- String lastName
+- String phoneNo
+- CourierStatus status
++ <<Create>> Courier(int,String,String,String,CourierStatus)
++ <<Create>> Courier(String,String,String,CourierStatus)
++ int getId()
++ void setId(int)
++ String getFirstName()
++ void setFirstName(String)
++ String getLastName()
++ void setLastName(String)
++ String getPhoneNo()
++ void setPhoneNo(String)
++ CourierStatus getStatus()
++ void setStatus(CourierStatus)
++ String[] toStringArray()
+}
+class ui.CustomerLoginMenu {
+- JDialog dialogCustomerMenu
+- CustomerController customerController
++ <<Create>> CustomerLoginMenu(JFrame)
+- void initialize()
+- void closeWindow()
++ void showWindow()
+}
+class db.OrderLineDB {
+- {static} String CREATE_ORDER_LINE_Q
+- PreparedStatement createOrderLinePS
++ <<Create>> OrderLineDB()
++ int createOrderLine(Order,OrderLine)
+}
+class ui.UIUtil {
++ {static} void displayDBErrorMsg(String)
++ {static} void displayMessage(String,String,int)
++ {static} Address parseAddress(JTextField,JTextField,JTextField,JTextField,JTextField)
++ {static} List<JTextField> getTextFields(Container)
++ {static} List<String> getEmptyTextFields(List<JTextField>)
++ {static} void resizeColumnWidth(JTable)
++ {static} String[] getTableRowValues(TableModel,int,int)
++ {static} void updateRow(TableModel,int,String[])
++ {static} String[] getClassFields(Class)
+}
+class ui.CreateProductEmployeeMenu {
+- JDialog dialogCreateProduct
+- ProductController productController
+- Observer<Product> observer
++ <<Create>> CreateProductEmployeeMenu()
+- void initialize()
++ void showWindow()
+- void closeWindow()
++ void addObserver(Observer<Product>)
+}
+class db.OrderDB {
+- {static} String GET_FINISHED_ORDERS_Q
+- {static} String CREATE_ORDER_Q
+- {static} String UPDATE_ORDER_Q
+- {static} String UPDATE_ORDER_STATUS_Q
+- PreparedStatement getFinishedOrdersPS
+- PreparedStatement createOrderPS
+- PreparedStatement updateOrderPS
+- PreparedStatement updateOrderStatusPS
+- CustomerDBIF customerDB
+- AddressDBIF addressDB
+- CourierBatchDBIF courierBatchDB
++ <<Create>> OrderDB()
++ List<Order> getFinishedOrders()
++ int createOrder(Order)
+- int updateOrder(Order)
++ int saveOrder(Order)
++ int updateOrderStatus(int,OrderStatus)
+- List<Order> buildObjects(ResultSet)
+- Order buildObject(ResultSet)
+}
+interface db.interfaces.ProductDBIF {
+~ int createProduct(Product)
+~ List<Product> getProducts()
+~ Product findByBarcode(int)
+~ int updateProduct(Product)
+~ int deleteProduct(int)
+}
+class test.DBConnectivityTest {
+- DBConnection con
++ void setUp()
++ void wasConnected()
+}
+class ui.EmployeeMenu {
+- ProductController productController
+- OrderController orderController
+- CourierController courierController
+- JTable tableProducts
+- JTable tableCouriers
++ <<Create>> EmployeeMenu()
++ void showWindow()
+- Image fitImage(Image,int,int)
+}
+class ui.EmployeeMenu.ProductObserver {
++ void notifyUpdate(Product)
++ ProductObserver getThis()
+}
+class ui.EmployeeMenu.CourierObserver {
++ void notifyUpdate(Courier)
++ CourierObserver getThis()
+}
+class db.VoucherDB {
+- {static} String FIND_BY_CODE_Q
+- PreparedStatement findByCodePS
++ <<Create>> VoucherDB()
++ Voucher findByCode(String)
+- Voucher buildObject(ResultSet)
+}
+class models.Customer {
+- int id
+- String name
+- String phoneNumber
+- String email
+- Address address
++ <<Create>> Customer(int,String,String,String,Address)
++ <<Create>> Customer(String,String,String,Address)
++ int getId()
++ void setId(int)
++ String getName()
++ void setName(String)
++ String getPhoneNumber()
++ void setPhoneNumber(String)
++ String getEmail()
++ void setEmail(String)
++ Address getAddress()
++ void setAddress(Address)
++ String toString()
+}
+interface interfaces.Observer {
+~ void notifyUpdate(T)
+}
+class exceptions.InsufficientDataException {
++ <<Create>> InsufficientDataException(String)
++ <<Create>> InsufficientDataException(String,Throwable)
+}
+class ui.MainMenu {
+- JFrame frmBiobio
+- String validPassword
+- String validUsername
++ <<Create>> MainMenu()
++ {static} void main(String[])
+- void initialize()
+- {static} void setUIFont(javax.swing.plaf.FontUIResource)
+}
+
+
+ui.CreateOrderCustomerMenu +.. ui.CreateOrderCustomerMenu.MyListCellRenderer
+ui.DefaultListCellRenderer <|-- ui.CreateOrderCustomerMenu.MyListCellRenderer
+interfaces.Observable <|.. ui.CreateCourierEmployeeMenu
+db.interfaces.CustomerDBIF <|.. db.CustomerDB
+db.interfaces.CourierDBIF <|.. db.CourierDB
+db.interfaces.CourierBatchDBIF <|.. db.CourierBatchDB
+db.interfaces.ProductDBIF <|.. db.ProductDB
+db.interfaces.ShoppingListDBIF <|.. db.ShoppingListDB
+ui.Runnable <|.. ui.DBConnectivityWorker
+exceptions.Exception <|-- exceptions.DataAccessException
+db.interfaces.AddressDBIF <|.. db.AddressDB
+db.interfaces.OrderLineDBIF <|.. db.OrderLineDB
+interfaces.Observable <|.. ui.CreateProductEmployeeMenu
+db.interfaces.OrderDBIF <|.. db.OrderDB
+ui.EmployeeMenu +.. ui.EmployeeMenu.ProductObserver
+ui.Observer <|.. ui.EmployeeMenu.ProductObserver
+ui.EmployeeMenu +.. ui.EmployeeMenu.CourierObserver
+ui.Observer <|.. ui.EmployeeMenu.CourierObserver
+db.interfaces.VoucherDBIF <|.. db.VoucherDB
+exceptions.Exception <|-- exceptions.InsufficientDataException
+@enduml

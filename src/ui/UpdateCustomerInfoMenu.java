@@ -155,6 +155,7 @@ public class UpdateCustomerInfoMenu {
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				System.out.println("test");
 				List<String> emptyFields = UIUtil.getEmptyTextFields(UIUtil.getTextFields(dialog.getContentPane()));
 				if(emptyFields.size() > 0) {
 					StringBuilder errorMessage = new StringBuilder("<html>Cannot complete update. The following fields are empty:<br><ul>");
@@ -182,8 +183,9 @@ public class UpdateCustomerInfoMenu {
 					String phoneNumber = textFieldUpdatePhoneNumber.getText();
 					String email = textFieldUpdateEmail.getText();
 
-					Customer c = new Customer(name, phoneNumber, email, a);
+					Customer c = new Customer(customer.getId(), name, phoneNumber, email, a);
 					int rows = customerController.updateCustomer(c);
+					System.out.println(rows);
 					if(rows > 0) {
 						UIUtil.displayMessage("Successfully updated your info! Please re-enter your phone number.", "Success", JOptionPane.INFORMATION_MESSAGE);
 						closeWindow();

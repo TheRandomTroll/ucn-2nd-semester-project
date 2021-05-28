@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>360</y>
+      <w>440</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+1.createCourier(firstName:String,lastName:String,
+phoneNumber:String)
+2.getCouriers()
+3.updateCourier(newCourier:Courier)
+4.deleteCourier(id:int)</panel_attributes>
+    <additional_attributes>10.0;20.0;420.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>730</x>
+      <y>360</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:UI_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>730</x>
+      <y>520</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:CourierController_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>790</x>
+      <y>390</y>
+      <w>350</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.createCourier(firstName:String,lastName:String,
+phoneNumber:String):int
+2.1.getCouriers():List&lt;Courier&gt;
+3.1.updateCourier(newCourier:Courier):int
+4.1.deleteCourier(id:int):int</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>730</x>
+      <y>660</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:CourierDB_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>790</x>
+      <y>550</y>
+      <w>300</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.2.saveCourier(c:Courier):int
+2.1.1.getCouriers():List&lt;Courier&gt;
+3.1.1.updateCourier(newCourier:Courier):int
+4.1.1.deleteCourier(id:int):int</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>410</x>
+      <y>660</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:Courier_
+{NEW}
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>470</x>
+      <y>530</y>
+      <w>340</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1.c=&lt;&lt;create&gt;&gt;(firstName:String,lastName:String,
+phoneNumber:String,status=AVAILABLE)
+</panel_attributes>
+    <additional_attributes>70.0;150.0;260.0;10.0</additional_attributes>
+  </element>
+</diagram>

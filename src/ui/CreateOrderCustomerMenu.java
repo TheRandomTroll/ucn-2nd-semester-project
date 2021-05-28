@@ -16,20 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CreateOrderCustomerMenu {
-    private static class MyListCellRenderer extends DefaultListCellRenderer {
-        @Override
-        public Component getListCellRendererComponent(
-                JList list, Object value, int index,
-                boolean isSelected, boolean cellHasFocus) {
-            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            String labelText = (String) value;
-            setText(labelText);
-
-            return this;
-        }
-
-    }
-
     private final JDialog dialog;
 
     private OrderController orderController;
@@ -113,7 +99,6 @@ public class CreateOrderCustomerMenu {
                 list.setModel(listModel);
             }
         });
-        list.setCellRenderer(new MyListCellRenderer());
         scrollPane.setViewportView(list);
 
         JLabel lblNewLabel_1 = new JLabel("Your products:");

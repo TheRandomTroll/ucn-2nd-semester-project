@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>280</y>
+      <w>470</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+1.createCustomer(name:String,phoneNumber:String,email:String,
+streetName:String,streetNumber:String,floor:String;city:String,
+postalCode:int)
+2.login(phoneNumber:String)
+3.updateCustomer(newCustomer:Customer)</panel_attributes>
+    <additional_attributes>10.0;20.0;450.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1060</x>
+      <y>280</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:UI_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1060</x>
+      <y>440</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:CustomerController_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>310</y>
+      <w>450</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.createCustomer(name:String,phoneNumber:String,email:String,
+streetName:String,streetNumber:String,floor:String;city:String,
+postalCode:int)
+2.1.findUserByPhoneNumber(phoneNumber:String)
+3.1.updateCustomer(newCustomer:Customer):int</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1060</x>
+      <y>600</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:CustomerDB_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>470</y>
+      <w>420</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.2.c.address = lookup
+1.1.3.[lookup == null]c.address = a
+1.1.4.saveCustomer(c:Customer):int
+2.1.1.c = findUserByPhoneNumber(phoneNumber:String):String
+3.1.1.[lookup == null]newCustomer.address = a;
+3.1.2.newCustomer.address = lookup;
+3.1.3.updateCustomer(newCustomer)</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>740</x>
+      <y>600</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:Customer_
+{NEW}
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>450</y>
+      <w>340</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1.c=&lt;&lt;create&gt;&gt;(firstName:String,lastName:String,
+phoneNumber:String,status=AVAILABLE)
+</panel_attributes>
+    <additional_attributes>70.0;170.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>380</x>
+      <y>440</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:AddressController_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>440</y>
+      <w>570</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1.lookup=findAddressByData(streetName:String,
+streetNumber:String,floor:String,city:String,postalCode:int):Address
+3.1.1.lookup=findAddressByData(newCustomer.address):Address</panel_attributes>
+    <additional_attributes>10.0;20.0;550.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>380</x>
+      <y>770</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:AddressDB_
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>470</y>
+      <w>510</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1.1.lookup=findAddressByData(streetName:String,streetNumber:String,
+floor:String,city:String,postalCode:int):Address
+1.1.1.3.[lookup == null]save(a:Address):int
+3.1.1.1.lookup=findAddressByData(newCustomer.address):Address
+3.1.1.3.[lookup == null]save(a:Address):int</panel_attributes>
+    <additional_attributes>40.0;300.0;10.0;170.0;40.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>450</y>
+      <w>120</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>230</x>
+      <y>600</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:Address_
+{NEW}
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>0</x>
+      <y>400</y>
+      <w>400</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>1.1.1.2.[lookup == null]a=&lt;&lt;create&gt;&gt;(streetName,streetNumber,
+floor,city,postalCode)
+3.1.1.2.[lookup == null]a=&lt;&lt;create&gt;&gt;(newCustomer.address)
+halign=center
+style=autoresize</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
