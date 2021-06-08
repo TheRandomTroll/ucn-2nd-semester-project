@@ -17,6 +17,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import exceptions.DataAccessException;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MainMenu {
 	private JFrame frmBiobio;
@@ -46,6 +48,7 @@ public class MainMenu {
 
 	/**
 	 * Create the application.
+	 * 
 	 */
 	public MainMenu() {
 		initialize();
@@ -95,6 +98,21 @@ public class MainMenu {
         frmBiobio.getContentPane().add(userNameField);
 
         JPasswordField passwordField = new JPasswordField();
+        passwordField.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        			String username = userNameField.getText();
+                    String password = String.valueOf(passwordField.getPassword());
+
+                    if (validPassword.equals(password) && validUsername.equals(username)) {
+                        new EmployeeMenu();
+                    } else {
+                        System.out.println("Wrong username/password! " + username + password + " ");
+                    }
+        		}
+        	}
+        });
         passwordField.setBounds(10, 90, 186, 20);
         frmBiobio.getContentPane().add(passwordField);
 

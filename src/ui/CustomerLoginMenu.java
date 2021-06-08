@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CustomerLoginMenu {
     private final JDialog dialogCustomerMenu;
@@ -48,6 +50,35 @@ public class CustomerLoginMenu {
         panelLogin.add(lblNewLabel);
 
         JTextField textFieldLoginPhoneNumber = new JTextField();
+        textFieldLoginPhoneNumber.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String phoneNumber = textFieldLoginPhoneNumber.getText();
+
+                    Customer c = null;
+                    try {
+                        c = customerController.findByPhoneNo(phoneNumber);
+                    } catch (DataAccessException dataAccessException) {
+                        JOptionPane.showMessageDialog(dialogCustomerMenu,
+                                "An error has occurred while connecting to the database. Message: " + dataAccessException.getMessage(),
+                                "Error connecting to database",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    if (c == null) {
+                        JOptionPane.showMessageDialog(dialogCustomerMenu,
+                                "This phone number is invalid!",
+                                "Invalid phone number",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        CustomerMenu cm = new CustomerMenu(c);
+                        cm.showWindow();
+                        closeWindow();
+                    }
+                }
+            }
+        });
         textFieldLoginPhoneNumber.setBounds(10, 49, 121, 20);
         panelLogin.add(textFieldLoginPhoneNumber);
         textFieldLoginPhoneNumber.setColumns(10);
