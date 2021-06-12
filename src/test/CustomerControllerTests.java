@@ -72,17 +72,17 @@ public class CustomerControllerTests {
     @Test
     public void testUpdateCustomer() {
         try {
-            Customer c = this.customerController.findByPhoneNo("+385919826498");
+            Customer c = this.customerController.findByPhoneNo("+385123456789");
             c.setEmail("test2@test.com");
-            c.setPhoneNumber("+359123456789");
+            c.setPhoneNumber("+359987654321");
             int rows = this.customerController.updateCustomer(c);
 
             assertEquals(1, rows);
 
-            c = this.customerController.findByPhoneNo("+359123456789");
+            c = this.customerController.findByPhoneNo("+359987654321");
             assertEquals("test2@test.com", c.getEmail());
 
-            c = this.customerController.findByPhoneNo("+385919826498");
+            c = this.customerController.findByPhoneNo("+385123456789");
             assertNull(c);
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -92,12 +92,12 @@ public class CustomerControllerTests {
     @Test
     public void testDeleteCustomer() {
         try {
-            Customer c = this.customerController.findByPhoneNo("+359123456789");
+            Customer c = this.customerController.findByPhoneNo("+359987654321");
             int rows = this.customerController.deleteCustomer(c);
 
             assertEquals(1, rows);
 
-            c = this.customerController.findByPhoneNo("+359123456789");
+            c = this.customerController.findByPhoneNo("+359987654321");
 
             assertNull(c);
         } catch (DataAccessException e) {
@@ -109,7 +109,7 @@ public class CustomerControllerTests {
     public static void cleanUpWhenFinish() {
         try {
             CustomerController cc = new CustomerController();
-            Customer c = cc.findByPhoneNo("+385123456789");
+            Customer c = cc.findByPhoneNo("+359987654321");
             int numDeleted = cc.deleteCustomer(c);
             // Assert
             assertEquals("One row deleted", 1, numDeleted );

@@ -53,12 +53,12 @@ public class ProductControllerTests {
     @Test
     public void testCreateProduct() {
         try {
-            Product p = new Product("test", 12345678, "test description", 7.99f, 5, 50, 50);
+            Product p = new Product("test", 87654321, "test description", 7.99f, 5, 50, 50);
             int rows = this.productController.addProduct(p);
 
             assertEquals(1, rows);
 
-            p = this.productController.findByBarcode(12345678);
+            p = this.productController.findByBarcode(87654321);
             assertEquals("test", p.getName());
 
         } catch (DataAccessException e) {
@@ -69,13 +69,13 @@ public class ProductControllerTests {
     @Test
     public void testUpdateProduct() {
         try {
-            Product p = this.productController.findByBarcode(12345678);
+            Product p = this.productController.findByBarcode(87654321);
             p.setName("updated test");
             int rows = this.productController.updateProduct(p);
 
             assertEquals(1, rows);
 
-            p = this.productController.findByBarcode(12345678);
+            p = this.productController.findByBarcode(87654321);
             assertEquals("updated test", p.getName());
 
         } catch (DataAccessException e) {
@@ -86,12 +86,12 @@ public class ProductControllerTests {
     @Test
     public void testDeleteProduct() {
         try {
-            Product p = this.productController.findByBarcode(12345678);
+            Product p = this.productController.findByBarcode(87654321);
             int rows = this.productController.deleteProduct(p.getId());
 
             assertEquals(1, rows);
 
-            p = this.productController.findByBarcode(12345678);
+            p = this.productController.findByBarcode(87654321);
             assertNull(p);
 
         } catch (DataAccessException e) {
