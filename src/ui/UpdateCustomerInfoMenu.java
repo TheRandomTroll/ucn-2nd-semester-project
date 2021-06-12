@@ -189,6 +189,8 @@ public class UpdateCustomerInfoMenu {
 					if(rows > 0) {
 						UIUtil.displayMessage("Successfully updated your info! Please re-enter your phone number.", "Success", JOptionPane.INFORMATION_MESSAGE);
 						closeWindow();
+						CustomerMenu cm = new CustomerMenu(customer);
+						cm.showWindow();
 					}
 				} catch (DataAccessException dataAccessException) {
 					UIUtil.displayDBErrorMsg(dataAccessException.getMessage());
